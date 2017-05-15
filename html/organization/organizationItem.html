@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>公司信息</title>
+</head>
+<body>
+	<form action="../../data/success" method="POST">
+		<div class="module" style="width: 100%;">
+			<div class="title">
+	    		<div class="item selected" v-cloak>公司信息{{PAGETITLE}}</div>	
+	    	</div>
+	    	<div class="content">
+	    		<div class="item selected" style="padding:10px;">    			
+	  				<table class="detailTable" border="1">
+						<tr>
+							<th width="20%">公司名称</th>
+							<td width="30%">
+								<input type="text" name="name" title="公司名称" class="null" v-model="name" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{name}}</span>
+							</td>
+							<th width="20%">中文简称</th>
+							<td width="30%">
+								<input type="text" name="abbr" title="中文简称" class="null" v-model="abbr" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{abbr}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">是否演示</th>
+							<td width="30%">
+								<input type="checkbox" name="isDemo" v-model="isDemo" :disabled="ISDETAIL">
+							</td>
+							<th width="20%">类型</th>
+							<td width="30%">
+								<select name="typeName" v-model="typeName" v-cloak v-if="!ISDETAIL">
+									<option value="学校">学校</option>
+									<option value="机关">机关</option>
+									<option value="企业">企业</option>
+								</select>
+								<span v-cloak v-else>{{typeName}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">防伪类型</th>
+							<td width="30%">
+								<select name="verifyType" v-model="verifyType" v-cloak v-if="!ISDETAIL">
+									<option value="0">产品防伪</option>
+									<option value="1">包裹防伪</option>
+								</select>
+								<span v-cloak v-else>{{verifyType=='0'?'产品防伪':'包裹防伪'}}</span>
+							</td>
+							<th width="20%">注册时间</th>
+							<td width="30%">
+								<input type="text" name="regTime" title="注册时间" class="Wdate null" id="regTime" onFocus="WdatePicker({lang:'zh-cn',readOnly:true})" :value="regTime | date" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{regTime | date}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">注册地址</th>
+							<td width="30%">
+								<input type="text" name="regAddress" title="注册地址" class="null" v-model="regAddress" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{regAddress}}</span>
+							</td>
+							<th width="20%">经营范围</th>
+							<td width="30%">
+								<input type="text" name="busniessScop" title="经营范围" class="null" v-model="busniessScop" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{busniessScop}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">售出时间(天)</th>
+							<td width="30%">
+								<input type="text" name="saleDay" v-model="saleDay" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{saleDay}}</span>
+							</td>
+							<th width="20%">联系电话</th>
+							<td width="30%">
+								<input type="text" name="tel" title="联系电话" class="null" v-model="tel" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{tel}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">售后电话</th>
+							<td width="30%">
+								<input type="text" name="serviceTel" title="售后电话" class="null phone" v-model="serviceTel" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{serviceTel}}</span>
+							</td>
+							<th width="20%">售后网址</th>
+							<td width="30%">
+								<input type="text" name="serviceUrl" title="售后网址" class="null" v-model="serviceUrl" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{serviceUrl}}</span>
+							</td>
+						</tr>
+						<tr style="height:200px;">
+							<th width="20%" height="50">备注</th>
+							<td width="30%" colspan="3" style="height: 200px;">
+								<textarea name="" style="height: 100%;width: 98%;" v-model="memo" :readonly="ISDETAIL"></textarea>
+							</td>
+						</tr>
+	  				</table>		
+	    		</div>
+	    		<div class="submit" v-if="PAGETYPE != 'detail'">
+	    		    <center>
+	    		    	<input type="button" class="saveBtn" value="保存">
+	    		    </center>
+	    		</div>
+	    	</div>
+		</div>
+	</form>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+	<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+	<script src="../../js/framework/table.js?v=1.0.1" ></script>
+	<script src="../../js/default.js?v=1.0.1"></script>
+	<script>
+		var vmParam = $.extend(true, VMDEFAULT, {
+			data: {
+				"abbr": "",
+		        "badRate": "",
+		        "busniessScop": "",
+		        "code": "",
+		        "gmtCreate": "",
+		        "gmtModified": "",
+		        "kind": "",
+		        "name": "",
+		        "order": "",
+		        "regAddress": "",
+		        "regTime": "",
+		        "saleDay": "",
+		        "serviceTel": "",
+		        "sort": "",
+		        "sortFieldType": "",
+		        "tel": "",
+		        "type": "0",
+		        "typeName": "",
+		        "verifyType": 0,
+		        "serviceUrl": "",
+		        "memo": "",
+		        "isDemo": 0
+			},
+			filters: {
+				date: function(value){
+					return value.slice(0, 10);
+				}
+			}
+		});
+		var vm = new Vue(vmParam);
+		if(TYPE != null){
+			junAjax({
+				url: "../../data/organizationDetail",
+				success: function(result){
+					if(result.code != "200"){
+						alert(result.data);
+					}else{
+						for(data in result.data){
+							vm[data] = result.data[data];
+						};
+					}
+				},
+				error: function(){
+					alert("网络错误 ！");
+				}
+			});
+		}
+	</script>
+</body>
+</html>

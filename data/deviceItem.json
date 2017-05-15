@@ -1,0 +1,21 @@
+{
+  "code":200,
+  "data":{
+    "bindId": 712057,
+    "consumerAddress": "浙江省杭州市余杭区五常街道杭州疯狂网营",
+    "consumerMobile": "15868685858",
+    "consumerName": "陈小二",
+    "installId": 3342,
+    "installManId": 1036,
+    "installManName": "wpwltest",
+    "installTime": "2016-11-13 19:07:55",
+    "modifiedAddress": "浙江省杭州市余杭区五常街道杭州疯狂网营",
+    "orgName": "浙江帅丰电器有限公司",
+    "productId": 271,
+    "productName": "集成灶",
+    "reinstall": true,
+    "repairCount": 0,
+    "standard": "JJZT(Y/R)-FU2-3",
+    "transCode": "15100881370A014"
+  }
+}

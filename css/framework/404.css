@@ -1,0 +1,14 @@
+.module{
+	width:500px;
+}
+.module .title{
+	font-size:14px;
+	font-weight:bold;
+}
+.module .content{
+	height:175px;
+	width:500px;
+	margin:10px;
+	font-size:12px;
+	padding-top:30px;
+}

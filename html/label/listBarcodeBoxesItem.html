@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>条码盒信息</title>
+</head>
+<body>
+	<form action="../../data/success" method="POST">
+		<div class="module" style="width: 100%;">
+			<div class="title">
+	    		<div class="item selected" v-cloak>条码盒信息{{PAGETITLE}}</div>	
+	    	</div>
+	    	<div class="content">
+	    		<div class="item selected" style="padding:10px;">    			
+	  				<table class="detailTable" border="1">
+						<tr>
+							<th width="20%">条码盒类型</th>
+							<td width="30%">
+								<select name="type" v-model="type" v-cloak v-if="!ISDETAIL">
+									<option value=""></option>
+								</select>
+								<span v-cloak v-else>{{type}}</span>
+							</td>
+							<th width="20%">盒子容量</th>
+							<td width="30%">
+								<input type="text" name="capacity" title="盒子容量" class="null integer plus" v-model="capacity" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{capacity}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">所属公司</th>
+							<td width="30%">
+								<select name="company" v-model="company" v-cloak v-if="!ISDETAIL">
+									<option value=""></option>
+								</select>
+								<span v-cloak v-else>{{company}}</span>
+							</td>
+							<th width="20%">所属产品</th>
+							<td width="30%">
+								<select name="product" v-model="product" v-cloak v-if="!ISDETAIL">
+									<option value=""></option>
+								</select>
+								<span v-cloak v-else>{{product}}</span>
+							</td>
+						</tr>
+	  				</table>		
+	    		</div>
+	    		<div class="submit" v-if="PAGETYPE != 'detail'">
+	    		    <center>
+	    		    	<input type="button" class="saveBtn" value="保存">
+	    		    </center>
+	    		</div>
+	    	</div>
+		</div>
+	</form>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+	<script src="../../js/framework/table.js?v=1.0.1" ></script>
+	<script src="../../js/default.js?v=1.0.1"></script>
+	<script>
+		var vmParam = $.extend(true, VMDEFAULT, {
+			data: {
+				type: "",
+				capacity: "",
+				company: "",
+				product: ""
+			}
+		});
+		var vm = new Vue(vmParam);
+		if(TYPE != null){
+			/*junAjax({
+				url: "",
+				success: function(result){*/
+					result = {
+						code: "200", 
+						data: {		
+							type: "001",
+							capacity: "3",
+							company: "",
+							product: ""			
+						}
+					};
+					if(result.code != "200"){
+						alert(result.data);
+					}else{
+						for(data in result.data){
+							vm[data] = result.data[data];
+						}
+					}
+/*				},
+				error: function(){
+					alert("网络错误 ！");
+				}
+			});*/
+		}
+	</script>
+</body>
+</html>

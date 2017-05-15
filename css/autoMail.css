@@ -1,0 +1,36 @@
+.ipt{ width:218px;}/* 输入框外围div */
+input{ margin:0;}/* 输入框 */
+ul.autoul{  /* 下拉菜单 */
+    width:216px;
+	margin:0px;
+	margin-top:-5px;
+	padding:0px;
+	color:#666;
+	border:1px solid #666;
+	border-top:0;
+	overflow:hidden;
+	position: absolute;
+	background: white;
+	z-index:10;
+}
+ul.autoul li.autoli{  /* 下拉菜单li */
+
+	height:24px;
+	display:block;
+	list-style-type:none;
+	text-align:left;
+	cursor:pointer;
+	font-size:13px;
+	line-height:24px;
+	padding-left:10px;
+	padding-right:15px;
+	overflow:hidden;
+	/*当对象内文本溢出时显示省略标记*/
+	text-overflow:ellipsis; 
+}
+.lihover{  /* 下拉菜单li高亮样式 */
+
+	background-color:#eee;
+}
+span{ padding-right:2px;}/* li下文字 */
+.showli{ display:block;}/* 经过过滤的li的样式 */

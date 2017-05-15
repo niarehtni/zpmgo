@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="AC后台管理系统">
+	<meta http-equiv="description" content="AC后台管理系统">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../css/framework/framework.css?v=1.0.1">
+	<link rel="styleSheet" href="../css/framework/index.css?v=1.0.1">
+	<base href="./">
+	<title>AC后台管理系统</title>
+</head>
+<body>
+    <div class="header">
+    	<div class="logo"></div>
+		<div class="tool">
+			<div class="logout" title="注销"></div>
+			<div onclick="editPwd()" class="updatePassword" title="修改密码"></div>
+			<div style="padding: 0 10px;">
+				<span class="user"></span>admin
+			</div>
+		</div>
+	</div>
+	
+	<div class="menu">
+		<div>
+			<span>公司管理</span>
+			<ul>
+				<li href="html/organization/organization.html" title="公司列表">公司列表</li>
+				<li href="html/organization/acproductline.html" title="生产线列表">生产线列表</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>品牌管理</span>
+			<ul>
+				<li href="html/brand/brand.html" title="品牌列表">品牌列表</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>产品管理</span>
+			<ul>
+				<li href="html/product/accategory.html" title="品类列表">品类列表</li>
+				<li href="html/product/product.html" title="产品列表">产品列表</li>
+				<li href="html/product/acmessage.html" title="产品咨询">产品咨询</li>
+				<li href="html/product/listStandard.html" title="规格码列表">规格码列表</li>
+				<li href="html/product/productCodeList.html" title="产品码列表">产品码列表</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>门店管理</span>
+			<ul>
+				<li href="html/store/acpos.html" title="门店列表">门店列表</li>
+				<li href="html/store/acdistributor.html" title="渠道商列表">渠道商列表</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>标签管理</span>
+			<ul>
+				<li href="html/label/acserialinfo.html" title="标签列表">标签列表</li>
+				<li href="html/label/acserialtype.html" title="标签类型">标签类型</li>
+				<li href="html/label/acserialorder.html" title="订单列表">订单列表</li>
+				<li href="html/label/acserialbind.html" title="标签绑定">标签绑定</li>
+				<li href="html/label/acserialtransfer.html" title="标签转移">标签转移</li>
+				<li href="html/label/acmaterialmanagement.html" title="物料号管理">物料号管理</li>
+				<li href="html/label/listBarcodeBoxes.html" title="条码盒管理">条码盒管理</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>商品管理</span>
+			<ul>
+				<li href="html/goods/antifake.html" title="商品列表">商品列表</li>
+				<li href="html/goods/acpackingbox.html" title="包装箱列表">包装箱列表</li>
+				<li href="html/goods/aclogisticsinfo.html" title="物流信息列表">物流信息列表</li>
+				<li href="html/goods/acpackinghistory.html" title="装拆箱历史列表">装拆箱历史列表</li>
+				<li href="html/goods/acpackinglogisticsinfo.html" title="包装箱物流历史列表">包装箱物流历史列表</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>权限管理</span>
+			<ul>
+				<li href="html/authority/user.html" title="用户列表">用户列表</li>
+				<!--<li href="html/authority/group.html" title="用户组列表">用户组列表</li>-->
+				<li href="html/authority/menu.html" title="菜单列表">菜单列表</li>
+				<li href="html/authority/role.html" title="角色列表">角色列表</li>
+				<li href="html/authority/operate.html" title="操作列表">操作列表</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>内部管理</span>
+			<ul>
+				<li href="html/inside/device.html" title="安装维修列表">安装维修列表</li>
+				<li href="html/inside/conflict.html" title="窜货列表">窜货列表</li>
+				<li href="html/inside/acverifylog.html" title="扫描日志">扫描日志</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>系统管理</span>
+			<ul>
+				<li href="html/system/dictionary.html" title="字典列表">字典列表</li>
+				<li href="html/system/dictionaryPart.html" title="字典条目列表">字典条目列表</li>
+				<li href="html/system/acsysconfig.html" title="系统配置列表">系统配置列表</li>
+				<li href="html/system/acfeedback.html" title="反馈列表">反馈列表</li>
+				<li href="html/system/acloginlog.html" title="登录日志">登录日志</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>活动管理</span>
+			<ul>
+				<li href="html/activity/achtml/activity.html" title="活动列表">活动列表</li>
+				<li href="html/activity/acshoppingrecord.html" title="消费记录列表">消费记录列表</li>
+				<li href="html/activity/acsuspect.html" title="客户列表">客户列表</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>统计管理</span>
+			<ul>
+				<li href="html/statistics/achtml/statisticsverify.html" title="验伪统计">验伪统计</li>
+				<li href="html/statistics/verifyRateMap.html" title="全国验伪率">全国验伪率</li>
+				<li href="html/statistics/monthONmonth.html" title="验伪月统计">验伪月统计</li>
+				<li href="html/statistics/trendChart.html" title="验伪走势图">验伪走势图</li>
+				<li href="html/statistics/areaVerifyList.html" title="地区验伪对比">地区验伪对比</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>销售管理</span>
+			<ul>
+				<li href="html/sales/acsalerecord.html" title="登记列表">登记列表</li>
+				<li href="html/sales/acserialsale.html" title="销售修改">销售修改</li>
+				<li href="html/sales/acwarn.html" title="警示公告">警示公告</li>
+				<li href="html/sales/acserialkey.html" title="阀值设定">阀值设定</li>
+				<li href="html/sales/saleLogisticsList.html" title="商品登记">商品登记</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>产品绑定</span>
+			<ul>
+				<li href="html/producdbind/acproductbindrecord.html" title="绑定记录">绑定记录</li>
+			</ul>
+		</div>
+
+		<div>
+			<span>用户行为</span>
+			<ul>
+				<li href="html/UserBehavior/scanTimeList.html" title="用户扫描时段分布">用户扫描时段分布</li>
+				<li href="html/UserBehavior/scanJumpList.html" title="扫描跳转率走势">扫描跳转率走势</li>
+				<li href="html/UserBehavior/usageList.html" title="功能使用率">功能使用率</li>
+			</ul>
+		</div>
+  	</div>
+	
+	<div class="nav">
+		<div class="banner">
+			<ul>
+				<!-- 
+				<li class="default selected">首页</li>
+				-->
+			</ul>
+		</div>
+		<div class="tool">
+			<i class="screenBtn" title="全屏">&nbsp;</i>
+			<i class="settingBtn" title="设置">&nbsp;</i>
+			<i class="closeBtn" title="关闭全部">&nbsp;</i>
+			<i class="nextBtn" title="右移">&nbsp;</i>
+			<i class="prevBtn" title="左移">&nbsp;</i>
+		</div>
+	</div>
+	
+	<div class="body">
+		<!-- 
+		<div class="content default selected">
+			<iframe src="view/view_execute.action" frameborder="0" scrolling="yes"></iframe>
+		</div>
+		-->
+	</div>
+	
+	<div class="message">
+		<ul></ul>
+	</div>
+	
+	<div class="footer">@Copy right 2017 AC后台管理系统</div>
+
+	<script src="../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../js/framework/jquery.framework.js?v=1.0.1"></script>
+	<script src="../js/framework/form.js?v=1.0.1"></script>
+	<script>
+
+	function editPwd(){
+		var url="";
+		top.addTab({href:url,name:"修改密码",closeCallBack:function(result){
+			
+		},closeCheckBefore:function(){return confirm("是否确定关闭？")}});
+	}
+	</script>
+</body>
+</html>

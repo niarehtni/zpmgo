@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>品类信息</title>
+</head>
+<body>
+	<form action="" method="POST">
+		<div class="module" style="width: 100%;">
+			<div class="title">
+	    		<div class="item selected" v-cloak>品类信息{{PAGETITLE}}</div>	
+	    	</div>
+	    	<div class="content">
+	    		<div class="item selected" style="padding:10px;">    			
+	  				<table class="detailTable" border="1">
+						<tr>
+							<th width="20%">品类名称</th>
+							<td width="30%">
+								<input type="text" name="name" title="品类名称" class="null" :value="name" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{name}}</span>
+							</td>
+							<th width="20%">品类归属</th>
+							<td width="30%">
+								<select name="typeName" v-model="typeName" v-cloak v-if="!ISDETAIL">
+									<option value="">A</option>
+								</select>
+								<span v-cloak v-else>{{typeName}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">父品类</th>
+							<td width="30%">
+								<select name="parent" v-model="parent" v-cloak v-if="!ISDETAIL">
+									<option value="">A</option>
+								</select>
+								<span v-cloak v-else>{{parent}}</span>
+							</td>
+							<th width="20%">显示顺序</th>
+							<td width="30%">
+								<input type="text" name="order" title="显示顺序" class="null integer plus" :value="order" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{order}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%">公司</th>
+							<td width="30%">
+								<select name="company" v-model="company" v-cloak v-if="!ISDETAIL">
+									<option value="">A</option>
+								</select>
+								<span v-cloak v-else>{{company}}</span>
+							</td>
+							<th width="20%">品牌</th>
+							<td width="30%">
+								<select name="pp" v-model="pp" v-cloak v-if="!ISDETAIL">
+									<option value="">A</option>
+								</select>
+								<span v-cloak v-else>{{pp}}</span>
+							</td>
+						</tr>
+						
+						<tr style="height:200px;">
+							<th width="20%" height="50">说明</th>
+							<td width="30%" colspan="3" style="height: 200px;">
+								<textarea name="" style="height: 100%;width: 98%;" :value="memo" :readonly="ISDETAIL"></textarea>
+							</td>
+						</tr>
+	  				</table>		
+	    		</div>
+	    		<div class="submit" v-if="PAGETYPE != 'detail'">
+	    		    <center>
+	    		    	<input type="button" class="saveBtn" value="保存">
+	    		    </center>
+	    		</div>
+	    	</div>
+		</div>
+	</form>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+	<script src="../../plugins/laydate-v1.1/laydate/laydate.js?v=1.0.1"></script>
+	<script src="../../js/framework/table.js?v=1.0.1" ></script>
+	<script src="../../js/default.js?v=1.0.1"></script>
+	<script>
+		var vmParam = $.extend(true, VMDEFAULT, {
+			data: {
+				"name": "",
+				typeName: "",
+				parent: "",
+				order: "",
+				company: "",
+				pp:"",
+				memo: ""
+
+			}
+		});
+		var vm = new Vue(vmParam);
+		if(TYPE != null){
+			/*junAjax({
+				url: "",
+				success: function(result){*/
+					result = {
+						code: "200", 
+						data: {		
+							name: "锤镐冲击钻",
+							typeName: "零部件",
+							parent: "迪茨",
+							order: "1",
+							company: "玉环迪茨机械有限公司",
+							pp:"A",
+							memo: "xx"
+						}
+					};
+					if(result.code != "200"){
+						alert(result.data);
+					}else{
+						for(data in result.data){
+							vm[data] = result.data[data];
+						};
+					}
+				/*},
+				error: function(){
+					alert("网络错误 ！");
+				}
+			});*/
+		}
+	</script>
+</body>
+</html>

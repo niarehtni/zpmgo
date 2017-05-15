@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <base href="./">
+    <title>窜货列表</title>
+</head>
+<body>
+<form action="../../data/conflict" method="get">
+    <table class="searchTable">
+        <tbody>
+        <tr>
+            <td>所属公司</td>
+            <td>
+                <select name="" id="">
+                    <option value=""></option>
+                </select>
+            </td>
+            <td>产品名称</td>
+            <td >
+                <input type="text" name="">
+            </td>
+            <td>物流码</td>
+            <td >
+                <input type="text" name="">
+            </td>
+             <td>产品型号</td>
+            <td >
+                <input type="text" name="">
+            </td>
+            <td>销往地区</td>
+            <td>
+                <input type="text">
+            </td>
+        </tr>
+        <tr>    
+            <td>窜货地区</td>
+            <td>
+                <input type="text">
+            </td>
+            <td>是否处理</td>
+            <td>
+                <select name="" id="">
+                    <option value="">请选择</option>
+                    <option value="">未处理</option>
+                    <option value="">已处理</option>
+                </select>
+            </td>
+            <td>销往地区号</td>
+            <td>
+                <input  type="text" >
+            </td>
+            <td>窜货地区号</td>
+            <td>
+                <input type="text">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<table class="listTable"></table>
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+<script>
+    $(function(){
+        $("table.listTable").flexigrid(GRID);
+    });
+    var GRID = {
+        form: $("form"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        showCheckBox: false,
+        colModel: [
+            {display: "所属公司", name: "orgName", width: 120, sortable: true},
+            {display: "产品名称", name: "productName", width: 80, sortable: true},
+            {display: "产品型号", name: "standard", width: 110, sortable: true},
+            {display: "物流码", name: "transCode", width: 100, sortable: true},
+            {display: "销往地区号", name: "saleAreaDealer", width: 60, sortable: true},
+            {display: "销往地区", name: "saleAreaDealerName", width: 100, sortable: true},
+            {display: "窜货地区号 ", name: "verifyAreaDealer", width: 60, sortable: true},
+            {display: "窜货地区 ", name: "verifyAreaName", width: 100, sortable: true},
+            {display: "最后扫描时间 ", name: "verifyTime", width: 60, sortable: true,},
+            {display: "窜货可能 ", name: "conflictStatus", width: 40, sortable: true,
+                dataFormat:function(value,td,row)
+                {
+                    var pro = row.processed;
+                    if (value == 1 && pro == 0) {
+                        td.style.backgroundColor="yellow";
+                        td.style.color="black";
+                    }
+                    else if (value == 1 && pro == 1) {
+                        td.style.backgroundColor="red";
+                        td.style.color="black";
+                    }
+                    else
+                    {
+                        td.style.backgroundColor="white";
+                        td.style.color="black";
+                    }
+
+                    if (value == 1)
+                        return '<span style="color:black;"> YES </span>';
+                    else
+                        return '<span> NO</span>';
+                }
+            },
+            {display: "是否处理", name: "processed", width:50, sortable: true,
+                dataFormat:function(value,td,row)
+                {
+                    if (value == 1)
+                        return '<span style="color:black;"> 已处理 </span>';
+                    else
+                        return '<span> 未处理 </span>';
+                }
+            },
+            {display:"操作",name:"id",width:50,sortable:true,
+                dataFormat: function(value, td, row){
+                    var operation= '<span class="detailBtn rowBtn" title="查看" onclick="rowDetail(this)"></span>';
+                    if (row.processed != 1)
+                    {
+                        operation = '<span class="editBtn rowBtn" title="处理" onclick="rowEdit(this)"></span>';
+                    }
+                    return operation;
+                }
+            }
+        ]
+    };
+    var OPR = {
+        detail: {
+            url: "../html/inside/conflictItem.html?type=detail",
+            primaryKey: "id",
+            name:"窜货列表详情"
+        },
+        edit: {
+            url: "../html/inside/conflictItem.html?type=edit",
+            primaryKey: "id",
+            name:"窜货列表处理"
+        }
+    };
+    function rowEdit(obj){
+        edit(OPR.edit,obj,true);
+    }
+
+    function rowDetail(obj){
+        detail(OPR.detail, obj, true);
+    }
+</script>
+</body>
+</html>

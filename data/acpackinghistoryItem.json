@@ -1,0 +1,23 @@
+{
+  "code":200,
+  "data":[
+    {
+      "productName":"",
+      "orgName":"杭州熊本士日用品有限公司",
+      "standard":"",
+      "barcode":"",
+      "serialNo":"",
+      "transCode":"",
+      "saleArea":"",
+      "saleAreaName":"",
+      "produceDate":"2017-02-15 15:35:16",
+      "verifyTimes":""
+    }
+  ],
+  "dataSize": "1",
+  "listUser": "null",
+  "pageNum": "1",
+  "version": "-1",
+  "pageCount": "1",
+  "pageSize": "1"
+}

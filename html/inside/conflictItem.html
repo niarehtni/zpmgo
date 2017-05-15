@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+    <link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+    <title>窜货列表详情</title>
+    <style>
+        .ftitle {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px 0;
+            margin: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .flex-table {
+            width: 100%;
+            border-collapse:collapse;
+            table-layout: fixed;
+            font-size: 12px;
+        }
+        .flex-table th,.flex-table td{
+            border: 1px solid #d9d9d9;
+            border-width: 0 1px 1px 0;
+            text-align: center;
+            font-size: 12px !important;
+            line-height: 18px;
+            padding: 1px;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+        }
+        .flex-table th {
+            background-color: #E8F2FF;
+        }
+        .table-out {
+            width: 100%;
+            max-height: 150px;
+            overflow: auto;
+        }
+        .table-container {
+            border: 1px solid #d9d9d9;
+        }
+        .flex-table-head-inner {
+            float: left;
+            background-color: #E8F2FF;
+        }
+        .flex-table-head {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<form action="../../data/success" method="POST">
+    <div class="module" style="width: 100%;">
+        <div class="title">
+            <div class="item selected" v-cloak>窜货列表{{PAGETITLE}}</div>
+        </div>
+        <div class="content">
+            <div class="item selected" style="padding:10px;">
+                <table class="detailTable" border="1">
+                    <tr>
+                        <th width="20%">所属公司</th>
+                        <td width="30%">
+                            <span v-cloak   >{{orgName}}</span>
+                        </td>
+                        <th width="20%">产品名称</th>
+                        <td width="30%">
+                            <span v-cloak>{{productName}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">产品型号</th>
+                        <td width="30%">
+                            <span v-cloak>{{standard}}</span>
+                        </td>
+                        <th width="20%">物流码</th>
+                        <td width="30%">
+                            <span v-cloak>{{transCode}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">销往地区号</th>
+                        <td width="30%">
+                            <span v-cloak>{{saleAreaDealer}}</span>
+                        </td>
+                        <th width="20%">销往地区</th>
+                        <td width="30%">
+                            <span v-cloak>{{saleAreaDealerName}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">窜货地区号</th>
+                        <td width="30%">
+                            <span v-cloak>{{verifyAreaDealer}}</span>
+                        </td>
+                        <th width="20%">窜货地区</th>
+                        <td width="30%">
+                            <span v-cloak>{{verifyAreaName}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">最后扫描时间</th>
+                        <td width="30%">
+                            <span v-cloak>{{verifyTime}}</span>
+                        </td>
+                        <th width="20%">是否窜货</th>
+                        <td width="30%">
+                            <select name="" id="" v-if="!ISDETAIL">
+                                <option value="">未窜货</option>
+                                <option value="">窜货</option>
+                            </select>
+                            <span v-cloak="" v-else>
+                                <span v-if="conflictStatus==0">未窜货</span>
+                                <span v-if="conflictStatus==1">窜货</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">备注</th>
+                        <td colspan="3" style="height:60px">
+                            <textarea name="" id="" :value="content" :readonly="ISDETAIL" style="width: 98%;height: 98%;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <div class="ftitle">商品在该地的扫描记录</div>
+                <div class="table-container">
+                    <div class="table-out flex-table-head" id="table-head">
+                        <div class="flex-table-head-inner">
+                            <table class="flex-table">
+                                <colgroup>
+                                    <col style="width:10%">
+                                    <col span="3" style="width:30%">
+                                </colgroup>
+                                <tr>
+                                    <th></th>
+                                    <th>用户类型</th>
+                                    <th>扫描时间</th>
+                                    <th>扫描地址</th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="table-out flex-table-body" id="table-body">
+                        <table class="flex-table">
+                            <colgroup>
+                                    <col style="width:10%">
+                                    <col span="3" style="width:30%">
+                                </colgroup>
+                             <tr v-for="(item,index) in verifyHistory">
+                                <td>{{index}}</td>
+                                <td>{{item.userType}}</td>
+                                <td>{{item.gmtCreate}}</td>
+                                <td>{{item.verifyPosition}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="submit" v-if="PAGETYPE != 'detail'">
+                <center>
+                    <input type="button" class="saveBtn" value="处理">
+                </center>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+<script src="../../js/framework/table.js?v=1.0.1" ></script>
+<script src="../../js/default.js?v=1.0.1"></script>
+<script>
+    junAjax({
+        url: "../../data/conflictItem.json",
+        success: function(result){
+            if(result.code != "200"){
+                alert(result.data);
+            }else{
+                var vmParam = $.extend(true, VMDEFAULT, {
+                    data: result.data,
+                    methods: {
+                        measureScrollbar: function(){
+                            if(this.scrollbarWidth == null){
+                                var scrollDiv = document.createElement("div");
+                                scrollDiv.className = "jun-scrollbar-measure";
+                                document.body.appendChild(scrollDiv);
+                                var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+                                document.body.removeChild(scrollDiv);
+                                this.scrollbarWidth = scrollbarWidth;
+                            }
+                            return this.scrollbarWidth;
+                        },
+                        setHead: function(){
+                            if(document.getElementById("table-body").scrollHeight > document.getElementById("table-body").clientHeight ){
+                                $(".flex-table-head-inner").css("padding-right",this.measureScrollbar());
+                            }
+                        }
+                    }
+
+                });
+                var vm = new Vue(vmParam);
+                setTimeout(function(){
+                    vm.setHead();
+                },0);
+            }
+        },
+        error: function(){
+            alert("网络错误 ！");
+        }
+    });
+</script>
+</body>
+</html>

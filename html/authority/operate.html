@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <base href="./">
+	<title>操作列表</title>
+</head>
+<body>
+	<form action="../../data/operate" method="get">
+		<table class="searchTable">
+			<tbody>
+				<tr>
+					<td>操作名</td>
+  					<td style="padding-left:10px">
+  						<input type="text" name="">
+  					</td>	
+  				</tr>
+			</tbody>
+		</table>
+	</form>
+	<table class="listTable"></table>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+	<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+	<script>
+	$(function(){
+		$("table.listTable").flexigrid(GRID);	
+	});	
+	var GRID = {
+		form: $("form"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        colModel: [
+        	{display: "操作编号", name: "code", width: 200, sortable: true},
+        	{display: "操作名", name: "name", width: 200, sortable: true},
+			{display: "操作", name: "id", width: 100, sortable: true,
+				dataFormat: function(value, td, row){
+				    var oper = '';
+                    oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';
+            		oper += '<span class="detailBtn rowBtn" title="详情" onclick="rowDetail(this)"></span>';
+            		oper += '<span class="deletesBtn rowBtn" title="删除" onclick="rowDelete(this)"></span>';
+                    oper += '<span class="linkBtn rowBtn" title="关联菜单" onclick="link(this)"></span>';
+					return oper;
+				}
+			}
+        ],
+        add: {
+        	url: "../html/authority/operateItem.html",
+        },
+        edit: {
+        	url: "../html/authority/operateItem.html?type=edit",
+        	primaryKey: "id"
+        },
+        detail: {
+        	url: "../html/authority/operateItem.html?type=detail",
+        	primaryKey: "id",
+        },
+        deletes: {
+        	url : "",
+			primaryKey: "id"
+        },
+        buttons:[{
+            name: "关联菜单",
+            bclass: "linkBtn",
+            onpress: function(g){
+                alert("预留功能");
+                return;
+                edit(OPR,g);
+          }
+        }]
+	};
+    var OPR = {
+        url: "../html/authority/linkSystemMenu.jsp",
+        primaryKey: "id",
+        name: "关联菜单",
+        success : function() {},
+        error : function() {}
+    };
+    
+	function rowEdit(obj){
+		edit(GRID.edit, obj, true);
+	}
+
+	function rowDetail(obj){
+		detail(GRID.detail, obj, true);
+	}
+
+	function rowDelete(obj){
+		deletes(GRID.deletes, obj, true);
+	}
+
+    function link(obj){
+        alert("预留功能");
+        return;
+        executeRow(OPR, obj)
+    }
+	</script>
+</body>
+</html>

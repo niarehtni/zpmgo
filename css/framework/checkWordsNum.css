@@ -1,0 +1,14 @@
+.checkNumParent{
+	height: 100%;
+	position:relative;
+	background: none !important;
+}
+.checkNumDiv{
+	position:absolute;
+	float: right;
+	right: 25px;
+	height: 20px; 
+	line-height: 20px;
+	bottom: 0px;
+	font-weight: bold;
+}

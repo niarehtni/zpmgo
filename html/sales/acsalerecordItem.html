@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+    <link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+    <title>记录详情</title>
+</head>
+<body>
+<form action="../../data/success" method="POST">
+    <div class="module" style="width: 100%;">
+        <div class="title">
+            <div class="item selected" v-cloak>登记列表{{PAGETITLE}}</div>
+        </div>
+        <div class="content">
+            <div class="item selected" style="padding:10px;">
+                <table class="detailTable" border="1">
+                    <tr>
+                        <th width="20%">客户名称</th>
+                        <td width="30%">
+                            <input type="text" name="serialNo" title="客户名称" class="null" v-model="customerName" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{customerName}}</span>
+                        </td>
+                        <th width="20%">身份证号</th>
+                        <td width="30%">
+                            <input type="text" name="bindTime" title="身份证号" class="null" v-model="customerCardId" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{customerCardId}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">客户电话</th>
+                        <td width="30%">
+                            <input type="text" name="productCode" title="身份证号" class="null" v-model="customerTel" v-if="!ISDETAIL" :disabled="ISDETAIL">
+                            <span v-cloak v-else>{{customerTel}}</span>
+                        </td>
+                        <th width="20%"></th>
+                        <td width="30%">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="submit" v-if="PAGETYPE != 'detail'">
+                <center>
+                    <input type="button" class="saveBtn" value="保存">
+                </center>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+<script src="../../js/framework/table.js?v=1.0.1" ></script>
+<script src="../../js/default.js?v=1.0.1"></script>
+<script>
+
+    var vmParam = $.extend(true, VMDEFAULT, {
+        data: {
+            "bindId": "",
+            "city": "",
+            "confirmStatus": "",
+            "county": "",
+            "creator": "",
+            "customerCardId": "",
+            "customerName": "",
+            "customerTel": "",
+            "gmtCreate": "",
+            "gmtCreateString": "",
+            "id": "",
+            "order": "",
+            "orgId": "",
+            "orgName": "",
+            "productName": "",
+            "province": "",
+            "readStatus": "",
+            "saleDate": "",
+            "saleDateString": "",
+            "salerId": "",
+            "salerName": "",
+            "serialNo": "",
+            "sort": "",
+            "sortFieldType": "",
+            "standard": "",
+            "status": "",
+            "town": ""
+        },
+        filters: {
+            date: function(value){
+                return value.slice(0, 10);
+            }
+        }
+    });
+    var vm = new Vue(vmParam);
+    if(TYPE != null){
+        junAjax({
+            url: "../../data/acsalerecordItem.json",
+            success: function(result){
+                if(result.code != "200"){
+                    alert(result.data);
+                }else{
+                    for(data in result.data){
+                        vm[data] = result.data[data];
+                    };
+                }
+            },
+            error: function(){
+                alert("网络错误 ！");
+            }
+        });
+    }
+</script>
+</body>
+</html>

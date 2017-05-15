@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <base href="./">
+	<title>产品咨询</title>
+</head>
+<body>
+	<form action="../../data/acmessage" method="get">
+		<table class="searchTable">
+			<tbody>
+				<tr>
+					<td>企业名称</td>
+  					<td style="padding-left:10px">
+  						<input type="text" name="" value="">
+  					</td>
+  					<td>用户账号</td>
+  					<td style="padding-left:10px">
+  						<input type="text" name="" value="">
+  					</td>
+  					<td>产品名称</td>
+  					<td style="padding-left:10px">
+  						<input type="text" name="" value="">
+  					</td>
+  					<td>咨询时间</td>
+  					<td>
+  						<input id="startTime" type="text" class="Wdate" style="width: 100px;" onFocus="WdatePicker({lang:'zh-cn',readOnly:true,maxDate:'#F{$dp.$D(\'endTime\')}'})"/>至
+  						<input id="endTime" type="text" class="Wdate" style="width: 100px;" onFocus="WdatePicker({lang:'zh-cn',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})"/>
+  					</td>
+  				</tr>
+  				<tr>
+  					<td>产品规格</td>
+  					<td style="padding-left:10px">
+  						<input type="text" name="" value="">
+  					</td>
+  					<td>手机端显示</td>
+  					<td style="padding-left:10px">
+  						<select name="">
+  							<option value="全部">全部</option>
+  							<option value="显示">显示</option>
+  							<option value="不显示">不显示</option>
+  						</select>
+  					</td>
+  					<td>咨询状态</td>
+  					<td style="padding-left:10px">
+  						<select name="">
+  							<option value="0">全部</option>
+  							<option value="1">未答复</option>
+  							<option value="2">发送失败</option>
+  							<option value="3">答复发送中</option>
+  							<option value="4">已答复</option>
+  						</select>
+  					</td>				
+  				</tr>
+			</tbody>
+		</table>
+	</form>
+	<table class="listTable"></table>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+	<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+	<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+	<script>
+	$(function(){
+		$("table.listTable").flexigrid(GRID);	
+	});	
+	var GRID = {
+		form: $("form"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        showCheckBox: false,
+        colModel: [
+        	{display: "企业名称", name: "orgName", width: 90, sortable: true},
+			{display: "用户账号", name: "mobile", width: 70, sortable: true},
+			{display: "产品名称", name: "productName", width: 90, sortable: true},
+			{display: "产品规格", name: "standardCode", width: 80, sortable: true},
+			{display: "咨询问题", name: "consult", width: 150, sortable: true},
+			{display: "咨询时间", name: "consultTime", width: 80, sortable: true},
+			{display: "企业答复", name: "message", width: 100, sortable: true},
+			{display: "答复时间", name: "messageTime", width: 80, sortable: true},
+			{display: "答复状态", name: "status", width: 70, sortable: true, 
+				dataFormat: function(value, td, row){
+					
+					switch(value){
+						case 1:
+							return '<span style="color:red;font-weight:bold;">未答复</span>';
+						case 2:
+							return '<span style="color:red;font-weight:bold;">发送失败</span>';
+						case 3:
+							return '<span>答复发送中</span>';
+						case 4:
+							return '<span>已答复</span>';
+					}
+				}
+			},
+			{display: "手机端显示", name: "mobileBlock", width: 40, sortable: true,
+				dataFormat: function(value, td, row){
+					var disabled = "";
+					if(row["status"] != 4){
+						disabled = "disabled='disabled'";
+					}
+					switch(value){
+						case 0:
+							return '<input type="checkbox" onchange="updateMobileBloclk(this)" checked="checked" '+disabled+'>';
+						default:
+							return '<input type="checkbox" onchange="updateMobileBloclk(this)" '+disabled+'>';
+					}
+				}
+			},
+			{display: "手机端显示顺序", name: "mobileOrder", width: 40, sortable: true,
+				dataFormat: function(value, td, row){
+					var disabled = "";
+					if(row["status"] != 4){
+						disabled = "disabled='disabled'";
+					}
+					var select = 
+						"<select onchange='updateMobileOrder()' "+disabled+">\
+							<option value='1'>1</option>\
+							<option value='2'>2</option>\
+							<option value='3'>3</option>\
+							<option value='4'>4</option>\
+							<option value='5'>5</option>\
+						</select>";
+					select = select.replace(new RegExp("\\<option value='"+value+"'\\>"+value+"\\<\\/option\\>", "g"), "<option value='"+value+"' selected>"+value+"</option>");
+					return select;
+				}	
+			},
+			{display: "操作", name: "id", width:100, sortable: true,
+				dataFormat: function(value, td, row){
+					var oper = '<span style="padding:0 5px;color:blue;cursor:pointer;" onclick="rowView(this)">查看</span>';
+					if(row["status"] == 1){
+						oper += '<span style="padding:0 5px;color:blue;cursor:pointer;" onclick="rowReply(this)">答复</span>'; 
+					}
+					if(row["status"] == 2){
+						oper += '<span style="padding:0 5px;color:blue;cursor:pointer;" onclick="rowSend(this)">重发</span>'; 
+					}
+					return oper;
+				}
+			}
+        ]
+	};
+
+	function rowView(obj){
+		alert("预留功能");
+	}
+
+	function rowReply(obj){
+		alert("预留功能");
+	}
+
+	function rowSend(obj){
+		alert("预留功能");
+	}
+	</script>
+</body>
+</html>

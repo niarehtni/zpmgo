@@ -1,0 +1,99 @@
+{
+    "PRIMARYKEY": "null",
+    "pageSize": "15",
+    "pageNum": "1",
+    "pageCount": "5",
+    "dataSize": "61",
+    "data": [
+        {
+            "PRIMARYKEY": "route",
+            "code": "route",
+            "name": "航线预报管理",
+            "team": "PredictionManage"
+        },
+        {
+            "PRIMARYKEY": "InfoOutside",
+            "code": "InfoOutside",
+            "name": "外部数据",
+            "team": "InfoMake"
+        },
+        {
+            "PRIMARYKEY": "aquaculture",
+            "code": "aquaculture",
+            "name": "养殖区预报管理",
+            "team": "PredictionManage"
+        },
+        {
+            "PRIMARYKEY": "feedBack",
+            "code": "feedBack",
+            "name": "留言反馈",
+            "team": "PredictionManage"
+        },
+        {
+            "PRIMARYKEY": "emcee",
+            "code": "emcee",
+            "name": "主持人管理",
+            "team": "BasicDataManage"
+        },
+        {
+            "PRIMARYKEY": "oceanLaw",
+            "code": "oceanLaw",
+            "name": "海洋法规管理",
+            "team": "BasicDataManage"
+        },
+        {
+            "PRIMARYKEY": "fishPortWave",
+            "code": "fishPortWave",
+            "name": "渔港海浪",
+            "team": "PredictionManage"
+        },
+        {
+            "PRIMARYKEY": "fishPortWind",
+            "code": "fishPortWind",
+            "name": "渔港海风预报管理",
+            "team": "PredictionManage"
+        },
+        {
+            "PRIMARYKEY": "InfoNew",
+            "code": "InfoNew",
+            "name": "新建",
+            "team": "InfoMake"
+        },
+        {
+            "PRIMARYKEY": "InfoDraft",
+            "code": "InfoDraft",
+            "name": "草稿箱",
+            "team": "InfoMake"
+        },
+        {
+            "PRIMARYKEY": "NephogramDownload",
+            "code": "NephogramDownload",
+            "name": "云图下载",
+            "team": "PredictionManage"
+        },
+        {
+            "PRIMARYKEY": "InfoLevelManage",
+            "code": "InfoLevelManage",
+            "name": "信息级别管理",
+            "team": "BraceDataManage"
+        },
+        {
+            "PRIMARYKEY": "InfoTypeManage",
+            "code": "InfoTypeManage",
+            "name": "信息类型管理",
+            "team": "BraceDataManage"
+        },
+        {
+            "PRIMARYKEY": "Webwarn",
+            "code": "Webwarn",
+            "name": "水雨情实时监测",
+            "team": "PredictionManage"
+        },
+        {
+            "PRIMARYKEY": "Tide",
+            "code": "Tide",
+            "name": "潮汐预报管理",
+            "team": "PredictionManage"
+        }
+    ]
+}

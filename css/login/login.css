@@ -1,0 +1,77 @@
+@CHARSET "UTF-8";
+html,body{
+	padding: 0px;
+	margin: 0px;
+	height:100%;
+	overflow:hidden;
+}
+div.loginBody{
+	width: 100%;
+	min-width:1024px;
+	overflow-x:hidden;
+	height:2000px;
+	/*background: rgb(63, 159, 217);*/
+	background: white;
+}
+div.loginBody div.loginMiddle{
+	height: 100%;
+	position: relative;
+	background: url("../../images/login/login.jpg") 0px 0px no-repeat;
+	width:1024px;
+}
+
+div.loginBody div.patrolLoginMiddle{
+	height: 100%;
+	position: relative;
+	background: url("../../images/login/patrollogin.jpg") 0px 0px no-repeat;
+	width:1024px;
+}
+div.loginMiddle div.name,div.patrolLoginMiddle div.name{
+	position: absolute;
+	width: 201px;
+	height: 34px;
+	top: 376px;
+	left: 346px;
+}
+div.name input[type="text"],div.password input[type="password"]{
+	width: 150px;
+	height: 29px;
+	border: 1px solid #fff;
+	line-height: 25px;
+}
+div.loginMiddle div.password,div.patrolLoginMiddle div.password{
+	position: absolute;
+	width: 201px;
+	height: 34px;
+	top: 418px;
+	left: 346px;	
+}
+div.loginMiddle div.message,div.patrolLoginMiddle div.message{
+	position: absolute;
+	width: 170px;
+	height: 30px;
+	/**border: 1px solid red;**/
+	top: 495px;
+	left: 374px;
+	line-height: 30px;
+	font-size: 14px;
+	color: rgb(255, 0, 0);
+	font-family: Microsoft YaHei;
+	
+
+}
+div.loginMiddle div.login,div.patrolLoginMiddle div.login{
+	position: absolute;
+	width: 80px;
+	height: 34px;
+	top: 420px;
+	left: 578px;
+}
+div.login input[type="image"]{
+	/*width: 52px;*/
+}
+.rcode {
+	position: absolute;
+    top: 460px;
+    left: 347px;
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <base href="./">
+    <title>扫描日志</title>
+</head>
+<body>
+<form action="../../data/acverifylog" method="get">
+    <table class="searchTable">
+        <tbody>
+        <tr>
+            <td>标签编码</td>
+            <td>
+                <input type="text" name="">
+            </td>
+            <td>标签类型</td>
+            <td >
+                <select>
+                	<option value="">请选择</option>
+                	<option value="0">未知</option>
+                	<option value="1">LCD1</option>
+                	<option value="2">LCD2</option>
+                	<option value="3">LED</option>
+                	<option value="4">材料签1</option>
+                	<option value="5">材料签2</option>
+                </select>
+            </td>
+            <td>是否成功</td>
+            <td >
+                <select>
+                	<option value="">请选择</option>
+                	<option value="Y">成功</option>
+                	<option value="N">失败</option>
+                </select>
+            </td>
+            <td>信息类型</td>
+            <td>
+                <select>
+                	<option value="">请选择</option>
+					<option value="0">未知</option>                  		
+					<option value="1">成功</option>                  		
+					<option value="2">种子获取失败</option>                  		
+					<option value="3">验证失败</option>                  		
+					<option value="4">超时</option>                  		
+					<option value="5">网络连接失败</option>
+                </select>
+            </td>
+            <td>判定原因</td>
+            <td >
+                <select>
+                	<option value="">请选择</option>
+					<option value="0">扫描成功</option> 
+					<option value="2">扫描的条码或液晶码为空</option>                  		
+					<option value="3">标签未登记</option> 
+					<option value="4">算法验证不通过</option>                  		
+					<option value="5">没有产品信息</option> 
+					<option value="6">没有产品码信息</option>                  		
+					<option value="7">扫描成功，但产品安装时未填写客户信息</option> 
+					<option value="8">APP扫描超时</option> 
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>应用类型</td>
+            <td >
+                <select>
+                	<option value="">请选择</option>
+					<option value="1">苹果正品控</option>                  		
+					<option value="2">苹果售后管家</option>                  		
+					<option value="3">安卓正品控</option>                  		
+					<option value="4">安卓售后管家</option> 
+                </select>
+            </td>
+            <td>手机号</td>
+            <td>
+            	<input type="text" name="">
+            </td>
+             <td>用户类型</td>
+            <td >
+                <select>
+                	<option value="">请选择</option>
+					<option value="1">消费者</option>                  		
+					<option value="2">安装维修人员</option>  
+                </select>
+            </td>
+            <td>开始时间</td>
+            <td>
+                <input id="startTime" type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,maxDate:'#F{$dp.$D(\'endTime\')}'})" readonly="">
+            </td>
+            <td>结束时间</td>
+            <td>
+                <input id="endTime" type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<table class="listTable"></table>
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+<script>
+    $(function(){
+        $("table.listTable").flexigrid(GRID);
+    });
+    var GRID = {
+        form: $("form"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        showCheckBox: false,
+        colModel: [
+            {display: "标签编码", name: "serialNo", width: 120, sortable: true},
+            {display: "标签类型", name: "serialType", width: 60, sortable: true,
+            	dataFormat: function(value, td, row){
+					switch (value) {
+						case 0: return'未知';
+						case 1: return 'LCD1';
+						case 2: return 'LCD2';
+						case 3: return 'LED';
+						case 4: return '材料签1';
+						case 5: return '材料签2';
+						default:
+							return "";
+					}
+				}
+        	},
+            {display: "是否成功", name: "isVerifySuccess", width: 60, sortable: true},
+            {display: "设备UUID", name: "deviceUuid", width: 260, sortable: true},
+            {display: "应用类型", name: "appType", width: 60, sortable: true,
+            	dataFormat: function(value, td, row){
+					var type = '';
+					switch (value) {
+						case 1: type = '苹果正品控';break;
+						case 2: type = '苹果售后管家';break;
+						case 3: type = '安卓正品控';break;
+						case 4: type = '安卓售后管家';break;
+						default: type = "";
+					}
+					return type;
+				}
+        	},
+            {display: "手机号", name: "verifyMobile", width: 60, sortable: true},
+            {display: "经度 ", name: "longitude", width: 80, sortable: true},
+            {display: "纬度", name: "latitude", width: 80, sortable: true},
+            {display: "扫描地点", name: "verifyPosition", width: 180, sortable: true},
+            {display: "用时(ms) ", name: "scanTime", width: 120, sortable: true},
+            {display: "验证者账号", name: "userAccount", width:80, sortable: true},
+            {display: "用户类型", name: "userType", width:80, sortable: true,
+            	dataFormat: function(value, td, row){
+					switch (value) {
+						case 1: return '消费者';
+						case 2: return '安装维修人员';
+						default:
+							return "";
+					}
+				}
+        	},
+            {display: "信息类型", name: "infoType", width:80, sortable: true,
+            	dataFormat: function(value, td, row){
+					switch (value) {
+						case 0: return'未知';
+						case 1: return '成功';
+						case 2: return '种子获取失败';
+						case 3: return '验证失败';
+						case 4: return '超时';
+						case 5: return '网络连接失败';
+						default:
+							return "";
+					}
+				}
+        	},
+            {display: "信息描述", name: "infoDetail", width:60, sortable: true},
+            {display: "判定原因", name: "status", width:80, sortable: true,
+            	dataFormat: function(value, td, row){
+					switch (value) {
+						case 0: return'扫描成功';
+						case 2: return '扫描的条码或液晶码为空';
+						case 3: return '标签未登记';
+						case 4: return '算法验证不通过';
+						case 5: return '没有产品信息';
+						case 6: return '没有产品码信息';
+						case 7: return '扫描成功，但产品安装时未填写客户信息';
+						case 8: return 'APP扫描超时';
+						default:
+							return "";
+					}
+				}
+        	},
+            {display: "时间", name: "gmtCreate", width:140, sortable: true}
+        ]
+    };
+</script>
+</body>
+</html>

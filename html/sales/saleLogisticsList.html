@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <base href="./">
+    <title>登记列表</title>
+</head>
+<body>
+<form action="../../data/saleLogisticsList" method="get">
+    <table class="searchTable">
+        <tbody>
+        <tr>
+            <td>列表类型</td>
+            <td style="padding-left:10px">
+                <select name="">
+                    <option value="" selected>全部</option>
+                    <option value="">售出登记</option>
+                    <option value="">发货登记</option>
+                </select>
+            </td>
+            <td>所属公司</td>
+            <td style="padding-left:10px">
+                <select name="" id="">
+                    <option value=""></option>
+                </select>
+            </td>
+            <td>销售人员</td>
+            <td style="padding-left:10px">
+                <select name="" >
+                    <option value=""></option>
+                </select>
+            </td>
+            <td>销售时间</td>
+            <td>
+                <input  type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,maxDate:'#F{$dp.$D(\'endTime\')}'})" readonly="">至
+                <input  type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})">
+            </td>
+        </tr>
+        <tr>
+            <td>商品名称</td>
+            <td style="padding-left:10px">
+                <input type="text" name="">
+            </td>
+            <td>销往门店</td>
+            <td style="padding-left:10px">
+                <select name="" id="">
+                    <option value=""></option>
+                </select>
+            </td>
+            <td>发货人员</td>
+            <td style="padding-left:10px">
+                <select name="" id="">
+                    <option value=""></option>
+                </select>
+            </td>
+            <td>发货时间</td>
+            <td>
+                <input id="startTime" type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,maxDate:'#F{$dp.$D(\'endTime\')}'})" readonly="">至
+                <input id="endTime" type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})">
+            </td>
+             <td>编号</td>
+            <td><input type="text" name=""></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<table class="listTable"></table>
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+<script>
+    $(function(){
+        $("table.listTable").flexigrid(GRID);
+    });
+    var GRID = {
+        form: $("form"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        showCheckBox: false,
+        colModel: [
+            {display: "公司名称", name: "orgName", width: 100, sortable: true},
+            {display: "销往门店", name: "salePosName", width: 100, sortable: true},
+            {display: "标签序号", name: "serialNo", width: 120, sortable: true},
+            {display: "编号", name: "standard", width: 100, sortable: true},
+            {display: "发货人员", name: "deliverName", width: 100, sortable: true},
+            {display: "发货时间", name: "deliverTime", width: 100, sortable: true,},
+            {display:"是否发货",name:"deliverStatus",width:100,sortable:true,
+                dataFormat:function(value,td,row)
+                {
+                    if(value == 1){
+                        return "<span class='acserialsale_delivered_state'>已发货</span>";
+                    }else if(value == 0){
+                        return "<span class='acserialsale_undeliver_state'>未发货</span>";
+                    }
+                }
+            },
+            {display: "是否售出 ", name: "saleStatus", width: 70, sortable: true,
+                dataFormat:function(value,td,row)
+                {
+                    if(value == 1){
+                        return "<span class='acserialsale_sold_state'>已售出</span>";
+                    }else if(value == 0){
+                        return "<span class='acserialsale_unsell_state'>未售出</span>";
+                    }
+                }
+            },
+            {display: "销售人员", name: "salePerson", width: 70, sortable: true,},
+            {display: "销售时间", name: "saleDate", width: 60, sortable: true,},
+            {display: "修改时间 ", name: "gmtModified", width:50, sortable: true,},
+            {display: "备注", name: "productSaleMemo", width: 50,}
+        ]
+    };
+</script>
+</body>
+</html>

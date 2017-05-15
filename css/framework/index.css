@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	margin:0px;
+	padding:0px;
+}
+
+.logo {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 70px;
+	height: 50px;
+	background: url("../../images/default.PNG");
+}
+div.header div.tool {
+	padding-top: 0;
+}
+.tool > div {
+	float: right;
+}
+.logout,
+.updatePassword,
+.user {
+	width: 40px;
+	height: 50px;
+	background: url("../../images/default.PNG");
+	background-position: 53px 50%;
+	text-indent: -9999px;
+	cursor: pointer;
+}
+.logout {
+	background-position: 53px 50%;
+}
+.updatePassword {
+	background-position: 93px 50%;
+}
+.user {
+	display: block;
+	float: left;
+	cursor: default;
+	background-position: 133px 50%;
+}

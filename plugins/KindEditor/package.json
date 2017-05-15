@@ -1,0 +1,72 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "kindsoft/kindeditor",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "kindsoft/kindeditor",
+        "spec": "github:kindsoft/kindeditor",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:kindsoft/kindeditor.git",
+          "sshUrl": "git+ssh://git@github.com/kindsoft/kindeditor.git",
+          "httpsUrl": "git+https://github.com/kindsoft/kindeditor.git",
+          "gitUrl": "git://github.com/kindsoft/kindeditor.git",
+          "shortcut": "github:kindsoft/kindeditor",
+          "directUrl": "https://raw.githubusercontent.com/kindsoft/kindeditor/master/package.json"
+        }
+      },
+      "D:\\WebDesign\\xampp\\tomcat\\webapps\\AC"
+    ]
+  ],
+  "_from": "kindsoft/kindeditor",
+  "_id": "KindEditor@4.1.11",
+  "_inCache": true,
+  "_location": "/KindEditor",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "kindsoft/kindeditor",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "kindsoft/kindeditor",
+    "spec": "github:kindsoft/kindeditor",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:kindsoft/kindeditor.git",
+      "sshUrl": "git+ssh://git@github.com/kindsoft/kindeditor.git",
+      "httpsUrl": "git+https://github.com/kindsoft/kindeditor.git",
+      "gitUrl": "git://github.com/kindsoft/kindeditor.git",
+      "shortcut": "github:kindsoft/kindeditor",
+      "directUrl": "https://raw.githubusercontent.com/kindsoft/kindeditor/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git://github.com/kindsoft/kindeditor.git#9b195e7b8809602f3c28642bce12d7565e54ab36",
+  "_shasum": "87f2cb28660d8490c03da6b53fbaf4175f54c83e",
+  "_shrinkwrap": null,
+  "_spec": "kindsoft/kindeditor",
+  "_where": "D:\\WebDesign\\xampp\\tomcat\\webapps\\AC",
+  "dependencies": {},
+  "description": "KindEditor is a lightweight, Open Source(LGPL), cross browser, web based WYSIWYG HTML editor. KindEditor has the ability to convert standard textareas to rich text editing.",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-compress": "~0.5.3",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.7"
+  },
+  "filename": "kindeditor",
+  "gitHead": "9b195e7b8809602f3c28642bce12d7565e54ab36",
+  "name": "KindEditor",
+  "optionalDependencies": {},
+  "readme": "## What is KindEditor?\r\n\r\nKindEditor is a lightweight, Open Source(LGPL), cross browser, web based WYSIWYG HTML editor. KindEditor has the ability to convert standard textareas to rich text editing.\r\n\r\n## Official site\r\n\r\nhttp://kindeditor.org/\r\n\r\n## Contributors\r\n\r\n* Timon Lin\r\n* daif alotaibi (http://daif.net/) : Arabic Translation\r\n* fisker (https://github.com/fisker) : QQ style theme\r\n* composite (https://github.com/composite) : Korean Translation",
+  "readmeFilename": "README.md",
+  "version": "4.1.11"
+}

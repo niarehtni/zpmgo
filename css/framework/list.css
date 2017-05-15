@@ -1,0 +1,46 @@
+@charset "utf-8";
+div.list{
+	width:100%;
+	font-size:12px;
+	font-family:"youyuan";
+	padding:0px;
+}
+div.list ul{
+	width:100%;
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+div.list ul li{
+	width:100%;
+	padding:0px;
+	min-width:270px;
+	overflow:hidden;
+	float:left;
+	list-style:none;
+	height:18px;
+	line-height:18px;
+}
+
+div.list ul li:hover{
+	color:blue;
+	border-bottom:1px solid blue;
+	cursor:pointer;
+}
+div.list ul span{
+	width:110px;;
+	float:right;
+	text-align:right;
+}
+
+div.list ul li.oneLevel{
+	color:red;
+}
+
+div.list ul li.twoLevel{
+	color:orange;
+}
+
+div.list ul li.threeLevel{
+	color:rgb(236,224,0);
+}

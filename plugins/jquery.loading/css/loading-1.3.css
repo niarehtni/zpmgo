@@ -1,0 +1,80 @@
+﻿@charset "utf-8";
+
+.jun-loading {
+	position: fixed;
+	z-index: 9999;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	font-size: 12px !important;
+	background: rgba(204, 204, 204, 0.2);
+}
+.jun-loading-layer {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 11em;
+	height: 11em;
+	margin: -5.5em 0 0 -5.5em;
+	text-align: center;
+	background: rgba(50, 50, 50, 0.7);
+	-webkit-border-radius: 10px;
+ 	 -khtml-border-radius: 10px;
+ 	   -moz-border-radius: 10px;
+  	    -ms-border-radius: 10px;
+	     -o-border-radius: 10px;
+	        border-radius: 10px;
+}
+.jun-loading-with-title:after {
+	content: "加载中...";
+	color: rgb(255, 255, 255);
+}
+.jun-loading-animate {
+	position: relative;
+	width: 6em;
+	height: 6em;
+	margin: 1.5em auto;
+	-webkit-box-sizing: content-box;
+       -moz-box-sizing: content-box;
+        -ms-box-sizing: content-box;
+         -o-box-sizing: content-box;
+            box-sizing: content-box;
+	border: 1em solid rgb(137, 137, 137);
+    border-left-color: rgb(255, 255, 255);
+    -webkit-border-radius: 50%;
+ 	 -khtml-border-radius: 50%;
+ 	   -moz-border-radius: 50%;
+  	    -ms-border-radius: 50%;
+	     -o-border-radius: 50%;
+	        border-radius: 50%;
+    -webkit-animation: jun-loading 1.1s infinite linear;
+     -khtml-animation: jun-loading 1.1s infinite linear;
+       -moz-animation: jun-loading 1.1s infinite linear;
+        -ms-animation: jun-loading 1.1s infinite linear;
+         -o-animation: jun-loading 1.1s infinite linear;
+		    animation: jun-loading 1.1s infinite linear;
+}
+.jun-loading-with-title .jun-loading-animate {
+	margin: 0.8em auto;
+}
+@-webkit-keyframes jun-loading {
+	0% { -webkit-transform: rotate(0deg); }
+  	100% { -webkit-transform: rotate(360deg); }
+}
+@-moz-keyframes jun-loading {
+	0% { -moz-transform: rotate(0deg); }
+  	100% { -moz-transform: rotate(360deg); }
+}
+@-ms-keyframes jun-loading {
+	0% { -ms-transform: rotate(0deg); }
+  	100% { -ms-transform: rotate(360deg); }
+}
+@-o-keyframes jun-loading {
+	0% { -o-transform: rotate(0deg); }
+  	100% { -o-transform: rotate(360deg); }
+}
+@keyframes jun-loading {
+	0% { transform: rotate(0deg); }
+  	100% { transform: rotate(360deg); }
+}

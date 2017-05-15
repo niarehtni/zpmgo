@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <link rel="stylesheet" href="../../plugins/jquery.loading/css/loading-1.3.css">
+    <base href="./">
+    <title>活动列表</title>
+    <style>
+        html,body {
+            height: 100%;
+            margin: 0;
+        }
+        .tableOut {
+            position: relative;
+            height: 60%;
+            min-height: 200px;
+        }
+        .tableOut:nth-child(2){
+            height: 40%;
+        }
+        .formTarget {
+            position: absolute;
+            top: 2px;
+            left: 8px;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="tableOut">
+        <div id="div1" class="formTarget">
+            <form id="form1" action="../../data/acactivity" method="get">
+                <table class="searchTable">
+                    <tbody>
+                    <tr>
+                        <td>公司</td>
+                        <td style="padding-left:10px">
+                            <select name="" id="">
+                                <option value=""></option>
+                                <option value="">公司A</option>
+                            </select>
+                        </td>
+                        <td>标题</td>
+                        <td style="padding-left:10px">
+                            <input type="text">
+                        </td>
+                        <td>状态</td>
+                        <td style="padding-left:10px">
+                            <select name="">
+                                <option value="">请选择</option>
+                                <option value="">未发布</option>
+                                <option value="">已发布</option>
+                                <option value="">已取消</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <!--<p>未知参数</p>-->
+            <input type="text" id="acactivity_orgAdminUser_ids" value="[2223, 1739, 1037, 1]" style="display:none;" hidden>
+            <table class="listTable"></table>
+        </div>
+    </div>
+    <div class="tableOut">   
+        <div id="div2" class="formTarget">
+            <form id="form2" action="../../data/acactivityItem.json" method="get">
+                <input type="text" id="detail_id" name="id" hidden>
+                <table>
+                    <tr>
+                        <td>客户名称</td>
+                        <td><input type="text"></td>
+                    </tr>
+                </table>
+            </form>
+            <!--<p>未知参数</p>-->
+            <input type="text" id="acactivity_customer_footer" value="" style="display: none;" hidden>
+            <table id="detailTable"></table>
+        </div>
+    </div>
+
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+<script src="../../plugins/jquery.loading/loading-1.3.js"></script>
+<script>
+    $(function(){
+        //id="acactivity_orgAdminUser_ids"  未知意义参数
+        $("table.listTable").flexigrid(GRID);
+        $("#detailTable").flexigrid(detailGRID)
+        $("#acactivity_customer_footer").data("footer",false)
+    });
+    var GRID = {
+        target:"#div1",
+        form: $("#form1"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        showCheckBox: false,
+        singleSelect: true,
+        trClick: customer,
+        trFormat: function (tr, data) {
+            if(data.creator == 1)
+            {
+                $(tr).css({
+                    backgroundColor:"pink",
+                    color:"blue",
+                    fontWeight:"bold"
+                })
+            }
+        },
+        colModel: [
+            {display: "标题", name: "heading", width: "16%", sortable: true},
+            {display: "摘要", name: "summary", width: "16%", sortable: true, },
+            {display: "公司", name: "orgName", width: "16%", sortable: true},
+            {display: "状态", name: "status", width: "10%", sortable: true,
+                dataFormat:function (value,td,row)
+                {
+                    switch (value) {
+                        case 0:
+                            return '<span style="color:blue;">未发布</span>';
+                        case 1:
+                            return '<span style="color:black;">已发布</span>';
+                        case 2:
+                            return '<span style="color:red;">已取消 </span>';
+                        case 9:
+                            return '<span style="color:green;">已移除 </span>';
+                        default:
+                            return "未知";
+                    }
+                }
+            },
+            {display: "开始时间", name: "gmtStartString", width: "16%", sortable: true,},
+            {display: "结束时间", name: "gmtEndString", width: "16%", sortable: true,},
+            {display: "操作", name: "id", width: "10%", sortable: true,
+                dataFormat:function (value,td,row)
+                {
+                    var orgAdminUserList = JSON.parse($('#acactivity_orgAdminUser_ids').val());
+                    var editAll = '', viewAll = '', publish = '', remove = '', cancel = '';
+                    editAll="<span class='rowBtn editBtn' title='修改' onclick='rowEdit(this)'></span>";
+                    viewAll="<span class='searchBtn rowBtn' title='查看' onclick='rowDetail(this)'></span>";
+                    publish="<span class='rowBtn redoBtn' title='发布' onclick='rowPublish(this)'></span>";
+                    remove="<span class='rowBtn invalidBtn' title='移除' onclick='rowDelete(this)'></span>";
+                    cancel="<span class='rowBtn deletesBtn' title='取消' onclick='rowCancel(this)'></span>";
+                    for (var i = 0; i < orgAdminUserList.length; i++) {
+                        if (1 != row.creator && row.creator == orgAdminUserList[i]) {
+                            return viewAll;
+                        }
+                    }
+                    if (0 ==0 || (0 != 0 && 1 == row.creator)) {
+                        if (row.status == 1) {
+                            return viewAll + cancel;
+                        } else {
+                            return editAll + viewAll + publish + remove;
+                        }
+                    }
+                }
+            }
+        ],
+        add: {
+            primaryKey: "id",
+            url: "../html/activity/acactivityinfo.html",
+        }
+    };
+    var detailGRID = {
+        form: $("#form2"),
+        target: "#div2",
+        primaryKey: "id",
+        showCheckBox: false,
+        toolbarHide: true,
+        colModel: [
+            {display: "姓名", name: "name", width: "22.5%", sortable: true},
+            {display: "手机", name: "mobile", width: "22.5%", sortable: true},
+            {display: "门店", name: "posName", width: "22.5%", sortable: true},
+            {display: "积分", name: "totalIntegral", width: "22.5%", sortable: true},
+            {display: "操作", name: "serialNo", width: "10%", sortable: true,
+                dataFormat:function (value,td,row)
+                {
+                    footer=$("#acactivity_customer_footer").data("footer");
+                    if(footer!==false)
+                        minIntegral=footer[0].configValue;
+                    else
+                        minIntegral=false;
+                    var formatter="";
+                    formatter+="<span class='rowBtn searchBtn' title='查看积分' onclick='viewPoint(this)'></span>";
+                    formatter+="<span class='addBtn rowBtn' title='添加积分' onclick='addPoint(this)'></span>";
+                    if (minIntegral!==false && row.totalIntegral >= minIntegral) {
+                        formatter+="<span class='rowBtn minusBtn' title='兑换积分' onclick='exchangePoint(this)'></span>"
+                    }
+                    return formatter;
+                }
+            }
+        ]
+    };
+
+    var AC={
+        edit:{
+            url:"../html/activity/acactivityinfo.html?type=edit",
+            primaryKey:"id",
+            name:"活动修改"
+        },
+        remove:{},
+        cancel:{},
+        detail:{
+            url:"../html/activity/acactivityItem.html?type=detail",
+            primaryKey:"id",
+            name:"活动详情"
+        },
+        publish:{}
+    }
+
+    function isEmpty(obj)
+    {
+        // 检验 undefined 和 null
+        if(!obj && obj !== 0 && obj !== '') {
+            return true;
+        }
+
+        if(Array.prototype.isPrototypeOf(obj) && obj.length === 0)
+        {　　　　
+            return true;　
+        }
+
+        if(Object.prototype.isPrototypeOf(obj) && Object.keys(obj).length === 0)
+        { 　　
+            return true; 　
+        } 　　
+    　　return false;
+    }
+    
+    function customer(tr)
+    {
+        junAjax({
+            url:"../../data/acactivitycustomerfooter.json",
+            success:function (data)
+            {
+                isEmpty(data.footer);
+                $("#acactivity_customer_footer").data("footer",data.footer);
+                var id = $(tr).attr("primarykey");
+                $("#detail_id").val(id);
+                $('#detailTable').flexReload();
+            }
+        })
+
+    }
+
+    function rowEdit(obj)
+    {
+        edit(AC.edit,obj,true);
+    }
+
+    function rowDelete(obj)
+    {
+        deletes(AC.remove,obj,true)
+    }
+
+    function rowDetail(obj)
+    {
+        detail(AC.detail,obj,true);
+    }
+    function rowCancel(obj)
+    {
+        var tr = $(obj).parents("tr");
+        id=tr.attr("primarykey");
+        jConfirm("确定取消当前已发布活动吗?","提示信息",function () {
+            console.log(id)
+        })
+    }
+    function rowPublish(obj)
+    {
+        var tr = $(obj).parents("tr");
+        id=tr.attr("primarykey");
+        jConfirm("确定发布当前所选择活动吗?","提示信息",function () {
+            console.log(id)
+        })
+    }
+
+    var CUS={
+        viewPoint:{},
+        addPoint:{},
+        exchange:{},
+    }
+    function viewPoint(obj)
+    {
+        detail(CUS.viewPoint,obj,true)
+    }
+
+    function addPoint(obj)
+    {
+        edit(CUS.addPoint,obj,true)
+    }
+
+    function exchangePoint(obj)
+    {
+        edit(CUS.exchange,obj,true);
+    }
+</script>
+</body>
+</html>

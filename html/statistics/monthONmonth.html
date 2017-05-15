@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>验伪月统计</title>
+	<style>
+		.tableContainer table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		.tableContainer thead {
+			background: rgb(0,128,128);
+    		color: rgb(255, 255, 255);
+		}
+		.tableContainer th, .tableContainer td {
+			line-height: 27px;
+			font-size: 13px;
+    		text-align: center;
+    		border: 1px solid #ccc;
+		}
+		form input[type='text'] {
+			width: 120px;
+		}
+		form select {
+			min-width: 120px;
+		}
+		.hasData {
+			height: 400px;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+<body onload="Linkage(oDefault.comList)">
+	<form>
+		<table>
+			<tr>
+				<td>年份</td>
+				<td style="padding-left: 10px;">
+					<select id="year"></select>
+				</td>
+				<td>公司</td>
+				<td style="padding-left: 10px;">
+					<select>
+						<option></option>
+					</select>
+				</td>
+				<td>品牌</td>
+				<td style="padding-left: 10px;">
+					<select>
+						<option></option>
+					</select>
+				</td>
+				<td>品类</td>
+				<td style="padding-left: 10px;">
+					<select>
+						<option></option>
+					</select>
+				</td>
+				<td style="padding-left: 20px;">
+					<input type="button" value="查询" class="myBtn btn-primary" id="query">
+				</td>
+			</tr>
+			<tr>
+				<td>省</td>
+				<td style="padding-left: 10px;">
+					<select id="cmbProvince" sign="省"></select>
+				</td>
+				<td>市</td>
+				<td style="padding-left: 10px;">
+					<select id="cmbCity" sign="市"></select>
+				</td>
+				<td>县</td>
+				<td style="padding-left: 10px;">
+					<select id="cmbArea" sign="县"></select>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div class="chartContainer" id="line">
+	</div>
+	<div class="tableContainer">
+	</div>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/echarts/echarts.js?v=1.0.1"></script>
+	<script src="../../plugins/select.linkage.js?v=1.0.1"></script>
+	<script src="../../js/month.js?v=1.0.1"></script>
+</body>
+</html>

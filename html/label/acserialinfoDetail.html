@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>订单详情</title>
+	<style>
+		.order-detail-title {
+		    font-size: 14px;
+		    font-weight: bold;
+		    padding: 5px 0;
+		    margin-bottom: 10px;
+		    color: #EB6116;
+		}
+		.order-detail-item {
+		    margin-bottom: 5px;
+		}
+		.order-detail-item-name {
+		    color: #666666;
+		}
+		.order-detail-item-value {
+		    font-weight: bold;   
+		    color: #666666;
+		}
+		.order-detail-table {
+			border-collapse: collapse;
+		}
+		.order-detail-table th,.order-detail-table td {
+			border: solid 1px #d9d9d9;
+			text-align: center;
+			padding: 5px;
+		}
+		.order-detail-table th {
+			background-color: #E8F2FF;
+		}
+		.item-name-table td {
+			border-style: none;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+	<form action="" method="POST">
+		<div class="module" style="width: 100%;">
+			<div class="title">
+	    		<div class="item selected">订单详情</div>	
+	    	</div>
+	    	<div class="content" style="padding: 10px 60px;font-size: 13px;">
+	    		<div class="item selected" style="padding:10px;" >  
+	    			<div style="float: right;padding-right: 50px;" v-cloak v-if="sign">
+	    				<img src="../../images/order_received_mark.png">
+	    			</div>
+	    			<div class="order-detail-title" v-cloak v-if="sign">签收信息
+	    				<label class="order-detail-item-name" style="font-weight: normal;padding-left: 20px;">签收人：</label>
+	  					<label class="order-detail-item-value" style="color: black">测试订单</label>
+	  					<label class="order-detail-item-name" style="font-weight: normal;padding-left: 20px;">签收时间：</label>
+	  					<label class="order-detail-item-value" style="color: black">2016-11-23 03:00</label>
+	    			</div> 
+	  				<div class="order-detail-title">基础信息</div> 	
+	  				<div class="order-detail-item">
+	  					<label class="order-detail-item-name">物流编号：</label>
+	  					<label class="order-detail-item-value" style="color: #217DD9" v-cloak>{{wlh}}</label>
+	  				</div>
+	  				<div class="order-detail-item">
+	  					<label class="order-detail-item-name">订单编号：</label>
+	  					<label class="order-detail-item-value" v-cloak>{{ddbh}}</label>
+	  				</div>
+	  				<div class="order-detail-item">
+	  					<label class="order-detail-item-name">订单时间：</label>
+	  					<label class="order-detail-item-value" v-cloak>{{ddsj}}</label>
+	  				</div>
+	  				<div class="order-detail-item">
+	  					<label class="order-detail-item-name">收货信息：</label>
+	  					<label class="order-detail-item-value" v-cloak>{{address}}</label>
+	  					<label class="order-detail-item-value" v-cloak>{{name}}</label>
+	  				</div>
+	  				<table class="order-detail-table" style="width:100%;">
+						<thead>
+							<tr>
+								<th style="border-right: none;">宝贝</th>
+								<th style="border-left: none;border-right: none;">描述</th>
+								<th style="border-left: none;border-right: none;">单价(元)</th>
+								<th style="border-left: none;">数量</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<table class="item-name-table">
+										<tbody>
+											<tr>
+												<td>
+													<img :src="goodsImg" style="width:88px;height:88px;">
+												</td>
+												<td>
+													<span title="goodsName" v-cloak>{{goodsName}}</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+								<td v-cloak>{{goodsInfo}}</td>
+								<td>
+									<span title="goodsPrice" v-cloak>{{goodsPrice}}</span>
+								</td>
+								<td>
+									<span title="goodsNum" v-cloak>{{goodsNum}}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+	  				<div class="order-detail-title">订单追踪</div>
+	  				<a :href="'http://m.kuaidi100.com/index_all.html?type=yuantong&postid='+wlh" target="_blank" class="myBtn btn-default">物流查询</a> 	
+	    		</div>
+	    	</div>
+		</div>
+	</form>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+	<script src="../../js/framework/table.js?v=1.0.1" ></script>
+	<script src="../../js/default.js?v=1.0.1"></script>
+	<script>
+		/*junAjax({
+			url: "",
+			success: function(result){*/
+				result = {
+					code: "200", 
+					data: {		
+						sign: true,
+						wlh: "80129889283",
+						ddbh: "CO12781278278130849284",
+						ddsj: "2016-08-12 10:00:00",
+						address: "浙江省杭州市",
+						name: "张三",
+						goodsImg: "http://7xo7wm.com1.z0.glb.clouddn.com/cool/1452219844577.jpg",	
+						goodsName: "FASCY撕拉唇彩-橘色 3.5g",
+						goodsInfo: "规格:3.5g",
+						goodsNum: "1",
+						goodsPrice: "42.5"
+					}
+				};
+				if(result.code != "200"){
+					alert(result.data);
+				}else{
+					var vmParam = $.extend(true, VMDEFAULT, {
+						data: result.data
+					});
+					var vm = new Vue(vmParam);
+				}
+/*				},
+			error: function(){
+				alert("网络错误 ！");
+			}
+		});*/
+	</script>
+</body>
+</html>

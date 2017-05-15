@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <base href="./">
+    <title>安装维护列表</title>
+</head>
+<body>
+<form action="../../data/device" method="get">
+    <table class="searchTable">
+        <tbody>
+        <tr>
+            <td>产品名称</td>
+            <td>
+                <input type="text" name="">
+            </td>
+            <td>产品规格</td>
+            <td >
+                <input type="text" name="">
+            </td>
+            <td>物流码</td>
+            <td >
+                <input type="text" name="">
+            </td>
+            <td>用户姓名</td>
+            <td >
+                <input type="text" name="">
+            </td>
+            <td>用户手机</td>
+            <td>
+                <input type="text">
+            </td>
+        </tr>
+        <tr>
+            <td>街道地址</td>
+            <td>
+                <input type="text">
+            </td>
+            <td>所属公司</td>
+            <td>
+                <select name="" id="">
+                    <option value=""></option>
+                </select>
+            </td>
+            <td>安装时间</td>
+            <td>
+                <input id="startTime" type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,maxDate:'#F{$dp.$D(\'endTime\')}'})" readonly="">
+            </td>
+            <td>至</td>
+            <td>
+                <input id="endTime" type="text" class="Wdate" style="width: 100px;" onfocus="WdatePicker({lang:'zh-cn',readOnly:true,minDate:'#F{$dp.$D(\'startTime\')}'})">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<table class="listTable"></table>
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+<script>
+    $(function(){
+        $("table.listTable").flexigrid(GRID);
+    });
+    var GRID = {
+        form: $("form"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        showCheckBox: false,
+        colModel: [
+            {display: "所属公司", name: "orgName", width: 120, sortable: true},
+            {display: "产品名称", name: "productName", width: 80, sortable: true},
+            {display: "产品型号", name: "standard", width: 80, sortable: true},
+            {display: "物流码", name: "transCode", width: 100, sortable: true},
+            {display: "用户名称", name: "consumerName", width: 60, sortable: true},
+            {display: "用户手机", name: "consumerMobile", width: 60, sortable: true},
+            {display: "街道地址 ", name: "consumerAddress", width: 120, sortable: true},
+            {display: "修改地址 ", name: "modifiedAddress", width: 70, sortable: true},
+            {display: "安装人 ", name: "installManName", width: 60, sortable: true,},
+            {display: "安装时间 ", name: "installTime", width: 60, sortable: true,},
+            {display: "维修记录", name: "repairCount", width:50, sortable: true,},
+            {display: "重复安装", name: "reinstall", width: 50, sortable:true,
+                dataFormat:function (value,td,row)
+                {
+                    if (value == 1) {
+                        td.style.backgroundColor="yellow";
+                        td.style.color="black";
+                        return '<span style="color:black;"> YES </span>';
+                    }
+                    else {
+                        td.style.backgroundColor="white";
+                        td.style.color="black";
+                        return '<span> NO </span>';
+                    }
+                }
+            },
+            {display:"操作",name:"id",width:50,sortable:true,
+                dataFormat: function(value, td, row){
+                    var operation = '<span class="detailBtn rowBtn" title="查看" onclick="rowDetail(this)"></span>';
+                    if (row.reinstall == 1)
+                    {
+                        operation += '<span class="editBtn rowBtn" title="确认" onclick="rowEdit(this)"></span>';
+                        
+                    } 
+                    return operation;
+                }
+            }
+        ]
+    };
+
+    function rowEdit(obj){
+        jConfirm("确定保留该条安装记录并删除此商品的其他安装记录？","提示信息",
+            function(input){
+                if(input)
+                {
+                    console.log(obj);
+                }
+            }
+        )
+    }
+
+    function rowDetail(obj){
+        detail({
+            url: "../html/inside/deviceItem.html?type=detail",
+            primaryKey: "id",
+            name:"安装维护详情"
+        }, obj, true);
+    }
+</script>
+</body>
+</html>

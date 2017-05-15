@@ -1,0 +1,53 @@
+{
+      "data": [
+        {
+            "activityId": 1,
+            "creator": 44,
+            "gmtCreate": "2015-02-04 09:39:58",
+            "gmtCreateString": "2015-02-04 09:39:58",
+            "id": 2,
+            "integralId": 2,
+            "order": "desc",
+            "orgId": 2,
+            "orgName": "浙江帅丰电器有限公司",
+            "posId": 7,
+            "price": 10000,
+            "recommender": 1,
+            "recommenderName": "再见理想",
+            "shoppingCode": "20150204093958",
+            "shoppingStatus": 0,
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1,
+            "transCode": "14102080992B005"
+        },
+        {
+            "activityId": 1,
+            "creator": 44,
+            "gmtCreate": "2015-02-04 09:39:33",
+            "gmtCreateString": "2015-02-04 09:39:33",
+            "id": 1,
+            "integralId": 1,
+            "order": "desc",
+            "orgId": 2,
+            "orgName": "浙江帅丰电器有限公司",
+            "posId": 7,
+            "price": 0,
+            "recommender": 1,
+            "recommenderName": "再见理想",
+            "shoppingCode": "20150204093933",
+            "shoppingStatus": 0,
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1,
+            "transCode": "14041080010A001"
+        }
+    ],
+    "dataSize": "53",
+    "listUser": "null",
+    "pageNum": "1",
+    "version": "-1",
+    "code": "200",
+    "pageCount": "1",
+    "pageSize": "10000"
+}

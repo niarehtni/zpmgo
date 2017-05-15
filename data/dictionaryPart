@@ -1,0 +1,122 @@
+{
+     "data": [
+        {
+            "code": "01024",
+            "id": 239,
+            "isEditable": 0,
+            "itemName": "电子类",
+            "itemOrder": 1,
+            "itemValue": "1",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1,
+            "isEditable": 0,
+            "memo": "xx"
+        },
+        {
+            "code": "01024",
+            "id": 240,
+            "isEditable": 0,
+            "itemName": "塑胶类",
+            "itemOrder": 2,
+            "itemValue": "2",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1,
+            "isEditable": 1
+        },
+        {
+            "code": "01024",
+            "id": 241,
+            "isEditable": 0,
+            "itemName": "包材类",
+            "itemOrder": 3,
+            "itemValue": "3",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1
+        },
+        {
+            "code": "01024",
+            "id": 242,
+            "isEditable": 0,
+            "itemName": "五金类",
+            "itemOrder": 4,
+            "itemValue": "4",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1
+        },
+        {
+            "code": "01024",
+            "id": 243,
+            "isEditable": 0,
+            "itemName": "化工类",
+            "itemOrder": 5,
+            "itemValue": "5",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1
+        },
+        {
+            "code": "01024",
+            "id": 244,
+            "isEditable": 0,
+            "itemName": "辅料",
+            "itemOrder": 6,
+            "itemValue": "6",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1
+        },
+        {
+            "code": "01024",
+            "id": 245,
+            "isEditable": 0,
+            "itemName": "原料",
+            "itemOrder": 7,
+            "itemValue": "7",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1
+        },
+        {
+            "code": "01024",
+            "id": 246,
+            "isEditable": 0,
+            "itemName": "半成品",
+            "itemOrder": 8,
+            "itemValue": "8",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1
+        },
+        {
+            "code": "01024",
+            "id": 247,
+            "isEditable": 0,
+            "itemName": "成品",
+            "itemOrder": 9,
+            "itemValue": "9",
+            "order": "desc",
+            "sort": "id",
+            "sortFieldType": "",
+            "status": 1
+        }
+    ],
+    "dataSize": "53",
+    "listUser": "null",
+    "pageNum": "1",
+    "version": "-1",
+    "code": "200",
+    "pageCount": "1",
+    "pageSize": "10000"
+}

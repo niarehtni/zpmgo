@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+    <link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+    <title>系统配置</title>
+</head>
+<body>
+<form action="../../data/success" method="POST">
+    <div class="module" style="width: 100%;">
+        <div class="title">
+            <div class="item selected" v-cloak>系统配置{{PAGETITLE}}</div>
+        </div>
+        <div class="content">
+            <div class="item selected" style="padding:10px;">
+                <table class="detailTable" border="1">
+                    <tr>
+                        <th width="20%">配置项目</th>
+                        <td width="30%">
+                            <input type="text" name="configItem" title="配置项目" class="null" v-model="configItem" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{configItem}}</span>
+                        </td>
+                        <th width="20%">配置值</th>
+                        <td width="30%">
+                            <input type="text" name="configValue" title="配置值" class="null" v-model="configValue" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{configValue}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">公司</th>
+                        <td width="30%">
+                            <select name="orgName" v-model="orgName" v-if="!ISDETAIL">
+                                <option value="">{{orgName}}</option>
+                            </select>
+                            <span v-cloak="" v-else="">{{orgName}}</span>
+                        </td>
+                        <th width="20%">全局配置</th>
+                        <td width="30%">
+                            <select name="globalFlag" v-model="globalFlag" v-cloak v-if="!ISDETAIL">
+                                <option value="0">私有</option>
+                                <option value="1">全局</option>
+                            </select>
+                            <span v-cloak v-else>
+                                <span v-if="globalFlag==0">私有</span>
+                                <span v-else-if="globalFlag==1">全局</span>
+                                <span v-else>未知</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="height:200px;">
+                        <th width="20%" height="50">备注</th>
+                        <td width="30%" colspan="3" style="height: 200px;">
+                            <textarea name="" style="height: 100%;width: 98%;" v-model="memo" :readonly="ISDETAIL"></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="submit" v-if="PAGETYPE != 'detail'">
+                <center>
+                    <input type="button" class="saveBtn" value="保存">
+                </center>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+<script src="../../js/framework/table.js?v=1.0.1" ></script>
+<script src="../../js/default.js?v=1.0.1"></script>
+<script>
+    var vmParam = $.extend(true, VMDEFAULT, {
+        data: {
+            "configItem": "",
+            "configValue": "",
+            "creator": "",
+            "globalFlag": "",
+            "gmtCreate": "",
+            "gmtCreateString": "",
+            "gmtModified": "",
+            "gmtModifiedString": "",
+            "id": "",
+            "memo": "",
+            "modifier":"",
+            "order": "",
+            "orgId": "",
+            "orgName": "",
+            "sort": "",
+            "sortFieldType": "",
+            "status": ""
+        }
+    });
+    var vm = new Vue(vmParam);
+    if(TYPE != null){
+        junAjax({
+            url: "../../data/acsysconfigItem.json",
+            success: function(result){
+                if(result.code != "200"){
+                    alert(result.data);
+                }else{
+                    for(data in result.data){
+                        vm[data] = result.data[data];
+                    }
+                }
+            },
+            error: function(){
+                alert("网络错误 ！");
+            }
+        });
+    }
+</script>
+</body>
+</html>
