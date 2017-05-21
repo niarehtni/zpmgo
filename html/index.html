@@ -22,7 +22,7 @@
     	<div class="logo"></div>
 		<div class="tool">
 			<div class="logout" title="注销"></div>
-			<div onclick="editPwd()" class="updatePassword" title="修改密码"></div>
+			<div onclick="BASE.editPwd()" class="updatePassword" title="修改密码"></div>
 			<div style="padding: 0 10px;">
 				<span class="user"></span>admin
 			</div>
@@ -201,14 +201,6 @@
 	<script src="../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
 	<script src="../js/framework/jquery.framework.js?v=1.0.1"></script>
 	<script src="../js/framework/form.js?v=1.0.1"></script>
-	<script>
-
-	function editPwd(){
-		var url="";
-		top.addTab({href:url,name:"修改密码",closeCallBack:function(result){
-			
-		},closeCheckBefore:function(){return confirm("是否确定关闭？")}});
-	}
-	</script>
+	<script src="../js/base.js?v=1.0.3"></script>
 </body>
 </html>
