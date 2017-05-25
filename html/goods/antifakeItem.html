@@ -10,7 +10,7 @@
     <title>商品信息</title>
 </head>
 <body>
-<form action="../../data/success" method="POST">
+<form action="" method="POST">
     <div class="module" style="width: 100%;">
         <div class="title">
             <div class="item selected" v-cloak>商品信息{{PAGETITLE}}</div>
@@ -19,23 +19,88 @@
             <div class="item selected" style="padding:10px;">
                 <table class="detailTable" border="1">
                     <tr>
-                        <th width="20%">所属公司</th>
+                        <th width="20%">产品唯一标识</th>
                         <td width="30%">
-                            <input type="text" name="orgName" title="所属公司" class="null" v-model="orgName">
+                            <input type="text" name="productId" v-model="productId" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{productId}}</span>
                         </td>
-                        <th width="20%">生产日期</th>
+                        <th width="20%">卖家唯一标识</th>
                         <td width="30%">
-                            <input type="text" class="Wdate" title="生产日期" class="null" onFocus="WdatePicker({lang:'zh-cn',readOnly:true})" v-model="produceDate">
+                            <input type="text" name="sellerId" v-model="sellerId" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{sellerId}}</span>
                         </td>
                     </tr>
                     <tr>
-                        <th width="20%">销售地区编号</th>
+                        <th width="20%">商品名称</th>
                         <td width="30%">
-                            <input type="text" name="saleArea" v-model="saleArea">
+                            <input type="text" name="name" title="商品名称" class="null" v-model="name" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{name}}</span>
                         </td>
-                        <th width="20%">销售地区名称</th>
+                        <th width="20%">价格</th>
                         <td width="30%">
-                            <input type="text" name="saleAreaName" v-model="saleAreaName" >
+                            <input type="text" name="price" title="价格" class="null" v-model="price" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{price}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">销量</th>
+                        <td width="30%">
+                            <input type="text" name="sold" v-model="sold" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{sold}}</span>
+                        </td>
+                        <th width="20%">总库存</th>
+                        <td width="30%">
+                            <input type="text" name="stock" v-model="stock" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{stock}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">规格一名称</th>
+                        <td width="30%">
+                            <input type="text" name="firstName" v-model="firstName" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{firstName}}</span>
+                        </td>
+                        <th width="20%">规格一选项</th>
+                        <td width="30%">
+                            <input type="text" name="first" v-model="first" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{first}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">规格二名称</th>
+                        <td width="30%">
+                            <input type="text" name="secondName" v-model="secondName" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{secondName}}</span>
+                        </td>
+                        <th width="20%">规格二选项</th>
+                        <td width="30%">
+                            <input type="text" name="second" v-model="second" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{second}}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">规格三名称</th>
+                        <td width="30%">
+                            <input type="text" name="thirdName" v-model="thirdName" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{thirdName}}</span>
+                        </td>
+                        <th width="20%">规格三选项</th>
+                        <td width="30%">
+                            <input type="text" name="third" v-model="third" v-cloak v-if="!ISDETAIL">
+                            <span v-cloak v-else>{{third}}</span>
+                        </td>
+                    </tr>
+                    <!--<tr>
+                        <th width="20%" height="50">大图</th>
+                        <td width="30%" colspan="3">
+                            <div id="image"></div>
+                            <button @click="upload('image')" class="myBtn btn-primary" v-if="!ISDETAIL">上传图片</button>
+                        </td>
+                    </tr>-->
+                    <tr style="height:200px;">
+                        <th width="20%" height="50">简介</th>
+                        <td width="30%" colspan="3" style="height: 200px;">
+                            <textarea name="desc" style="height: 100%;width: 98%;" v-model="desc" :readonly="ISDETAIL"></textarea>
                         </td>
                     </tr>
                 </table>
@@ -51,26 +116,95 @@
 
 <script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
 <script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
-<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+<script src="../../plugins/AjaxUploader-0.0.1.js?v=1.0.1"></script>
 <script src="../../js/framework/table.js?v=1.0.1" ></script>
 <script src="../../js/default.js?v=1.0.1"></script>
 <script>
-    junAjax({
-        url: "../../data/antifakeItem.json",
-        success: function(result){
-            if(result.code != "200"){
-                alert(result.data);
-            }else{
-                var vmParam = $.extend(true, VMDEFAULT, {
-                    data: result.data
-                });
-                var vm = new Vue(vmParam);
+    var vmParam = $.extend(true, VMDEFAULT, {
+        data: {
+            productId:"",
+            sellerId: "",
+            name: "",
+            des: "",
+            barcode: "",
+            price: "",
+            sold: "",
+            stock: "",
+            icon: "",
+            image: "",
+            firstName: "",
+            secondName: "",
+            thridName: "",
+            first: "",
+            second: "",
+            third: ""
+        },
+        computed: {
+            ACTION: function(){
+                switch(TYPE){
+                    case "edit":
+                        return "api/product/update/"+getRequest("id");
+                    case "detail":
+                        return "api/product/get/"+getRequest("id");
+                    default:
+                        return "api/product/add";
+                }
             }
         },
-        error: function(){
-            alert("网络错误 ！");
+        methods: {
+            upload: function(ms, event){
+                new AjaxUploader({
+                    url: "https://file.zpmgo.com/rest/o/uploads/temp",
+                    name: "files",
+                    before: function(file){
+                        //验证
+                        if(!file||file[0].type.indexOf("image")<0){
+                            alert("请选择一张图片");
+                            return false;
+                        }
+                        if(file[0].size>500*1024){
+                            alert("请你选择一张小于500K的图片");
+                            return false;
+                        }
+                        return true;
+                    },
+                    callBack:function(result){
+                        //处理结果，显示预览
+                        if(result && result.data){
+                            for(var i=0;i<result.data.length;i++){
+                                var $file = fileStyle.createFilePicture({
+                                    src: "http://127.0.0.1:8080/file.center/rest/o/download/temp/"+result.data[i]+"/"+document.body.clientWidth,
+                                    width: 120,
+                                    height: 120
+                                });
+                                $("#"+ms).html($file);
+                                vm[ms] = result.data[i];
+                            }
+                        }
+                    }
+                });
+            }
         }
     });
+    var vm = new Vue(vmParam);
+    $("form").attr("action", vm.PREFIX+vm.ACTION);
+    if(TYPE != null){
+        junAjax({
+            url: vm.PREFIX+"api/product/get/"+getRequest("id"),
+            success: function(result){
+                if(result.code != "200"){
+                    alert(result.data);
+                }else{
+                    for(data in result.data){
+                        vm[data] = result.data[data];
+                    };
+                }
+            },
+            error: function(){
+                alert("网络错误 ！");
+            }
+        });
+    }
     
 </script>
 </body>

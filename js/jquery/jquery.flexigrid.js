@@ -414,9 +414,9 @@
 			addData : function(data) { // parse data
 				if (p.dataType == 'json') {
 					data = $.extend( {
-						rows : [],
+						data : [],
 						pageNum : 0,
-						dataSize : 0
+						pageSize : 0
 					}, data);
 				}
 				if (p.preProcess) {
@@ -747,56 +747,46 @@
 				if (p.page > p.pages) {
 					p.page = p.pages;
 				}
-				var param = [ {
-					name : 'pageBean.pageNum',
-					value : p.newp
-				}, {
-					name : 'pageBean.pageSize',
-					value : p.rp
-				}, {
-					name : 'pageBean.sortName',
-					value : p.sortname
-				}, {
-					name : 'pageBean.sortOrder',
-					value : p.sortorder
-				}, {
-					name : 'pageBean.query',
-					value : p.query
-				}, {
-					name : 'pageBean.qtype',
-					value : p.qtype
-				} ];
-				if (p.params) {
+				var param = {
+					count: true,
+					pageNum: p.newp,
+					pageSize: p.rp,
+					sortName: p.sortname,
+					sortOrder: p.sortOrder,
+					//query: p.query,
+					//qtype: p.qtype
+				};
+				
+				/*if (p.params) {
 					for ( var pi = 0; pi < p.params.length; pi++) {
 						param[param.length] = p.params[pi];
 					}
-				}
+				}*/
 				var url = p.url;
 				var method = p.method;
 				if (p.form) {
 					url = $(p.form).attr("action");
 					method = $(p.form).attr("method");
+					var filters = [];
 					var formStr = decodeURI($(p.form).serialize());
-					var formParams = formStr.split("&");
-					for ( var pi = 0; pi < formParams.length; pi++) {
-						var formParam = formParams[pi].split("=");
-						param[param.length] = {
-							name : formParam[0],
-							value : formParam[1]
-						};
-					}
-					for(pc =0;pc<p.colModel.length;pc++){
-						if(p.colModel[pc]!=null&&p.colModel[pc].name!=null){
-							param[param.length] = {
-									name : "pageBean.fields",
-									value : p.colModel[pc].name
-								};
+					if(formStr != ""){
+						var formParams = formStr.split("&");
+						for ( var pi = 0; pi < formParams.length; pi++) {
+							var formParam = formParams[pi].split("=");
+							var element = $(p.form).find("[name='"+formParam[0]+"']");
+							var cpr = element.attr("cpr");
+							var val = element.val();
+							if("like" == cpr && "" == val){
+								continue;
+							}
+							filters[filters.length] = {
+								key: element[0].name,
+								cpr: cpr,
+								val: cpr=="like"? "%"+val+"%" : val
+							};
 						}
+						param.filters = filters;
 					}
-					param[param.length] = {
-							name : "pageBean.fields",
-							value : "PRIMARYKEY"
-						};
 				}
 				if (url.indexOf("?") > 0) {
 					url = url + "&" + "&time=" + new Date().getTime();
@@ -806,15 +796,15 @@
 				$.ajax( {
 					type : method,
 					url : url,
-					data : param,
 					dataType : p.dataType,
+					contentType:'application/json',
+					data: JSON.stringify(param),
+					processData: false,
 					success : function(data) {
 						g.addData(data);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						alert("网络异常");
-						//alert(XMLHttpRequest.responseText);
-						// $("body").html(XMLHttpRequest.responseText);
 					try {
 						if (p.onError)
 							p.onError(XMLHttpRequest, textStatus, errorThrown);
@@ -1208,13 +1198,13 @@
 											var name=th.attr("abbr");
 											var title=th.find("div").text();
 											if(name&&name.length>0){
-												form.append($("<input name='pageBean.fields' value='"+name+"!"+title+"' />"));
+												form.append($("<input name='fields' value='"+name+"!"+title+"' />"));
 											}
 										}
 									}
-									form.append($("<input name='pageBean.pageSize' value='"+p.rp+"' />"));
-									form.append($("<input name='pageBean.pageNum' value='"+p.newp+"' />"));
-									form.append($("<input name='pageBean.query' value='"+p.exportExcel.title+"' />"));
+									form.append($("<input name='pageSize' value='"+p.rp+"' />"));
+									form.append($("<input name='pageNum' value='"+p.newp+"' />"));
+									form.append($("<input name='query' value='"+p.exportExcel.title+"' />"));
 									$("body").append(form);
 									form.get(0).submit();
 									form.remove();
@@ -1312,8 +1302,8 @@
 					}
 					$(g.tDiv).append(tDiv2);
 					if(p.likeValueSearch){
-						if($(g.tDiv).find("input[name='pageBean.likeValue']").length==0){
-							var likeValueInput=$("<input name='pageBean.likeValue' />");
+						if($(g.tDiv).find("input[name='likeValue']").length==0){
+							var likeValueInput=$("<input name='likeValue' />");
 							$(g.tDiv).append(likeValueInput);
 							likeValueInput.keydown(function(e) {
 								if (e.keyCode == 13) {
@@ -2145,15 +2135,17 @@ function deletes(jsonObj, g, rowExecute) {
 				} else {
 					url += "?time=" + new Date().getTime();
 				}
-				tr.each(
-						function() {
-							url += "&" + jsonObj.primaryKey + "="
-									+ $(this).attr("PRIMARYKEY");
-						});
+				var data = {ids:[]};
+				tr.each(function() {
+					data.ids.push($(this).attr("PRIMARYKEY"));
+				});
 				$.ajax( {
 					type : 'post',
 					url : url,
 					dataType : 'json',
+					contentType:'application/json',
+					data: JSON.stringify(data),
+					processData: false,
 					success : function(json) {
 						jsonObj.success(json);
 						$(".listTable").flexReload( {});

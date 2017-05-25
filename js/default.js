@@ -215,7 +215,14 @@ function submitForm(param)
 			//hiddenFillFrame();
 			return true;
 		}
-		var data=param.form.serialize();
+		var data = {};
+		var dataArray = param.form.serializeArray();
+		for(var i=0; i<dataArray.length; i++){
+			data[dataArray[i].name] = dataArray[i].value;
+		}
+		if(vm.formdata){
+			$.extend(data, vm.formdata());
+		}
 		var url=param.form.attr('action');
 		//确保不会因为路径缓存问题，而不提交数据
 		if(url.indexOf("?")>0)
@@ -228,9 +235,11 @@ function submitForm(param)
 		$.ajax({
 			url: url,
 			type: 'post',
-			data:data,
 			dataType: 'json',
+			contentType:'application/json',
+			data: JSON.stringify(data),
 			timeout: 30000,
+			processData: false,
 			error: function(json){
 				hiddenFillFrame();
 				json={
@@ -377,7 +386,7 @@ function checkDate(obj){
  * @return
  */
 function checkPhone(obj){
-	/**
+	
 	var phone=obj.val();
 	if(phone.length>0)
 	{
@@ -387,7 +396,7 @@ function checkPhone(obj){
 			return false;
 		}
 	}
-	**/
+	
 	return true;
 }
 
@@ -399,7 +408,7 @@ function checkPhone(obj){
 function checkPlus(obj){
 	var num=obj.val();
 	if(num.length>0){
-		if(parseFloat(num)==null||parseFloat(num)<0){
+		if(isNaN(num) || parseFloat(num)<0){
 			alert(obj.attr("title")+"只能为正数!");
 			obj.focus();
 			return false;
@@ -498,10 +507,10 @@ var fillDiv;
  *
  **/
 function showFillFrame()
-{
+{	
 	var fillDiv=$("#fillDiv");
 	if(fillDiv.size()==0){
-        $(document.body).append("<div id='fillDiv' style='height:"+document.body.scrollHeight+"px;'><div><img src='"+getProjectPath()+"/images/loading.gif' alt='正在加载...' /></div></div>");
+        $(document.body).append("<div id='fillDiv' class='fillDiv' style='height:"+document.body.scrollHeight+"px;'></div>");
 	}else
 	{
 		$("#fillDiv").css({"display":"block"});
@@ -710,6 +719,7 @@ function getRequest(name){
 }
 
 var TYPE = getRequest("type");
+
 var VMDEFAULT = {
 	el: "form",
 	computed: {
@@ -728,6 +738,84 @@ var VMDEFAULT = {
 		},
 		ISDETAIL: function(){
 			return "detail" === this.PAGETYPE ? true : false;
+		},
+		PREFIX: function() {
+		    return "https://g.zpmgo.com/";
+		},
+		basePathB: function() {
+		    return "https://g.zpmgo.com/";
+		},
+		basePathC: function() {
+			return "https://c.zpmgo.com/";
+		},
+		uploadBase: function(){
+			return "https://file.zpmgo.com/api/upload/temp";
+		},
+		downloadBase: function(){
+			return "https://file.zpmgo.com/api/download/temp/"
+		}
+	},
+	methods: {
+		pictureCheck: function (file) {
+			//验证
+			if(-1 == file.type.indexOf("image")){
+				alert("请选择一张图片");
+				return false;
+			}
+			if(file.size>500*1024){
+				alert("请你选择一张小于500K的图片");
+				return false;
+			}
+			return true;			
+		},
+		createFilePicture: function (files, name, param) {
+			var _this = this;
+			param = param || {};
+			var size = param["size"] ? param["size"] : 120;
+			
+			for(var i=0; i<files.length; i++){
+				var src = !param.type ? _this.downloadBase+files[i] : files[i];
+				var cParam = {
+					src: src,
+					width: size,
+					height: size,
+					multiple: param.multiple ? true : false
+				};
+				if("detail" == param.type){
+					var $file = fileStyle.createFilePicture(cParam, true);
+					if(typeof param.multiple != "undefined"){
+						$("#"+name).append($file);
+					}else{
+						$("#"+name).html($file);
+					}
+				}else{
+					cParam["deleteFun"] = function(file){
+						if(typeof param.multiple != "undefined"){
+							var pics = _this[name];
+							for(var i=0; i<pics.length; i++){
+								if(pics[i] == file.src){
+									_this[name].splice(i,1);
+									break;
+								}
+							}
+						}else{
+							_this[name] = "";
+						}
+					};
+					var $file = fileStyle.createFilePicture(cParam);
+					if(typeof param.multiple != "undefined"){
+						if(!param.type){
+							_this[name].push(src);
+						}
+						$("#"+name).append($file);
+					}else{
+						if(!param.type){
+							_this[name] = src;
+						}
+						$("#"+name).html($file);
+					}
+				}
+			}
 		}
 	}
 };
@@ -775,11 +863,10 @@ var fileStyle = {
 			);
 			$(".jun-file-delete", $file).on("click", function(){
 				var obj = $(this).parents(".jun-attachment");
-				var pObj = obj.parent();
 				obj.fadeOut("normal", function(){
 					$(this).remove();
 					if(file.deleteFun){
-						file.deleteFun(pObj);
+						file.deleteFun(file);
 					}
 				});
 			});
@@ -810,11 +897,10 @@ var fileStyle = {
 			);
 			$(".jun-file-delete", $file).on("click", function(){
 				var obj = $(this).parents(".jun-attachment");
-				var pObj = obj.parent();
 				obj.fadeOut("normal", function(){
 					$(this).remove();
 					if(file.deleteFun){
-						file.deleteFun(pObj);
+						file.deleteFun(file);
 					}
 				});
 			});
@@ -844,11 +930,10 @@ var fileStyle = {
 			//删除
 			$(".empty", $file).on("click", function(){
 				var obj = $(this).parents(".jun-attachment");
-				var pObj = obj.parent();
 				obj.fadeOut("normal", function(){
 					$(this).remove();
 					if(file.deleteFun){
-						file.deleteFun(pObj);
+						file.deleteFun(file);
 					}
 				});
 			});

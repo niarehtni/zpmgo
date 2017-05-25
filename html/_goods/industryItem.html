@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>行业信息</title>
+</head>
+<body>
+	<form action="" method="POST">
+		<div class="module" style="width: 100%;">
+			<div class="title">
+	    		<div class="item selected" v-cloak>行业信息{{PAGETITLE}}</div>	
+	    	</div>
+	    	<div class="content">
+	    		<div class="item selected" style="padding:10px;">    			
+	  				<table class="detailTable" border="1">
+						<tr>
+							<th width="20%">名称</th>
+							<td width="30%">
+								<input type="text" name="name" title="名称" class="null" v-model="name" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{name}}</span>
+							</td>
+							<th width="20%"></th>
+							<td width="30%"></td>
+						</tr>
+						<tr>
+							<th width="20%" height="50">图片</th>
+							<td width="30%" colspan="3" style="padding: 5px">
+								<div id="image"></div>
+								<button @click="upload('image')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
+							</td>
+						</tr>
+
+	  				</table>		
+	    		</div>
+	    		<div class="submit" v-if="PAGETYPE != 'detail'">
+	    		    <center>
+	    		    	<input type="button" class="saveBtn" value="保存">
+	    		    </center>
+	    		</div>
+	    	</div>
+		</div>
+	</form>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+	<script src="../../plugins/AjaxUploader-0.0.1.js?v=1.0.1"></script>
+	<script src="../../js/framework/table.js?v=1.0.1" ></script>
+	<script src="../../js/default.js?v=1.0.1"></script>
+	<script>
+		var vmParam = $.extend(true, VMDEFAULT, {
+			data: {
+				name: "",
+				image: ""
+			},
+			computed: {
+				ACTION: function(){
+					switch(TYPE){
+						case "edit":
+							return "meta/industry/update/"+getRequest("id");
+						case "detail":
+							return "meta/industry/get/"+getRequest("id");
+						default:
+							return "meta/industry/add";
+					}
+				}
+			},
+			methods: {
+				formdata: function(){
+					var data = {
+						image: this.image
+					};
+					return data;
+				},
+				upload: function(ms){
+					var _this = this;
+					new AjaxUploader({
+    					url: _this.uploadBase,
+    					name: "file",
+    					before: function(file){
+    						//验证
+    						return _this.pictureCheck(file);
+    					},
+    					callBack:function(result){
+        					//处理结果，显示预览
+    						if(result && result.data){
+    							_this.createFilePicture(result.data, ms);
+    						}
+    					}
+    				});
+				}
+			}
+		});
+		var vm = new Vue(vmParam);
+		$("form").attr("action", vm.basePathB+vm.ACTION);
+		if(TYPE != null){
+			junAjax({
+				url: vm.basePathB+"meta/industry/get/"+getRequest("id"),
+				success: function(result){
+					if(result.code != "200"){
+						alert(result.data);
+					}else{
+						for(data in result.data){
+							vm[data] = result.data[data];
+						}
+
+						if(typeof vm.image != "undefined" && vm.image != ""){
+							vm.createFilePicture([vm.image], "image", {type: vm.PAGETYPE});
+						}
+					}
+				},
+				error: function(){
+					alert("网络错误 ！");
+				}
+			});
+		}
+	</script>
+</body>
+</html>

@@ -10,7 +10,7 @@
 	<title>品牌列表</title>
 </head>
 <body>
-	<form action="../../data/brand" method="get">
+	<form action="" method="get">
 		<table class="searchTable">
 			<tbody>
 				<tr>
@@ -35,6 +35,7 @@
 	<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
 	<script>
 	$(function(){
+		$("form").attr("action", location.origin+"/api/brand");
 		$("table.listTable").flexigrid(GRID);	
 	});	
 	var GRID = {
@@ -43,10 +44,9 @@
         //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: "15%", sortable: true},
-			{display: "公司", name: "orgName", width: "20%", sortable: true},
-			{display: "简介", name: "brandDesc", width: "30%", sortable: true},
-			{display: "添加时间", name: "gmtCreate", width: "15%", sortable: true},
+        	{display: "名称", name: "name", width: "25%", sortable: true},
+			{display: "行业标识", name: "industryId", width: "25%", sortable: true},
+			{display: "描述", name: "des", width: "30%", sortable: true},
 			{display: "状态", name: "status", width: "10%", sortable: true, 
 				dataFormat: function(value, td, row){
 					switch(value){
@@ -85,7 +85,7 @@
         	primaryKey: "id",
         },
         deletes: {
-        	url : "",
+        	url : location.origin+"/api/brand/delete",
 			primaryKey: "id"
         }
 	};

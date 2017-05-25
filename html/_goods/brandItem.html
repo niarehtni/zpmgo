@@ -10,7 +10,7 @@
 	<title>品牌信息</title>
 </head>
 <body>
-	<form :action="PREFIX+ACTION" method="POST">
+	<form action="" method="POST">
 		<div class="module" style="width: 100%;">
 			<div class="title">
 	    		<div class="item selected" v-cloak>品牌信息{{PAGETITLE}}</div>	
@@ -26,14 +26,20 @@
 							</td>
 							<th width="20%">行业标识</th>
 							<td width="30%">
-								<input type="text" name="industryId" title="行业标识" class="null" v-model="industryId" v-cloak v-if="!ISDETAIL">
+								<select name="industryId" v-model="industryId" v-cloak v-if="!ISDETAIL">
+									<option></option>
+									<option v-for="s in INDUSTRYS" :value="s.id">{{s.name}}</option>
+								</select>
 								<span v-cloak v-else>{{industryId}}</span>
 							</td>
 						</tr>
 						<tr>
 							<th width="20%">状态</th>
 							<td width="30%">
-								<input type="text" name="status" title="状态" class="null" v-model="status" v-cloak v-if="!ISDETAIL">
+								<select name="status" v-model="status" v-cloak v-if="!ISDETAIL">
+									<option></option>
+									<option v-for="s in STATUSS" :value="s.id">{{s.name}}</option>
+								</select>
 								<span v-cloak v-else>{{status}}</span>
 							</td>
 							<th width="20%"></th>
@@ -42,24 +48,23 @@
 						<tr style="height:200px;">
 							<th width="20%" height="50">描述</th>
 							<td width="30%" colspan="3" style="height: 200px;">
-								<textarea name="" style="height: 100%;width: 98%;" v-model="des" :readonly="ISDETAIL"></textarea>
+								<textarea name="des" style="height: 100%;width: 98%;" v-model="des" :readonly="ISDETAIL"></textarea>
 							</td>
 						</tr>
 						<tr>
-							<th width="20%" height="50">品牌logo</th>
-							<td width="30%" colspan="3">
+							<th width="20%" height="50">logo</th>
+							<td width="30%" colspan="3" style="padding: 5px">
 								<div id="logoImage"></div>
-								<button @click="upload('logoImage')" class="myBtn btn-primary" v-if="!ISDETAIL">上传图片</button>
+								<button @click="upload('logoImage')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
 							</td>
 						</tr>
 						<tr>
-							<th width="20%" height="50">品牌宣传图片</th>
-							<td width="30%" colspan="3">
+							<th width="20%" height="50">图片</th>
+							<td width="30%" colspan="3" style="padding: 5px">
 								<div id="image"></div>
-								<button @click="upload('image')" class="myBtn btn-primary" v-if="!ISDETAIL">上传图片</button>
+								<button @click="upload('image')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
 							</td>
 						</tr>
-
 	  				</table>		
 	    		</div>
 	    		<div class="submit" v-if="PAGETYPE != 'detail'">
@@ -79,65 +84,90 @@
 	<script>
 		var vmParam = $.extend(true, VMDEFAULT, {
 			data: {
-				id: "",
 				name: "",
 				industryId: "",
 				des: "",
 				status: "",
 				logoImage: "",
-				image: ""
+				image: "",
+				INDUSTRYS: [],
+				STATUSS: []
 			},
 			computed: {
 				ACTION: function(){
 					switch(TYPE){
 						case "edit":
-							return "api/productLine/update";
+							return "meta/brand/update/"+getRequest("id");
 						case "detail":
-							return "api/brand/get/"+getRequest("id");
+							return "meta/brand/get/"+getRequest("id");
 						default:
-							return "api/brand/add";
+							return "meta/brand/add";
 					}
 				}
 			},
 			methods: {
+				formdata: function(){
+					var data = {
+						logoImage: this.logoImage,
+						image: this.image
+					};
+					return data;
+				},
 				upload: function(ms, event){
+					var _this = this;
 					new AjaxUploader({
-    					url: "http://127.0.0.1:8080/file.center/rest/o/uploads/temp",
-    					name: "files",
+    					url: _this.uploadBase,
+    					name: "file",
     					before: function(file){
     						//验证
-    						if(!file||file[0].type.indexOf("image")<0){
-    							alert("请选择一张图片");
-    							return false;
-    						}
-    						if(file[0].size>500*1024){
-    							alert("请你选择一张小于500K的图片");
-    							return false;
-    						}
-    						return true;
+    						return _this.pictureCheck(file);
     					},
     					callBack:function(result){
         					//处理结果，显示预览
     						if(result && result.data){
-    							for(var i=0;i<result.data.length;i++){
-    								var $file = fileStyle.createFilePicture({
-										src: "http://127.0.0.1:8080/file.center/rest/o/download/temp/"+result.data[i]+"/"+document.body.clientWidth,
-										width: 120,
-										height: 120
-									});
-									$("#"+ms).html($file);
-    								vm[ms] = result.data[i];
-    							}
+    							_this.createFilePicture(result.data, ms);
     						}
     					}
     				});
+				},
+				getIndustry: function(){
+					var _this = this;
+					var param = {
+						pageSize: 100
+					};
+					junAjax({
+						url: vm.basePathB+"meta/industry",
+						type: "POST",
+						contentType:'application/json',
+						data: JSON.stringify(param),
+						processData: false,
+						success: function(result){
+							if(result.code != "200"){
+								alert(result.data);
+							}else{
+								for(var i=0; i<result.data.length; i++){
+									_this.$set(_this.INDUSTRYS, i, {
+	                                    name: result.data[i].name,
+	                                    id: result.data[i].id
+	                                });
+								}
+							}
+						},
+						error: function(){
+							alert("网络错误 ！");
+						}
+					});
 				}
 			}
 		});
 		var vm = new Vue(vmParam);
+		$("form").attr("action", vm.basePathB+vm.ACTION);
+		if(TYPE != "detail"){
+			vm.getIndustry();
+		}
 		if(TYPE != null){
 			junAjax({
-				url: $("form")[0].action,
+				url: vm.basePathB+"meta/brand/get/"+getRequest("id"),
 				success: function(result){
 					if(result.code != "200"){
 						alert(result.data);
@@ -145,21 +175,12 @@
 						for(data in result.data){
 							vm[data] = result.data[data];
 						}
-						if(vm.logo != ""){
-							var $file = fileStyle.createFilePicture({
-								src: "http://127.0.0.1:8080/file.center/rest/o/download/temp/"+vm.logoImage+"/"+document.body.clientWidth,
-								width: 120,
-								height: 120
-							}, vm.ISDETAIL);
-							$("#logo").html($file);
+
+						if(typeof vm.logoImage != "undefined" && vm.logoImage != ""){
+							vm.createFilePicture([vm.logoImage], "logoImage", {type: vm.PAGETYPE});
 						}
-						if(vm.publicity != ""){
-							var $file = fileStyle.createFilePicture({
-								src: "http://127.0.0.1:8080/file.center/rest/o/download/temp/"+vm.image+"/"+document.body.clientWidth,
-								width: 120,
-								height: 120
-							}, vm.ISDETAIL);
-							$("#publicity").html($file);
+						if(typeof vm.image != "undefined" && vm.image != ""){
+							vm.createFilePicture([vm.image], "image", {type: vm.PAGETYPE});
 						}
 					}
 				},
@@ -168,7 +189,6 @@
 				}
 			});
 		}
-
 	</script>
 </body>
 </html>

@@ -10,7 +10,7 @@
 	<title>修改密码</title>
 </head>
 <body>
-	<form action="../../data/success" method="POST">
+	<form :action="PREFIX+'api/user/update/password'" method="POST">
 		<div class="module" style="width: 100%;">
 			<div class="title">
 	    		<div class="item selected" v-cloak>修改密码</div>	
@@ -21,7 +21,7 @@
 						<tr>
 							<th width="20%">用户名</th>
 							<td width="30%">
-								<input type="text" name="id" readonly>
+								<input type="text" name="id" v-model="id" readonly>
 							</td>
 							<th width="20%">旧密码</th>
 							<td width="30%">
@@ -50,10 +50,16 @@
 	</form>
 
 	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
 	<script src="../../js/framework/table.js?v=1.0.1" ></script>
 	<script src="../../js/default.js?v=1.0.1"></script>
 	<script>
-		
+		var vmParam = $.extend(true, VMDEFAULT, {
+			data: {
+				id: "admin"
+			}
+		});
+		var vm = new Vue(vmParam);
 	</script>
 </body>
 </html>

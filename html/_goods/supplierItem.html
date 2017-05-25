@@ -33,16 +33,18 @@
 						<tr>
 							<th width="20%">类型</th>
 							<td width="30%">
-								<select name="typeName" v-model="typeName" v-cloak v-if="!ISDETAIL">
-									<option value="学校">学校</option>
-									<option value="机关">机关</option>
-									<option value="企业">企业</option>
+								<select name="typeId" v-model="typeId" v-cloak v-if="!ISDETAIL">
+									<option></option>
+									<option v-for="s in TYPES" :value="s.id">{{s.name}}</option>
 								</select>
 								<span v-cloak v-else>{{typeName}}</span>
 							</td>
 							<th width="20%">品牌标识</th>
 							<td width="30%">
-								<input type="text" name="brandId" title="品牌标识" class="null" v-model="brandId" v-cloak v-if="!ISDETAIL">
+								<select name="brandId" v-model="brandId" v-cloak v-if="!ISDETAIL">
+									<option></option>
+									<option v-for="s in BRANDS" :value="s.id">{{s.name}}</option>
+								</select>
 								<span v-cloak v-else>{{brandId}}</span>
 							</td>
 						</tr>
@@ -50,45 +52,52 @@
 							<th width="20%">防伪类型</th>
 							<td width="30%">
 								<select name="verifyTypeId" v-model="verifyTypeId" v-cloak v-if="!ISDETAIL">
-									<option value="0">产品防伪</option>
-									<option value="1">包裹防伪</option>
+									<option></option>
+									<option v-for="s in VERIFYTYPES" :value="s.id">{{s.name}}</option>
 								</select>
-								<span v-cloak v-else>{{verifyTypeId=='0'?'产品防伪':'包裹防伪'}}</span>
+								<span v-cloak v-else>{{verifyTypeName}}</span>
 							</td>
 							<th width="20%">注册时间</th>
 							<td width="30%">
-								<input type="text" name="regTime" title="注册时间" class="Wdate null" id="regTime" onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:true})" :value="regTime | date" v-cloak v-if="!ISDETAIL">
-								<span v-cloak v-else>{{regTime | date}}</span>
+								<input type="text" name="regTime" class="Wdate" :change="change(this)" onFocus="WdatePicker({lang:'zh-cn',dateFmt:'yyyy-MM-dd',readOnly:true})" v-model="regTime" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{regTime}}</span>
 							</td>
 						</tr>
 						<tr>
 							<th width="20%">注册地址</th>
 							<td width="30%">
-								<input type="text" name="regAddress" title="注册地址" class="null" v-model="regAddress" v-cloak v-if="!ISDETAIL">
+								<input type="text" name="regAddress" v-model="regAddress" v-cloak v-if="!ISDETAIL">
 								<span v-cloak v-else>{{regAddress}}</span>
 							</td>
 							<th width="20%">经营范围</th>
 							<td width="30%">
-								<input type="text" name="busniessScop" title="经营范围" class="null" v-model="busniessScop" v-cloak v-if="!ISDETAIL">
+								<input type="text" name="busniessScop" v-model="busniessScop" v-cloak v-if="!ISDETAIL">
 								<span v-cloak v-else>{{busniessScop}}</span>
 							</td>
 						</tr>
 						<tr>
 							<th width="20%">联系电话</th>
 							<td width="30%">
-								<input type="text" name="tel" title="联系电话" class="null" v-model="tel" v-cloak v-if="!ISDETAIL">
+								<input type="text" name="tel" title="联系电话" class="phone" v-model="tel" v-cloak v-if="!ISDETAIL">
 								<span v-cloak v-else>{{tel}}</span>
 							</td>
 							<th width="20%">售后电话</th>
 							<td width="30%">
-								<input type="text" name="serviceTel" title="售后电话" class="null phone" v-model="serviceTel" v-cloak v-if="!ISDETAIL">
+								<input type="text" name="serviceTel" title="售后电话" class="phone" v-model="serviceTel" v-cloak v-if="!ISDETAIL">
 								<span v-cloak v-else>{{serviceTel}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%" height="50">图片</th>
+							<td width="30%" colspan="3" style="padding: 5px">
+								<div id="image"></div>
+								<button @click="upload('image')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
 							</td>
 						</tr>
 						<tr style="height:200px;">
 							<th width="20%" height="50">描述</th>
 							<td width="30%" colspan="3" style="height: 200px;">
-								<textarea name="desc" style="height: 100%;width: 98%;" v-model="desc" :readonly="ISDETAIL"></textarea>
+								<textarea name="des" style="height: 100%;width: 98%;" v-model="des" :readonly="ISDETAIL"></textarea>
 							</td>
 						</tr>
 	  				</table>		
@@ -105,6 +114,7 @@
 	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
 	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
 	<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
+	<script src="../../plugins/AjaxUploader-0.0.1.js?v=1.0.1"></script>
 	<script src="../../js/framework/table.js?v=1.0.1" ></script>
 	<script src="../../js/default.js?v=1.0.1"></script>
 	<script>
@@ -113,45 +123,113 @@
 				name:"",
 				abbr:"",
 				typeName:"",
+				typeId: "",
 				brandId:"",
 				verifyTypeId:"",
+				verifyTypeName: "",
 				regTime:"",
 				regAddress:"",
 				busniessScop:"",
+				image: "",
 				tel:"",
 				serviceTel:"",
-				desc:""
+				des:"",
+				TYPES: [],
+				BRANDS: [],
+				VERIFYTYPES:[]
 			},
 			computed: {
 				ACTION: function(){
 					switch(TYPE){
 						case "edit":
-							return "api/supplier/update/"+getRequest("id");
+							return "meta/supplier/update/"+getRequest("id");
 						case "detail":
-							return "api/supplier/get/"+getRequest("id");
+							return "meta/supplier/get/"+getRequest("id");
 						default:
-							return "api/supplier/add";
+							return "meta/supplier/add";
 					}
 				}
 			},
-			filters: {
-				date: function(value){
-					return value.slice(0, 10);
+			methods: {
+				formdata: function(){
+					var data = {
+						image: this.image,
+						verifyTypeName: $("[name='verifyTypeId'] option:selected").text(),
+						typeName: $("[name='typeId'] option:selected").text()
+					};
+					return data;
+				},
+				change: function(input){
+					this.regTime = $("[name='regTime']").val();
+				},
+				upload: function(ms, event){
+					var _this = this;
+					new AjaxUploader({
+    					url: _this.uploadBase,
+    					name: "file",
+    					before: function(file){
+    						//验证
+    						return _this.pictureCheck(file);
+    					},
+    					callBack:function(result){
+        					//处理结果，显示预览
+    						if(result && result.data){
+    							for(var i=0;i<result.data.length;i++){
+    								_this.createFilePicture(result.data, ms);
+    							}
+    						}
+    					}
+    				});
+				},
+				getBrand: function(){
+					var _this = this;
+					var param = {
+						pageSize: 100
+					};
+					junAjax({
+						url: vm.basePathB+"meta/brand",
+						type: "POST",
+						contentType:'application/json',
+						data: JSON.stringify(param),
+						processData: false,
+						success: function(result){
+							if(result.code != "200"){
+								alert(result.data);
+							}else{
+								for(var i=0; i<result.data.length; i++){
+									_this.$set(_this.BRANDS, i, {
+										name: result.data[i].name,
+										id: result.data[i].id
+									});
+								}
+							}
+						},
+						error: function(){
+							alert("网络错误 ！");
+						}
+					});
 				}
 			}
 		});
 		var vm = new Vue(vmParam);
-		$("form").attr("action", vm.PREFIX+vm.ACTION);
+		$("form").attr("action", vm.basePathB+vm.ACTION);
+		if(TYPE != "detail"){
+			vm.getBrand();
+		}
 		if(TYPE != null){
 			junAjax({
-				url: vm.PREFIX+"api/supplier/get/"+getRequest("id"),
+				url: vm.basePathB+"meta/supplier/get/"+getRequest("id"),
 				success: function(result){
 					if(result.code != "200"){
 						alert(result.data);
 					}else{
 						for(data in result.data){
 							vm[data] = result.data[data];
-						};
+						}
+
+						if(typeof vm.image != "undefined" && vm.image != ""){
+							vm.createFilePicture([vm.image], "image", {type: vm.PAGETYPE});
+						}
 					}
 				},
 				error: function(){

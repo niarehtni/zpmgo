@@ -12,6 +12,7 @@
 				url:"rest/o/uploads/temp",		//文件上传提交地址
 				name:"files",					//form参数名称
 				dataType:"json",				//结果数据类型
+				size:9,							//最大上传数量
 				input:false,					//input元素
 				initChoose:true,				//初始化时是否直接选择文件
 				before:function(file){
@@ -40,11 +41,13 @@
 				//初始化事件
 				var input=document.createElement("input");
 				input.setAttribute("type","file");
+				input.setAttribute("size",param.size);
+				input.setAttribute("multiple","true");
 				param.input=input;
 				document.body.appendChild(input);
 				input.style.display="none";
 				var changeFun=function(){
-					var file = input.files[0];
+					var file = input.files;
 					//验证文件参数
 					if(param.before.apply(input,[file])){
 						var xMLHttpRequest = _this.getXMLHttpRequest();
@@ -67,7 +70,9 @@
 							param.uploading.apply(input,[progressValue,event.loaded,event.total]);
 						}
 						var formData = new FormData();
-						formData.append(param.name,file);
+						for(var i=0;i<file.length;i++){
+							formData.append(param.name,file[i]);
+						}
 						
 						if ("withCredentials" in xMLHttpRequest){
 							xMLHttpRequest.open("post", param.url, true);

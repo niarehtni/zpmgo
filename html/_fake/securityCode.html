@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
+    <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
+    <base href="./">
+	<title>防伪码列表</title>
+</head>
+<body>
+	<form action="" method="POST">
+		<table class="searchTable">
+			<tbody>
+				<tr>
+					<td>标识</td>
+  					<td style="padding-left:10px">
+  						<input type="text" name="id" value="" cpr="like">
+  					</td>				
+  				</tr>
+			</tbody>
+		</table>
+	</form>
+	<table class="listTable"></table>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+	<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+	<script src="../../js/base.js?v=1.0.2"></script>
+	<script>
+	$(function(){
+		$("form").attr("action", BASE.setUrl("meta/securityCode", true));
+		$("table.listTable").flexigrid(GRID);	
+	});	
+	var GRID = {
+		form: $("form"),
+        //sortname: "",
+        //sortorder: "",
+        primaryKey: "id",
+        colModel: [
+        	{display: "标识", name: "id", width: 200, sortable: true},
+			{display: "订单标识", name: "orderId", width: 80, sortable: true},
+			{display: "商品标识", name: "goodsId", width: 80, sortable: true},
+			{display: "操作", name: "id", width: 80, sortable: true,
+				dataFormat: function(value, td, row){
+					var oper = '';
+            		oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';
+            		oper += '<span class="detailBtn rowBtn" title="详情" onclick="rowDetail(this)"></span>';
+            		oper += '<span class="deletesBtn rowBtn" title="删除" onclick="rowDelete(this)"></span>';
+					return oper;
+				}
+			}
+        ],
+        add: {
+        	url: "../html/_fake/securityCodeItem.html",
+        },
+        edit: {
+        	url: "../html/_fake/securityCodeItem.html?type=edit",
+        	primaryKey: "id"
+        },
+        detail: {
+        	url: "../html/_fake/securityCodeItem.html?type=detail",
+        	primaryKey: "id",
+        },
+        deletes: {
+        	url : BASE.getBasePathC()+"meta/securityCode/delete",
+			primaryKey: "id"
+        },
+        buttons:[{
+            name: "批量上传",
+            bclass: "uploadBtn",
+            onpress: function(g){
+                upload({
+                    url: "../html/_fake/securityCodeUpload.html",
+                    primaryKey: "id",
+                    name: "防伪码上传",
+                    success : function() {},
+                    error : function() {}
+                },g);
+            }
+        }]
+	};
+
+	function rowEdit(obj){
+		edit(GRID.edit, obj, true);
+	}
+
+	function rowDetail(obj){
+		detail(GRID.detail, obj, true);
+	}
+
+	function rowDelete(obj){
+		deletes(GRID.deletes, obj, true);
+	}
+
+	function upload(jsonObj, g) {
+        jsonObj = $.extend( {
+            url : false,
+            width : false,
+            height : false,
+            primaryKey : false,
+        }, jsonObj);
+        var url = jsonObj.url;
+        if (url.indexOf("?") > 0) {
+            url = url + "&time=" + new Date().getTime();
+        } else {
+            url = url + "?time=" + new Date().getTime();
+        }
+        
+        top.addTab({href:url,name:jsonObj.name,closeCallBack:function(result){
+            if(result.code == "200"){
+                jsonObj.success();
+                $(".listTable").flexReload( {});
+            }else{
+                jsonObj.error();
+            }
+       	},closeCheckBefore:function(){return confirm("是否确定关闭？")}});
+    }
+	</script>
+</body>
+</html>

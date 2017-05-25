@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>防伪码订单信息</title>
+</head>
+<body>
+	<form action="" method="POST">
+		<div class="module" style="width: 100%;">
+			<div class="title">
+	    		<div class="item selected" v-cloak>防伪码订单信息{{PAGETITLE}}</div>	
+	    	</div>
+	    	<div class="content">
+	    		<div class="item selected" style="padding:10px;">    			
+	  				<table class="detailTable" border="1">
+						<tr>
+							<th width="20%">编码</th>
+							<td width="30%">
+								<input type="text" name="code" title="编码" class="null" v-model="code" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{code}}</span>
+							</td>
+							<th width="20%">公司</th>
+							<td width="30%">
+								<select name="supplierId" v-model="supplierId" v-cloak v-if="!ISDETAIL">
+									<option></option>
+									<option v-for="s in SUPPLIERS" :value="s.id">{{s.name}}</option>
+								</select>
+								<span v-cloak v-else>{{supplierName}}</span>
+							</td>
+						</tr>
+						<tr>
+	                        <th width="20%">绑定数量</th>
+	                        <td width="30%">
+	                            <input type="text" name="bindNum" v-model="bindNum" title="绑定数量" class="plus integer" v-cloak v-if="!ISDETAIL">
+	                            <span v-cloak v-else>{{bindNum}}</span>
+	                        </td>
+	                        <th width="20%">数量</th>
+	                        <td width="30%">
+	                            <input type="text" name="num" v-model="num" title="数量" class="plus integer" v-cloak v-if="!ISDETAIL">
+	                            <span v-cloak v-else>{{num}}</span>
+	                        </td>
+	                    </tr>
+	                    <tr>
+							<th width="20%">防伪类型</th>
+							<td width="30%">
+								<select name="typeId" v-model="typeId" v-cloak v-if="!ISDETAIL">
+									<option></option>
+									<option v-for="s in TYPES" :value="s.id">{{s.name}}</option>
+								</select>
+								<span v-cloak v-else>{{typeName}}</span>
+							</td>
+							<th width="20%">状态</th>
+							<td width="30%">
+								<span v-cloak>{{status}}</span>
+							</td>
+						</tr>
+	  				</table>		
+	    		</div>
+	    		<div class="submit" v-if="PAGETYPE != 'detail'">
+	    		    <center>
+	    		    	<input type="button" class="saveBtn" value="保存">
+	    		    </center>
+	    		</div>
+	    	</div>
+		</div>
+	</form>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+	<script src="../../js/framework/table.js?v=1.0.1" ></script>
+	<script src="../../js/default.js?v=1.0.1"></script>
+	<script>
+		var vmParam = $.extend(true, VMDEFAULT, {
+			data: {
+				code: "",
+				num: "",
+				bindNum: "",
+				typeId: "",
+				typeName: "",
+				supplierId: "",
+				supplierName: "",
+				TYPES: [],
+				SUPPLIERS:[]
+			},
+			computed: {
+				ACTION: function(){
+					switch(TYPE){
+						case "edit":
+							return "meta/codeOrder/update/"+getRequest("id");
+						case "detail":
+							return "meta/codeOrder/get/"+getRequest("id");
+						default:
+							return "meta/codeOrder/add";
+					}
+				}
+			},
+			methods: {
+				formdata: function(){
+					var data = {
+						image: this.image
+					};
+					return data;
+				},
+				getSuppliers: function(){
+					var _this = this;
+					var param = {
+						pageSize: 1000
+					};
+					junAjax({
+						url: vm.basePathB+"meta/supplier?_="+new Date().getTime(),
+						type: "POST",
+						contentType:'application/json',
+						data: JSON.stringify(param),
+						processData: false,
+						success: function(result){
+							if(result.code != "200"){
+								alert(result.data);
+							}else{
+								for(var i=0; i<result.data.length; i++){
+									_this.$set(_this.SUPPLIERS, i, {
+	                                    name: result.data[i].name,
+	                                    id: result.data[i].id
+	                                });
+								}
+							}
+						},
+						error: function(){
+							alert("网络错误 ！");
+						}
+					});
+				}
+			}
+		});
+		var vm = new Vue(vmParam);
+		$("form").attr("action", vm.basePathC+vm.ACTION);
+		if(TYPE != "detail"){
+			vm.getSuppliers();
+		}
+		if(TYPE != null){
+			junAjax({
+				url: vm.basePathC+"meta/codeOrder/get/"+getRequest("id"),
+				success: function(result){
+					if(result.code != "200"){
+						alert(result.data);
+					}else{
+						for(data in result.data){
+							vm[data] = result.data[data];
+						}
+					}
+				},
+				error: function(){
+					alert("网络错误 ！");
+				}
+			});
+		}
+	</script>
+</body>
+</html>

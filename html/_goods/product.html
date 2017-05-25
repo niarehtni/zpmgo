@@ -7,47 +7,45 @@
     <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
     <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
     <base href="./">
-    <title>商品列表</title>
+    <title>产品列表</title>
 </head>
 <body>
-<form action="../../data/antifake" method="get">
-    <table class="searchTable">
-        <tbody>
-        <tr>
-            <td>商品名称</td>
-            <td >
-                <input type="text" name="name">
-            </td>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</form>
-<table class="listTable"></table>
+    <form action="" method="POST">
+        <table class="searchTable">
+            <tbody>
+                <tr>
+                    <td>名称</td>
+                    <td style="padding-left:10px">
+                        <input type="text" name="name" value="" cpr="like">
+                    </td>               
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <table class="listTable"></table>
 
-<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
-<script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
-<script src="../../plugins/My97DatePicker/WdatePicker.js?v=1.0.1"></script>
-<script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
-<script src="../../js/base.js?v=1.0.2"></script>
-<script>
+    <script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+    <script src="../../js/jquery/jquery.flexigrid.js?v=1.0.1"></script>
+    <script src="../../js/jquery/jquery.alerts.js?v=1.0.1"></script>
+    <script src="../../js/base.js?v=1.0.2"></script>
+    <script>
     $(function(){
-        $("form").attr("action", BASE.setUrl("api/supplier"));
-        $("table.listTable").flexigrid(GRID);
-    });
+        $("form").attr("action", BASE.setUrl("meta/product"));
+        $("table.listTable").flexigrid(GRID);   
+    }); 
     var GRID = {
         form: $("form"),
         //sortname: "",
         //sortorder: "",
         primaryKey: "id",
         colModel: [
-            {display: "商品名称", name: "name", width: 100, sortable: true},
-            {display: "价格", name: "price", width: 150, sortable: true},
+            {display: "名称", name: "name", width: 200, sortable: true},
+            {display: "价格", name: "price", width: 80, sortable: true},
+            {display: "销量", name: "sold", width: 80, sortable: true},
             {display: "总库存", name: "stock", width: 80, sortable: true},
-            {display: "销量", name: "sold", width: 90, sortable: true,},
             {display: "操作", name: "id", width: 80, sortable: true,
                 dataFormat: function(value, td, row){
-                   var oper = '';
+                    var oper = '';
                     oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';
                     oper += '<span class="detailBtn rowBtn" title="详情" onclick="rowDetail(this)"></span>';
                     oper += '<span class="deletesBtn rowBtn" title="删除" onclick="rowDelete(this)"></span>';
@@ -56,18 +54,18 @@
             }
         ],
         add: {
-            url: "../html/goods/antifakeItem.html",
+            url: "../html/_goods/productItem.html",
         },
         edit: {
-            url: "../html/goods/antifakeItem.html?type=edit",
+            url: "../html/_goods/productItem.html?type=edit",
             primaryKey: "id"
         },
         detail: {
-            url: "../html/goods/antifakeItem.html?type=detail",
+            url: "../html/_goods/productItem.html?type=detail",
             primaryKey: "id",
         },
         deletes: {
-            url : BASE.getBasePath()+"api/product/delete",
+            url : BASE.getBasePath()+"meta/product/delete",
             primaryKey: "id"
         }
     };
@@ -83,6 +81,6 @@
     function rowDelete(obj){
         deletes(GRID.deletes, obj, true);
     }
-</script>
+    </script>
 </body>
 </html>

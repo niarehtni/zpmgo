@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
+	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <base href="./">
+	<title>防伪码信息</title>
+</head>
+<body>
+	<form action="" method="POST">
+		<div class="module" style="width: 100%;">
+			<div class="title">
+	    		<div class="item selected" v-cloak>防伪码信息{{PAGETITLE}}</div>	
+	    	</div>
+	    	<div class="content">
+	    		<div class="item selected" style="padding:10px;">    			
+	  				<table class="detailTable" border="1">
+						<tr>
+							<th width="20%">订单标识</th>
+							<td width="30%">
+								<input type="text" name="orderId" title="订单标识" class="null" v-model="orderId" v-cloak v-if="!ISDETAIL">
+								<span v-cloak v-else>{{orderId}}</span>
+							</td>
+							<th width="20%">商品标识</th>
+							<td width="30%">
+								<select name="goodsId" v-model="goodsId" v-cloak v-if="!ISDETAIL">
+									<option></option>
+									<option v-for="s in GOODSS" :value="s.id">{{s.name}}</option>
+								</select>
+								<span v-cloak v-else>{{goodsId}}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="20%" height="50">图片</th>
+							<td width="30%" colspan="3" style="padding: 5px">
+								<div id="image"></div>
+								<button @click="upload('image')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
+							</td>
+						</tr>
+						<tr style="height:200px;">
+							<th width="20%" height="50">防伪内容</th>
+							<td width="30%" colspan="3" style="height: 200px;">
+								<textarea name="content" style="height: 100%;width: 98%;" v-model="content" :readonly="ISDETAIL"></textarea>
+							</td>
+						</tr>
+	  				</table>		
+	    		</div>
+	    		<div class="submit" v-if="PAGETYPE != 'detail'">
+	    		    <center>
+	    		    	<input type="button" class="saveBtn" value="保存">
+	    		    </center>
+	    		</div>
+	    	</div>
+		</div>
+	</form>
+
+	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
+	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
+	<script src="https://cdn.bootcss.com/vue-resource/1.3.3/vue-resource.min.js"></script>
+	<script src="../../plugins/AjaxUploader-0.0.1.js?v=1.0.1"></script>
+	<script src="../../js/framework/table.js?v=1.0.1" ></script>
+	<script src="../../js/default.js?v=1.0.1"></script>
+	<script>
+		var vmParam = $.extend(true, VMDEFAULT, {
+			data: {
+				orderId: "",
+				goodsId: "",
+				content: "",
+				image: "",
+				GOODSS:[]
+			},
+			computed: {
+				ACTION: function(){
+					switch(TYPE){
+						case "edit":
+							return "meta/securityCode/update/"+getRequest("id");
+						case "detail":
+							return "meta/securityCode/get/"+getRequest("id");
+						default:
+							return "meta/securityCode/add";
+					}
+				}
+			},
+			methods: {
+				formdata: function(){
+					var data = {
+						image: this.image
+					};
+					return data;
+				},
+				upload: function(ms, event){
+					var _this = this;
+					new AjaxUploader({
+    					url: _this.uploadBase,
+    					name: "file",
+    					before: function(file){
+    						//验证
+    						return _this.pictureCheck(file);
+    					},
+    					callBack:function(result){
+        					//处理结果，显示预览
+    						if(result && result.data){
+    							_this.createFilePicture(result.data, ms);
+    						}
+    					}
+    				});
+				},
+				getGoods: function(){
+					var _this = this;
+					var param = {
+						pageSize: 1000
+					};
+					var url = _this.basePathB+"meta/goods?_="+new Date().getTime();
+					_this.$http.post(url,param).then(function(response){
+						var result = response.body;
+						if(result.code != "200"){
+							alert(result.data);
+						}else{
+							for(var i=0; i<result.data.length; i++){
+								_this.$set(_this.GOODSS, i, {
+                                    name: result.data[i].name,
+                                    id: result.data[i].id
+                                });
+							}
+						}
+					},function(){
+						alert("网络错误！");
+					});
+				}
+			}
+		});
+		var vm = new Vue(vmParam);
+		$("form").attr("action", vm.basePathC+vm.ACTION);
+		if(TYPE != "detail"){
+			vm.getGoods();
+		}
+		if(TYPE != null){
+			var url = vm.basePathC+"meta/securityCode/get/"+getRequest("id");
+			vm.$http.post(url).then(function(response){
+				var result = response.body;
+				if(result.code != "200"){
+					alert(result.data);
+				}else{
+					for(data in result.data){
+						vm[data] = result.data[data];
+					}
+
+					if(typeof vm.image != "undefined" && vm.image != ""){
+						vm.createFilePicture([vm.image], "image", {type: vm.PAGETYPE});
+					}
+				}
+			},function(){
+				alert("网络错误 ！");
+			});
+		}
+	</script>
+</body>
+</html>

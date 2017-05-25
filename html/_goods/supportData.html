@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
     <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
     <base href="./">
-	<title>公司列表</title>
+	<title>支撑数据列表</title>
 </head>
 <body>
-	<form action="" method="get">
+	<form action="" method="POST">
 		<table class="searchTable">
 			<tbody>
 				<tr>
-					<td>名称</td>
+					<td>类型</td>
   					<td style="padding-left:10px">
-  						<input type="text" name="name" value="">
+  						<input type="text" name="type" value="" cpr="like">
   					</td>				
   				</tr>
 			</tbody>
@@ -30,7 +30,7 @@
 	<script src="../../js/base.js?v=1.0.2"></script>
 	<script>
 	$(function(){
-		$("form").attr("action", BASE.setUrl("api/supplier"));
+		$("form").attr("action", BASE.setUrl("meta/supportData"));
 		$("table.listTable").flexigrid(GRID);	
 	});	
 	var GRID = {
@@ -39,39 +39,9 @@
         //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 120, sortable: true},
-			{display: "中文简称", name: "abbr", width: 70, sortable: true},
-			{display: "类型", name: "typeName", width: 30, sortable: true},
-			{display: "防伪类型", name: "verifyTypeName", width: 50, sortable: true, 
-				dataFormat: function(value, td, row){
-					if(0 === value){
-						return "产品防伪";
-					}
-					return "包裹防伪";
-				}
-			},
-			{display: "品牌标识", name: "brandId", width: 120, sortable: true},
-			{display: "注册地址", name: "regAddress", width: 160, sortable: true},
-			{display: "注册时间", name: "regTime", width: 120, sortable: true},
-			{display: "经营范围", name: "busniessScop", width: 100, sortable: true},
-			{display: "联系电话", name: "tel", width: 90, sortable: true},
-			{display: "状态", name: "status", width: 40, sortable: true, 
-				dataFormat: function(value, td, row){
-					switch(value){
-						case 0:
-							return "异常";
-						case 1:
-							return "正常";
-						case 2:
-							return "演示";
-						case 9:
-							return "删除";
-						default:
-							return value;
-					}
-				}
-			},
-			{display: "操作", name: "id", width: 75, sortable: true,
+        	{display: "名称", name: "name", width: 100, sortable: true},
+			{display: "类型", name: "type", width: 100, sortable: true},
+			{display: "操作", name: "id", width: 80, sortable: true,
 				dataFormat: function(value, td, row){
 					var oper = '';
             		oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';
@@ -82,18 +52,18 @@
 			}
         ],
         add: {
-        	url: "../html/organization/organizationItem.html",
+        	url: "../html/_goods/supportDataItem.html",
         },
         edit: {
-        	url: "../html/organization/organizationItem.html?type=edit",
+        	url: "../html/_goods/supportDataItem.html?type=edit",
         	primaryKey: "id"
         },
         detail: {
-        	url: "../html/organization/organizationItem.html?type=detail",
+        	url: "../html/_goods/supportDataItem.html?type=detail",
         	primaryKey: "id",
         },
         deletes: {
-        	url : BASE.getBasePath()+"api/supplier/delete",
+        	url : BASE.getBasePath()+"meta/supportData/delete",
 			primaryKey: "id"
         }
 	};
