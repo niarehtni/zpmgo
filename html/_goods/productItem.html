@@ -200,7 +200,7 @@
                                 <img ng-src="{{node.content}}" ng-if="'image'==node.type">
                                 <video ng-src="{{trustSrc(node.content)}}" controls="controls" ng-if="'video'==node.type">你的播放器不支持该视频播放</video>
                             </div>
-                            <div class="operate display-flex flex-colum">
+                            <div class="operate display-flex flex-colum" ng-if="!isDetail">
                                 <i class="material-icons pointer" ng-click="nodeDel(node,$index)" title="删除">clear</i>
                                 <i class="material-icons pointer" ng-click="nodeEdit(node,$index)" title="编辑">create</i>
                             </div>
