@@ -4,201 +4,218 @@
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
-	<link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/angular-material/1.1.4/angular-material.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/default.css">
     <base href="./">
 	<title>渠道信息</title>
 </head>
-<body>
-	<form action="" method="POST">
-		<div class="module" style="width: 100%;">
-			<div class="title">
-	    		<div class="item selected" v-cloak>渠道信息{{PAGETITLE}}</div>	
-	    	</div>
-	    	<div class="content">
-	    		<div class="item selected" style="padding:10px;">    			
-	  				<table class="detailTable" border="1">
-						<tr>
-							<th width="20%">名称</th>
-							<td width="30%">
-								<input type="text" name="name" title="名称" class="null" v-model="name" v-cloak v-if="!ISDETAIL">
-								<span v-cloak v-else>{{name}}</span>
-							</td>
-							<th width="20%">公司名称</th>
-							<td width="30%">
-								<select name="supplierId" v-model="supplierId" v-cloak v-if="!ISDETAIL">
-									<option></option>
-									<option v-for="s in SUPPLIERS" :value="s.id">{{s.name}}</option>
-								</select>
-								<span v-cloak v-else>{{supplierName}}</span>
-							</td>
-						</tr>
-						<tr>
-							<th width="20%">渠道类型</th>
-							<td width="30%">
-								<select name="typeId" v-model="typeId" v-cloak v-if="!ISDETAIL">
-									<option></option>
-									<option v-for="s in TYPES" :value="s.id">{{s.name}}</option>
-								</select>
-								<span v-cloak v-else>{{typeName}}</span>
-							</td>
-							<th width="20%">联系电话</th>
-							<td width="30%">
-								<input type="text" name="tel" v-model="tel" title="联系电话" class="phone" v-cloak v-if="!ISDETAIL">
-								<span v-cloak v-else>{{tel}}</span>
-							</td>
-						</tr>
-						<tr>
-							<th width="20%">负责人</th>
-							<td width="30%">
-								<input type="text" name="managerName" v-model="managerName" v-cloak v-if="!ISDETAIL">
-								<span v-cloak v-else>{{managerName}}</span>
-							</td>
-							<th width="20%">负责人电话</th>
-							<td width="30%">
-								<input type="text" name="managerMobile" v-model="managerMobile" title="负责人电话" class="phone" v-cloak v-if="!ISDETAIL">
-								<span v-cloak v-else>{{managerMobile}}</span>
-							</td>
-						</tr>
-						<tr>
-							<th width="20%" height="50">图片</th>
-							<td width="30%" colspan="3" style="padding: 5px">
-								<div id="code"></div>
-								<button @click="upload('code')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
-							</td>
-						</tr>
-						<tr style="height:200px;">
-							<th width="20%" height="50">描述</th>
-							<td width="30%" colspan="3" style="height: 200px;">
-								<textarea name="des" style="height: 100%;width: 98%;" v-model="des" :readonly="ISDETAIL"></textarea>
-							</td>
-						</tr>
-	  				</table>		
-	    		</div>
-	    		<div class="submit" v-if="PAGETYPE != 'detail'">
-	    		    <center>
-	    		    	<input type="button" class="saveBtn" value="保存">
-	    		    </center>
-	    		</div>
-	    	</div>
-		</div>
-	</form>
+<body ng-app="lmApp" ng-cloak ng-controller="mainController">
+	<md-content layout-padding class="lm-pageTitle">
+   		渠道{{pageTitle}}
+	</md-content>
+	<md-card layout-padding>
+		<form name="form" ng-submit="onSubmit()">
+	        <div layout="row" layout-margin>
+	            <md-input-container flex>
+	                <label>渠道名称</label>
+	                <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
+	                <div ng-messages="form.name.$error" role="alert">
+	                    <div ng-message="required">请填写必要信息</div>
+	                </div>
+	            </md-input-container>
+	             <md-input-container flex>
+	                <label>公司</label>
+	                <md-select ng-model="data.supplierId" ng-change="supplierChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="supplier in supplierMap" ng-value="supplier.id">
+                            {{supplier.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.supplierName" ng-if="isDetail" disabled>
+	            </md-input-container>
+	            <md-input-container flex>
+	                <label>渠道类型</label>
+	                <md-select ng-model="data.typeId" ng-change="typeChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="type in typeMap" ng-value="type.id">
+                            {{type.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.typeName" ng-if="isDetail" disabled>
+	            </md-input-container>
+	        </div>
+	        <div layout="row" layout-margin>
+	        	<md-input-container flex>
+	                <label>联系电话</label>
+	                <input type="text" name="tel" ng-model="data.tel" telphone ng-disabled="isDetail">
+	                <div ng-messages="form.tel.$error" role="alert">
+	                    <div ng-message="telphone">格式不正确</div>
+	                </div>
+	            </md-input-container>
+	            <md-input-container flex>
+	                <label>负责人</label>
+	                <input type="text" name="managerName" ng-model="data.managerName" ng-disabled="isDetail">
+	            </md-input-container>
+	            <md-input-container flex>
+	                <label>负责人电话</label>
+	                <input type="text" name="managerMobile" ng-model="data.managerMobile" telphone ng-disabled="isDetail">
+	                <div ng-messages="form.managerMobile.$error" role="alert">
+	                    <div ng-message="telphone">格式不正确</div>
+	                </div>
+	            </md-input-container>
+	        </div>
+	        <div layout="row" layout-margin>
+	             <md-input-container flex>
+                    <label>描述</label>
+                    <textarea ng-model="data.des" rows="3" md-detect-hidden md-select-on-focus ng-disabled="isDetail"></textarea>
+                </md-input-container>
+	        </div>
+	        <div layout="row" layout-margin ng-if="!isDetail">
+	            <upload-section ws-options="options" ws-name="file" ws-text="图片"></upload-section>
+	        </div>
+	        <div class="jun-progress display-flex align-items-center flex-hc" ng-show="onLoading">
+                <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>
+            </div>
+	        <md-grid-list layout-margin class="gallery" 
+		    	md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
+		    	md-row-height="1:1" 
+		    	md-gutter="8px">
+		        <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '图片', data.code)" ng-if="data.code">
+		            <img ng-src="{{data.code}}" img-responsive>
+		            <md-grid-tile-footer>
+		            	<i class="material-icons pointer" ng-click="remove($event, 'code')" ng-if="!isDetail">delete_forever</i>
+		            	<h3 class="inline-block">图片</h3>
+		            </md-grid-tile-footer>
+		        </md-grid-tile>
+		    </md-grid-list>
+	        <div layout="row" layout-margin ng-if="!isDetail">
+	            <span flex></span>
+	            <md-button class="md-primary md-raised" type="submit" ng-disabled="form.$invalid">
+	           		保&nbsp;&nbsp;存
+	           	</md-button>
+	        </div>
+	    </form>
+	</md-card>
 
-	<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
-	<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
-	<script src="../../plugins/AjaxUploader-0.0.1.js?v=1.0.1"></script>
-	<script src="../../js/framework/table.js?v=1.0.1" ></script>
-	<script src="../../js/default.js?v=1.0.1"></script>
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular.min.js"></script>
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-animate.min.js"></script>
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-aria.min.js"></script>
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-messages.min.js"></script>
+	<script src="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.js"></script>
+	<script src="../../js/_default.js?v=1.0.1"></script>
 	<script>
-		var vmParam = $.extend(true, VMDEFAULT, {
-			data: {
-				name: "",
-				supplierId: "",
-				supplierName: "",
-				code: "",
-				des: "",
-				typeId: "",
-				typeName: "",
-				tel: "",
-				managerName: "",
-				managerMobile: "",
-				TYPES: [],
-				SUPPLIERS: []
-			},
-			computed: {
-				ACTION: function(){
-					switch(TYPE){
-						case "edit":
-							return "meta/channel/update/"+getRequest("id");
-						case "detail":
-							return "meta/channel/get/"+getRequest("id");
-						default:
-							return "meta/channel/add";
-					}
-				}
-			},
-			methods: {
-				formdata: function(){
-					var data = {
-						code: this.code,
-						typeName: $("[name='typeId'] option:selected").text(),
-						supplierName: $("[name='supplierId'] option:selected").text()
-					};
-					return data;
-				},
-				upload: function(ms, event){
-					var _this = this;
-					new AjaxUploader({
-    					url: _this.uploadBase,
-    					name: "file",
-    					before: function(file){
-    						//验证
-    						return _this.pictureCheck(file);
-    					},
-    					callBack:function(result){
-        					//处理结果，显示预览
-    						if(result && result.data){
-    							_this.createFilePicture(result.data, ms);
-    						}
-    					}
-    				});
-				},
-				getSupplier: function(){
-					var _this = this;
-					var param = {
-						pageSize: 100
-					};
-					junAjax({
-						url: vm.basePathB+"meta/supplier",
-						type: "POST",
-						contentType:'application/json',
-						data: JSON.stringify(param),
-						processData: false,
-						success: function(result){
-							if(result.code != "200"){
-								alert(result.data);
-							}else{
-								for(var i=0; i<result.data.length; i++){
-									_this.$set(_this.SUPPLIERS, i, {
-										name: result.data[i].name,
-										id: result.data[i].id
-									});
-								}
-							}
-						},
-						error: function(){
-							alert("网络错误 ！");
-						}
-					});
-				}
-			}
-		});
-		var vm = new Vue(vmParam);
-		$("form").attr("action", vm.basePathB+vm.ACTION);
-		if(TYPE != "detail"){
-			vm.getSupplier();
-		}
-		if(TYPE != null){
-			junAjax({
-				url: vm.basePathB+"meta/channel/get/"+getRequest("id"),
-				success: function(result){
-					if(result.code != "200"){
-						alert(result.data);
-					}else{
-						for(data in result.data){
-							vm[data] = result.data[data];
-						}
+		angular.module("lmApp")
+		.controller("mainController", ["$scope", "baseParam", "removeTab", "uploadCheck", "potoView", "lmToastHelper", "httpService", 
+			function($scope, baseParam, removeTab, uploadCheck, potoView, lmToastHelper, httpService){
+				$scope.data = {};
+				$scope.supplierMap = [];  //公司
+				$scope.typeMap = []; //渠道类型
+				$scope.determinateValue = 0;
 
-						if(typeof vm.code != "undefined" && vm.code != ""){
-							vm.createFilePicture([vm.code], "code", {type: vm.PAGETYPE});
+				$scope.onSubmit = function(){
+					if($scope.form.$valid){
+						if("edit" == $scope.pageType){
+							var action = baseParam.basePathB+"meta/channel/update/"+$scope.id;
+						}else{
+							var action = baseParam.basePathB+"meta/channel/add";
+						}
+						httpService.post(action, {
+							name: 		   $scope["data"]["name"],
+							code: 		   $scope["data"]["code"],
+							des: 		   $scope["data"]["des"],
+							tel: 		   $scope["data"]["tel"],
+							typeId:   	   $scope["data"]["typeId"],
+							typeName:      $scope["data"]["typeName"],
+							supplierId:    $scope["data"]["supplierId"],
+							supplierName:  $scope["data"]["supplierName"],
+							managerName:   $scope["data"]["managerName"],
+							managerMobile: $scope["data"]["managerMobile"]
+						})
+						.then(function(response){
+							removeTab.do(response);
+						}, function(error){
+							lmToastHelper.alert(error.message);
+						});
+					}
+				};
+
+				$scope.remove = function(event, type){
+                    event.preventDefault();
+                    $scope["data"][type] = "";
+                };
+
+				$scope.showPhotoView = potoView.show;
+
+				$scope.supplierChange = function() {
+					for(var i=0,len=$scope.supplierMap.length; i<len; i++){
+						if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
+							$scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
+							break;
 						}
 					}
-				},
-				error: function(){
-					alert("网络错误 ！");
+				};
+
+				$scope.typeChange = function(){};
+
+				$scope.options = {
+		            url: baseParam.uploadBase,
+		            before:function(file){
+		                //验证
+		                var result = uploadCheck.image(file);
+		                if(!result){
+		                	return false;
+		                }
+		                $scope.onLoading = true;
+		                $scope.determinateValue = 0;
+		                $scope.$digest();
+		                return true;
+		            },
+		            uploading: function(progressValue){
+                        $scope.determinateValue = progressValue;
+                        $scope.$digest();
+                    },
+		            callBack:function(result){
+		                //处理结果，显示预览
+		                if("200" == result.code){
+		                	$scope["data"]["code"] = baseParam.downloadBase+result["data"][0];
+		                }else{
+		                	lmToastHelper.alert(result.message);
+		                }
+		                $scope.onLoading = false;
+		                $scope.determinateValue = 0;
+		                $scope.$digest();
+		            }
+		        };
+
+		        //获取详情
+				if($scope.pageType != null){
+					(function(){
+						httpService.post(baseParam.basePathB+"meta/channel/get/"+$scope.id)
+						.then(function(response){
+							$scope.data = response.data;
+						}, function(error){
+							lmToastHelper.alert(error.message);
+						});
+					})();
 				}
-			});
-		}
+
+				//获取公司
+				if($scope.pageType != "detail"){
+					(function(){
+						httpService.post(baseParam.basePathB+"meta/supplier", {
+							pageSize: 1000
+						})
+						.then(function(response){
+							$scope.supplierMap = response.data;
+						}, function(error){
+							lmToastHelper.alert(error.message);
+						});
+					})();
+				}
+
+				//获取渠道类型
+			}
+		])
+	;
 	</script>
 </body>
 </html>

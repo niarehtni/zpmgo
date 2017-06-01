@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
     <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
     <base href="./">
-	<title>行业列表</title>
+	<title>产品类型</title>
 </head>
 <body>
 	<form action="" method="POST">
@@ -30,7 +30,7 @@
 	<script src="../../js/base.js?v=1.0.2"></script>
 	<script>
 	$(function(){
-		$("form").attr("action", BASE.setUrl("meta/industry"));
+		$("form").attr("action", BASE.setUrl("meta/productType"));
 		$("table.listTable").flexigrid(GRID);	
 	});	
 	var GRID = {
@@ -39,7 +39,9 @@
         //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 200, sortable: true},
+        	{display: "名称", name: "name", width: 120, sortable: true},
+			{display: "公司", name: "supplierName", width: 100, sortable: true},
+			{display: "描述", name: "des", width: 150, sortable: true},
 			{display: "操作", name: "id", width: 80, sortable: true,
 				dataFormat: function(value, td, row){
 					var oper = '';
@@ -51,18 +53,18 @@
 			}
         ],
         add: {
-        	url: "../html/_goods/industryItem.html",
+        	url: "../html/_fake/productTypeItem.html",
         },
         edit: {
-        	url: "../html/_goods/industryItem.html?type=edit",
+        	url: "../html/_fake/productTypeItem.html?type=edit",
         	primaryKey: "id"
         },
         detail: {
-        	url: "../html/_goods/industryItem.html?type=detail",
+        	url: "../html/_fake/productTypeItem.html?type=detail",
         	primaryKey: "id",
         },
         deletes: {
-        	url : BASE.getBasePath()+"meta/industry/delete",
+        	url : BASE.getBasePath()+"meta/productType/delete",
 			primaryKey: "id"
         }
 	};

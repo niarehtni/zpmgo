@@ -8,17 +8,17 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/default.css">
     <base href="./">
-	<title>门店信息</title>
+	<title>产品类型信息</title>
 </head>
 <body ng-app="lmApp" ng-cloak ng-controller="mainController">
 	<md-content layout-padding class="lm-pageTitle">
-   		门店{{pageTitle}}
+   		产品类型{{pageTitle}}
 	</md-content>
 	<md-card layout-padding>
 		<form name="form" ng-submit="onSubmit()">
 	        <div layout="row" layout-margin>
 	            <md-input-container flex>
-	                <label>门店名称</label>
+	                <label>名称</label>
 	                <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
 	                <div ng-messages="form.name.$error" role="alert">
 	                    <div ng-message="required">请填写必要信息</div>
@@ -34,32 +34,21 @@
                     <input type="text" ng-model="data.supplierName" ng-if="isDetail" disabled>
 	            </md-input-container>
 	            <md-input-container flex>
-	                <label>门店地址</label>
-	                <input type="text" name="fullAddress" ng-model="data.fullAddress" ng-disabled="isDetail">
+	                <label>父类标识</label>
+	                <md-select ng-model="data.productTypeId" ng-change="productTypehange()" ng-if="!isDetail">
+                        <md-option ng-repeat="productType in productTypeMap" ng-value="productType.id">
+                            {{productType.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.productTypeName" ng-if="isDetail" disabled>
+	            </md-input-container>
+	            <md-input-container flex>
+	                <label>排序</label>
+	                <input type="number" name="sort" ng-model="data.sort" ng-disabled="isDetail">
 	            </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin>
-	        	<md-input-container flex>
-	                <label>联系电话</label>
-	                <input type="text" name="tel" ng-model="data.tel" telphone ng-disabled="isDetail">
-	                <div ng-messages="form.tel.$error" role="alert">
-	                    <div ng-message="telphone">格式不正确</div>
-	                </div>
-	            </md-input-container>
 	            <md-input-container flex>
-	                <label>负责人</label>
-	                <input type="text" name="managerName" ng-model="data.managerName" ng-disabled="isDetail">
-	            </md-input-container>
-	            <md-input-container flex>
-	                <label>负责人电话</label>
-	                <input type="text" name="managerMobile" ng-model="data.managerMobile" telphone ng-disabled="isDetail">
-	                <div ng-messages="form.managerMobile.$error" role="alert">
-	                    <div ng-message="telphone">格式不正确</div>
-	                </div>
-	            </md-input-container>
-	        </div>
-	        <div layout="row" layout-margin>
-	             <md-input-container flex>
                     <label>描述</label>
                     <textarea ng-model="data.des" rows="3" md-detect-hidden md-select-on-focus ng-disabled="isDetail"></textarea>
                 </md-input-container>
@@ -71,11 +60,9 @@
                 <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>
             </div>
 	        <md-grid-list layout-margin class="gallery" 
-		    	md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6" 
-		    	md-row-height-gt-md="1:1" 
-		    	md-row-height="4:3" 
-		    	md-gutter="8px" 
-		    	md-gutter-gt-sm="4px">
+		    	md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
+		    	md-row-height="1:1" 
+		    	md-gutter="8px">
 		        <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '图片', data.code)" ng-if="data.code">
 		            <img ng-src="{{data.code}}" img-responsive>
 		            <md-grid-tile-footer>
@@ -101,29 +88,28 @@
 	<script src="../../js/_default.js?v=1.0.1"></script>
 	<script>
 		angular.module("lmApp")
-		.controller("mainController", ["$scope", "baseParam", "removeTab", "uploadCheck", "lmToastHelper", "httpService", 
-			function($scope, baseParam, removeTab, uploadCheck, lmToastHelper, httpService){
+		.controller("mainController", ["$scope", "baseParam", "removeTab", "uploadCheck", "potoView", "lmToastHelper", "httpService", 
+			function($scope, baseParam, removeTab, uploadCheck, potoView, lmToastHelper, httpService){
 				$scope.data = {};
 				$scope.supplierMap = [];  //公司
-				$scope.determinateValue = 0;
+				$scope.productTypeMap = []; //产品类型
 
 				$scope.onSubmit = function(){
 					if($scope.form.$valid){
 						if("edit" == $scope.pageType){
-							var action = baseParam.basePathB+"meta/store/update/"+$scope.id;
+							var action = baseParam.basePathB+"meta/productType/update/"+$scope.id;
 						}else{
-							var action = baseParam.basePathB+"meta/store/add";
+							var action = baseParam.basePathB+"meta/productType/add";
 						}
 						httpService.post(action, {
-							name: 		   $scope["data"]["name"],
-							code: 		   $scope["data"]["code"],
-							des: 		   $scope["data"]["des"],
-							tel: 		   $scope["data"]["tel"],
-							fullAddress:   $scope["data"]["fullAddress"],
-							supplierId:    $scope["data"]["supplierId"],
-							supplierName:  $scope["data"]["supplierName"],
-							managerName:   $scope["data"]["managerName"],
-							managerMobile: $scope["data"]["managerMobile"]
+							name: 		     $scope["data"]["name"],
+							code: 		     $scope["data"]["code"],
+							des: 		     $scope["data"]["des"],
+							productTypeId:   $scope["data"]["productTypeId"],
+							productTypeName: $scope["data"]["productTypeName"],
+							supplierId:      $scope["data"]["supplierId"],
+							supplierName:    $scope["data"]["supplierName"],
+							sort:     		 $scope["data"]["sort"]
 						})
 						.then(function(response){
 							removeTab.do(response);
@@ -137,11 +123,22 @@
                     event.preventDefault();
                     $scope["data"][type] = "";
                 };
-                
+
+				$scope.showPhotoView = potoView.show;
+
 				$scope.supplierChange = function() {
 					for(var i=0,len=$scope.supplierMap.length; i<len; i++){
 						if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
 							$scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
+							break;
+						}
+					}
+				};
+
+				$scope.productTypehange = function(){
+					for(var i=0,len=$scope.productTypeMap.length; i<len; i++){
+						if($scope.productTypeMap[i]["id"] === $scope["data"]["productTypeId"]){
+							$scope["data"]["productTypeName"] = $scope.productTypeMap[i]["name"];
 							break;
 						}
 					}
@@ -180,7 +177,7 @@
 		        //获取详情
 				if($scope.pageType != null){
 					(function(){
-						httpService.post(baseParam.basePathB+"meta/store/get/"+$scope.id)
+						httpService.post(baseParam.basePathB+"meta/productType/get/"+$scope.id)
 						.then(function(response){
 							$scope.data = response.data;
 						}, function(error){
@@ -197,6 +194,20 @@
 						})
 						.then(function(response){
 							$scope.supplierMap = response.data;
+						}, function(error){
+							lmToastHelper.alert(error.message);
+						});
+					})();
+				}
+
+				//获取产品类型
+				if($scope.pageType != "detail"){
+					(function(){
+						httpService.post(baseParam.basePathB+"meta/productType", {
+							pageSize: 1000
+						})
+						.then(function(response){
+							$scope.productTypeMap = response.data;
 						}, function(error){
 							lmToastHelper.alert(error.message);
 						});

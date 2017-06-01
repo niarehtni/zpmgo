@@ -39,9 +39,10 @@
         //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 120, sortable: true},
-			{display: "行业标识", name: "industryId", width: 80, sortable: true},
+        	{display: "名称", name: "name", width: 200, sortable: true},
+			{display: "行业", name: "industryName", width: 80, sortable: true},
 			{display: "状态", name: "status", width: 80, sortable: true},
+			{display: "描述", name: "des", width: 240, sortable: true},
 			{display: "操作", name: "id", width: 80, sortable: true,
 				dataFormat: function(value, td, row){
 					var oper = '';

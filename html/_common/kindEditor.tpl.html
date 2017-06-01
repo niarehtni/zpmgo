@@ -1,0 +1,25 @@
+<md-dialog aria-label="Mango (Fruit)" class="ws-detail" style="min-width: 800px; min-height: 400px;">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>文本编辑</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="hide()">
+                &times;
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div style="width: 100%;height: 380px">
+            <iframe name="content" src="../_common/kindEditor.html" frameborder="0" scrolling="auto" width="100%" height="100%"></iframe>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <span flex></span>     
+        <md-button class="md-primary md-raised" ng-click="sure()">
+            确定
+        </md-button>
+        <md-button class="md-primary" ng-click="hide()">
+            返回
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

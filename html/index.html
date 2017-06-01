@@ -13,13 +13,14 @@
     <link href="icons/logo.PNG" rel="bookmark" type="image/x-icon"/>
     <link href="icons/logo.PNG" rel="shortcut icon" type="image/x-icon"/>
 	<link rel="styleSheet" href="../css/framework/framework.css?v=1.0.1">
-	<link rel="styleSheet" href="../css/framework/index.css?v=1.0.1">
+	<link rel="styleSheet" href="../css/framework/index.css?v=1.0.5">
 	<base href="./">
-	<title>AC后台管理系统</title>
+	<title>郎猫运维平台</title>
 </head>
 <body>
     <div class="header">
     	<div class="logo"></div>
+    	<div class="logoName">郎猫运维平台</div>
 		<div class="tool">
 			<div class="logout" title="注销" onclick="BASE.logout()"></div>
 			<div onclick="BASE.editPwd()" class="updatePassword" title="修改密码"></div>
@@ -36,89 +37,72 @@
 				<li href="html/_goods/industry.html" title="行业列表">行业列表</li>
 				<li href="html/_goods/brand.html" title="品牌列表">品牌列表</li>
 				<li href="html/_goods/supplier.html" title="公司列表">公司列表</li>
-				<li href="html/_goods/productLine.html" title="产线列表">产线列表</li>
 				<li href="html/_goods/store.html" title="门店列表">门店列表</li>
 				<li href="html/_goods/channel.html" title="渠道列表">渠道列表</li>
 				<li href="html/_goods/product.html" title="产品列表">产品列表</li>
 				<li href="html/_goods/goods.html" title="商品列表">商品列表</li>
-				<li href="html/_goods/supportData.html" title="支撑数据列表">支撑数据列表</li>
-
-				
-				<!--<li href="html/product/accategory.html" title="品类列表">品类列表</li>
-				<li href="html/product/product.html" title="产品列表">产品列表</li>
-				<li href="html/product/acmessage.html" title="产品咨询">产品咨询</li>
 				<li href="html/product/listStandard.html" title="规格码列表">规格码列表</li>
 				<li href="html/product/productCodeList.html" title="产品码列表">产品码列表</li>
-				
-				<li href="html/store/acdistributor.html" title="渠道商列表">渠道商列表</li>
-				
+			</ul>
+		</div>
+		<div>
+			<span>标签管理</span>
+			<ul>
+				<li href="html/_fake/securityCode.html" title="防伪码列表">防伪码列表</li>
+				<li href="html/_fake/codeOrder.html" title="防伪码订单列表">防伪码订单列表</li>
+				<li href="html/_fake/productType.html" title="产品类型">产品类型</li>
+				<li href="html/_goods/productLine.html" title="产线列表">产线列表</li>
+				<li href="html/_fake/_materielBox.html" title="条码盒列表">条码盒列表</li>
+				<li href="html/_fake/materielBox.html" title="物料盒列表">物料盒列表</li>
+				<li href="html/inside/conflict.html" title="窜货列表">窜货列表</li>
+				<li href="html/inside/acverifylog.html" title="扫描日志">扫描日志</li>
+				<li href="html/sales/acwarn.html" title="警示公告">警示公告</li>
+				<li href="html/sales/acserialkey.html" title="阀值设定">阀值设定</li>
 				<li href="html/goods/acpackingbox.html" title="包装箱列表">包装箱列表</li>
 				<li href="html/goods/aclogisticsinfo.html" title="物流信息列表">物流信息列表</li>
 				<li href="html/goods/acpackinghistory.html" title="装拆箱历史列表">装拆箱历史列表</li>
 				<li href="html/goods/acpackinglogisticsinfo.html" title="包装箱物流历史列表">包装箱物流历史列表</li>
-				<li href="html/producdbind/acproductbindrecord.html" title="绑定记录">绑定记录</li>-->
+				<li href="html/producdbind/acproductbindrecord.html" title="绑定记录">绑定记录</li>
 			</ul>
 		</div>
 		<div>
-			<span>防伪管理</span>
-			<ul>
-				<li href="html/_fake/securityCode.html" title="防伪码列表">防伪码列表</li>
-				<li href="html/_fake/codeOrder.html" title="防伪码订单列表">防伪码订单列表</li>
-			</ul>
-		</div>
-		<!--<div>
-			<span>标签管理</span>
-			<ul>
-				<li href="html/label/acserialinfo.html" title="标签列表">标签列表</li>
-				<li href="html/label/acserialtype.html" title="标签类型">标签类型</li>
-				<li href="html/label/acserialorder.html" title="订单列表">订单列表</li>
-				<li href="html/label/acserialbind.html" title="标签绑定">标签绑定</li>
-				<li href="html/label/acserialtransfer.html" title="标签转移">标签转移</li>
-				<li href="html/label/acmaterialmanagement.html" title="物料号管理">物料号管理</li>
-				<li href="html/label/listBarcodeBoxes.html" title="条码盒管理">条码盒管理</li>
-			</ul>
-		</div>
-		<div>
-			<span>营销管理</span>
+			<span>销售管理</span>
 			<ul>
 				<li href="html/activity/achtml/activity.html" title="活动列表">活动列表</li>
 				<li href="html/activity/acshoppingrecord.html" title="消费记录列表">消费记录列表</li>
 				<li href="html/activity/acsuspect.html" title="客户列表">客户列表</li>
 				<li href="html/sales/acsalerecord.html" title="登记列表">登记列表</li>
 				<li href="html/sales/acserialsale.html" title="销售修改">销售修改</li>
-				<li href="html/sales/acwarn.html" title="警示公告">警示公告</li>
-				<li href="html/sales/acserialkey.html" title="阀值设定">阀值设定</li>
 				<li href="html/sales/saleLogisticsList.html" title="商品登记">商品登记</li>
+				<li href="html/product/acmessage.html" title="产品咨询">产品咨询</li>
+				<li href="html/system/acfeedback.html" title="反馈列表">反馈列表</li>
+				<li href="html/inside/device.html" title="安装维修列表">安装维修列表</li>
+			</ul>
+		</div>
+		<div>
+			<span>运营管理</span>
+			<ul>
+				
 			</ul>
 		</div>
 		<div>
 			<span>统计分析</span>
 			<ul>
-				<li href="html/statistics/achtml/statisticsverify.html" title="验伪统计">验伪统计</li>
 				<li href="html/statistics/verifyRateMap.html" title="全国验伪率">全国验伪率</li>
-				<li href="html/statistics/monthONmonth.html" title="验伪月统计">验伪月统计</li>
-				<li href="html/statistics/trendChart.html" title="验伪走势图">验伪走势图</li>
-				<li href="html/statistics/areaVerifyList.html" title="地区验伪对比">地区验伪对比</li>
+				<li href="html/statistics/monthONmonth.html" title="验伪统计">验伪统计</li>
 			</ul>
-		</div>-->
-		<!--<div>
+		</div>
+		<div>
 			<span>系统管理</span>
 			<ul>
-				<li href="html/system/dictionary.html" title="字典列表">字典列表</li>
-				<li href="html/system/dictionaryPart.html" title="字典条目列表">字典条目列表</li>
-				<li href="html/system/acsysconfig.html" title="系统配置列表">系统配置列表</li>
-				<li href="html/system/acfeedback.html" title="反馈列表">反馈列表</li>
-				<li href="html/system/acloginlog.html" title="登录日志">登录日志</li>
-				<li href="html/authority/user.html" title="用户列表">用户列表</li>-->
-				<!--<li href="html/authority/group.html" title="用户组列表">用户组列表</li>-->
-				<!--li href="html/authority/menu.html" title="菜单列表">菜单列表</li>
+				<li href="html/_system/supportData.html" title="支撑数据列表">支撑数据列表</li>
+				<!--<li href="html/system/acloginlog.html" title="登录日志">登录日志</li>
+				<li href="html/authority/user.html" title="用户列表">用户列表</li>
 				<li href="html/authority/role.html" title="角色列表">角色列表</li>
-				<li href="html/authority/operate.html" title="操作列表">操作列表</li>
-				<li href="html/inside/device.html" title="安装维修列表">安装维修列表</li>
-				<li href="html/inside/conflict.html" title="窜货列表">窜货列表</li>
-				<li href="html/inside/acverifylog.html" title="扫描日志">扫描日志</li>
+				<li href="html/authority/menu.html" title="菜单列表">菜单列表</li>
+				<li href="html/authority/operate.html" title="操作列表">操作列表</li>-->
 			</ul>
-		</div>-->
+		</div>
   	</div>
 	
 	<div class="nav">
@@ -150,11 +134,11 @@
 		<ul></ul>
 	</div>
 	
-	<div class="footer">@Copy right 2017 AC后台管理系统</div>
+	<div class="footer">@Copy right 2017 郎猫运维平台</div>
 
 	<script src="../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
 	<script src="../js/framework/jquery.framework.js?v=1.0.1"></script>
 	<script src="../js/framework/form.js?v=1.0.1"></script>
-	<script src="../js/base.js?v=1.0.2"></script>
+	<script src="../js/base.js?v=1.0.5"></script>
 </body>
 </html>

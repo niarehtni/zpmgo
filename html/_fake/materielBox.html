@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
     <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
     <base href="./">
-	<title>行业列表</title>
+	<title>物料盒列表</title>
 </head>
 <body>
 	<form action="" method="POST">
 		<table class="searchTable">
 			<tbody>
 				<tr>
-					<td>名称</td>
+					<td>编码</td>
   					<td style="padding-left:10px">
-  						<input type="text" name="name" value="" cpr="like">
+  						<input type="text" name="packingCode" value="" cpr="like">
   					</td>				
   				</tr>
 			</tbody>
@@ -30,7 +30,7 @@
 	<script src="../../js/base.js?v=1.0.2"></script>
 	<script>
 	$(function(){
-		$("form").attr("action", BASE.setUrl("meta/industry"));
+		$("form").attr("action", BASE.setUrl("meta/materielBox", true));
 		$("table.listTable").flexigrid(GRID);	
 	});	
 	var GRID = {
@@ -39,7 +39,9 @@
         //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 200, sortable: true},
+        	{display: "编码", name: "packingCode", width: 200, sortable: true},
+        	{display: "公司", name: "supplierName", width: 120, sortable: true},
+        	{display: "打包时间", name: "packingTime", width: 120, sortable: true},
 			{display: "操作", name: "id", width: 80, sortable: true,
 				dataFormat: function(value, td, row){
 					var oper = '';
@@ -51,18 +53,18 @@
 			}
         ],
         add: {
-        	url: "../html/_goods/industryItem.html",
+        	url: "../html/_fake/_materielBoxItem.html",
         },
         edit: {
-        	url: "../html/_goods/industryItem.html?type=edit",
+        	url: "../html/_fake/_materielBoxItem.html?type=edit",
         	primaryKey: "id"
         },
         detail: {
-        	url: "../html/_goods/industryItem.html?type=detail",
+        	url: "../html/_fake/_materielBoxItem.html?type=detail",
         	primaryKey: "id",
         },
         deletes: {
-        	url : BASE.getBasePath()+"meta/industry/delete",
+        	url : BASE.getBasePathC()+"meta/materielBox/delete",
 			primaryKey: "id"
         }
 	};

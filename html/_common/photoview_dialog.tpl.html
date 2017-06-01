@@ -1,0 +1,40 @@
+<md-dialog aria-label="Mango (Fruit)" class="ws-detail" style="min-width: 1000px; min-height: 100%">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>{{vm.title}}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="hide()">
+                &times;
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content class="photo-container">
+        <img ng-src="{{vm.url}}" ng-style="picSty">
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button class="md-primary" ng-click="rotateRight()">
+            <i class="material-icons">rotate_right</i>
+        </md-button>
+        <md-button class="md-primary" ng-click="BoostBig()">
+            <i class="material-icons">zoom_in</i>
+        </md-button>
+        <md-button class="md-primary" ng-click="BoostSamll()">
+            <i class="material-icons">zoom_out</i>
+        </md-button>
+        <md-button class="md-primary" ng-click="mirrorThePicX()">
+            <i class="material-icons">swap_horiz</i>
+        </md-button>
+        <md-button class="md-primary" ng-click="mirrorThePicY()">
+            <i class="material-icons">swap_vert</i>
+        </md-button>
+        <span flex></span>
+        <a ng-href="{{vm.url}}" download="photo.png">
+            <md-button class="md-primary md-raised">
+                下载图片
+            </md-button>
+        </a>
+        <md-button class="md-primary" ng-click="hide()">
+            返回
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

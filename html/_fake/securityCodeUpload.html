@@ -4,100 +4,97 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/angular-material/1.1.4/angular-material.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/default.css">
     <base href="./">
     <title>防伪码批量上传</title>
-    <style>
-        .section {
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
-<body>
-    <form action="" method="POST">
-        <div class="module" style="width: 100%;">
-            <div class="title">
-                <div class="item selected">防伪码批量上传</div>  
+<body ng-app="lmApp" ng-cloak ng-controller="mainController">
+    <md-content layout-padding class="lm-pageTitle">
+        防伪码批量上传
+    </md-content>
+    <md-card layout-padding>
+        <form name="form">
+            <div layout="row" layout-margin>
+                <md-input-container flex>
+                    <label>商品</label>
+                    <md-select name="goodsId" ng-model="data.goodsId" required>
+                        <md-option ng-repeat="goods in goodsMap" ng-value="goods.id">
+                            {{goods.name}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="form.goodsId.$error" role="alert">
+                        <div ng-message="required">请选择商品</div>
+                    </div>
+                </md-input-container>
+                <div flex></div>
             </div>
-            <div class="content">
-                <div class="item selected" style="padding:10px;"> 
-                    <div class="section">
-                        <span>公司：</span>
-                        <select v-model="goodsId" v-cloak>
-                            <option v-for="s in GOODS" :value="s.id">{{s.name}}</option>
-                        </select>
-                    </div>
-                    <div class="section">
-                        <span>选择zip文件上传防伪码。</span>
-                    </div>
-                    <div class="section">
-                        <input type="button" class="myBtn btn-primary" value="上传防伪码" @click="upload()">
-                    </div>
-                </div>           
+            <md-content layout-padding>
+                <h5>请选择zip文件上传防伪码</h5>
+            </md-content>
+            <div class="jun-progress display-flex align-items-center flex-hc" ng-show="onLoading">
+                <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>
             </div>
-        </div>
-    </form>
+            <div layout="row" layout-margin ng-if="!isDetail">
+                <upload-section ws-options="options" ws-name="file" up-dis="form.$invalid"></upload-section>
+            </div>
+        </form>
+    </md-card>
 
-    <script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
-    <script src="../../plugins/AjaxUploader-0.0.1.js??v=1.0.1"></script>
-    <script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
-    <script src="../../js/default.js?v=1.0.1"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-animate.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-aria.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-messages.min.js"></script>
+    <script src="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.js"></script>
+    <script src="../../js/_default.js?v=1.0.1"></script>
     <script>
-        var vmParam = $.extend(true, VMDEFAULT, {
-            data: {
-                goodsId: "",
-                GOODS: []
-            },
-            methods: {
-                getGoods: function(){
-                    var _this = this;
-                    var param = {
-                        pageSize: 100
-                    };
-                    junAjax({
-                        url: _this.basePathB+"meta/goods",
-                        type: "POST",
-                        contentType:'application/json',
-                        data: JSON.stringify(param),
-                        processData: false,
-                        success: function(result){
-                            if(result.code != "200"){
-                                alert(result.data);
-                            }else{
-                                for(var i=0; i<result.data.length; i++){
-                                    _this.$set(_this.GOODS, i, {
-                                        name: result.data[i].name,
-                                        id: result.data[i].id
-                                    });
-                                }
-                            }
-                        },
-                        error: function(){
-                            alert("网络错误 ！");
-                        }
-                    });
-                },
-                upload: function(){
-                    new AjaxUploader({
-                        url: "https://c.zpmgo.com/api/security/upload/"+this.goodsId,
-                        name: "file",
-                        before: function(file){
-                            //验证
-                            return true;
-                        },
-                        callBack:function(result){
-                            if(result && result.data){
-                                top.removeTab({index:document.body.attributes['framework'].nodeValue,callBackParam:{ code: 200}});   
-                            }else{
-                                alert("上传失败");
-                            }
-                        }
-                    });
+        angular.module("lmApp")
+        .controller("mainController", ["$scope", "baseParam", "removeTab", "uploadCheck", "lmToastHelper", "httpService", 
+            function($scope, baseParam, removeTab, uploadCheck, lmToastHelper, httpService){
+                $scope.data = {};
+                $scope.goodsMap = []; //商品
+                $scope.options = {
+                    url: baseParam.uploadBaseC+$scope["data"]["goodsId"],
+                    before:function(file){
+                        //验证
+                        $scope.onLoading = true;
+                        $scope.determinateValue = 0;
+                        $scope.$digest();
+                        return true;
+                    },
+                    uploading: function(progressValue){
+                        $scope.determinateValue = progressValue;
+                        $scope.$digest();
+                    },
+                    callBack:function(result){
+                        $scope.onLoading = false;
+                        $scope.determinateValue = 0;
+                        $scope.$digest();
+                        if("200" == result.code){
+                            removeTab.do(result);
+                        }else{
+                            lmToastHelper.alert(result.message);
+                        }   
+                    }
+                };
+
+                //获取商品
+                if($scope.pageType != "detail"){
+                    (function(){
+                        httpService.post(baseParam.basePathB+"meta/goods", {
+                            pageSize: 1000
+                        })
+                        .then(function(response){
+                            $scope.goodsMap = response.data;
+                        }, function(error){
+                            lmToastHelper.alert(error.message);
+                        });
+                    })();
                 }
             }
-        });
-        var vm = new Vue(vmParam);
-        vm.getGoods();
+        ])
+    ;
     </script>
 </body>
 </html>

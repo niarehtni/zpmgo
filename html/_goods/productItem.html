@@ -4,266 +4,511 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="styleSheet" href="../../css/framework/table.css?v=1.0.1">
-    <link rel="styleSheet" href="../../css/framework/module.css?v=1.0.1">
+    <link rel="stylesheet" href="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/default.css">
     <base href="./">
     <title>产品信息</title>
+    <style>
+        md-list-item {
+            border: 1px solid transparent;
+        }
+        md-list-item:hover{
+            border: 1px solid #ccc;
+        }
+        md-list-item:hover .operate {
+            visibility: visible;
+        }
+        .operate {
+            visibility: hidden;
+        }
+    </style>
 </head>
-<body>
-<form action="" method="POST">
-    <div class="module" style="width: 100%;">
-        <div class="title">
-            <div class="item selected" v-cloak>产品信息{{PAGETITLE}}</div>
-        </div>
-        <div class="content">
-            <div class="item selected" style="padding:10px;">
-                <table class="detailTable" border="1">
-                    <tr>
-                        <th width="20%">产品名称</th>
-                        <td width="30%">
-                            <input type="text" name="name" title="产品名称" class="null" v-model="name" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{name}}</span>
-                        </td>
-                        <th width="20%">价格</th>
-                        <td width="30%">
-                            <input type="text" name="price" title="价格" class="null plus" v-model="price" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{price}}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%">销量</th>
-                        <td width="30%">
-                            <input type="text" name="sold" v-model="sold" title="销量" class="plus integer" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{sold}}</span>
-                        </td>
-                        <th width="20%">总库存</th>
-                        <td width="30%">
-                            <input type="text" name="stock" v-model="stock" title="总库存" class="plus integer" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{stock}}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%">规格一名称</th>
-                        <td width="30%">
-                            <input type="text" name="firstName" v-model="firstName" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{firstName}}</span>
-                        </td>
-                        <th width="20%">规格一选项</th>
-                        <td width="30%">
-                            <input type="text" v-model="first" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{first}}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%">规格二名称</th>
-                        <td width="30%">
-                            <input type="text" name="secondName" v-model="secondName" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{secondName}}</span>
-                        </td>
-                        <th width="20%">规格二选项</th>
-                        <td width="30%">
-                            <input type="text" v-model="second" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{second}}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%">规格三名称</th>
-                        <td width="30%">
-                            <input type="text" name="thirdName" v-model="thirdName" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{thirdName}}</span>
-                        </td>
-                        <th width="20%">规格三选项</th>
-                        <td width="30%">
-                            <input type="text" v-model="third" v-cloak v-if="!ISDETAIL">
-                            <span v-cloak v-else>{{third}}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%" height="50">二维码</th>
-                        <td width="30%" colspan="3" style="padding: 5px">
-                            <div id="barcode"></div>
-                            <button @click="upload('barcode')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%" height="50">大图</th>
-                        <td width="30%" colspan="3" style="padding: 5px">
-                            <div id="image"></div>
-                            <button @click="upload('image')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%" height="50">小图</th>
-                        <td width="30%" colspan="3" style="padding: 5px">
-                            <div id="icon"></div>
-                            <button @click="upload('icon')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th width="20%" height="50">多张图</th>
-                        <td width="30%" colspan="3" style="padding: 5px">
-                            <div id="images"></div>
-                            <button @click="upload('images')" class="myBtn btn-primary" v-cloak v-if="!ISDETAIL">上传图片</button>
-                        </td>
-                    </tr>
-                    <tr style="height:200px;">
-                        <th width="20%" height="50">简介</th>
-                        <td width="30%" colspan="3" style="height: 200px;">
-                            <textarea name="desc" style="height: 100%;width: 98%;" v-model="des" :readonly="ISDETAIL"></textarea>
-                        </td>
-                    </tr>
-                </table>
+<body ng-app="lmApp1" ng-cloak ng-controller="mainController">
+    <md-content layout-padding class="lm-pageTitle">
+        产品{{pageTitle}}
+    </md-content>
+    <md-card layout-padding>
+        <form name="form" ng-submit="onSubmit()">
+            <div layout="row" layout-margin>
+                <md-input-container flex>
+                    <label>名称</label>
+                    <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
+                    <div ng-messages="form.name.$error" role="alert">
+                        <div ng-message="required">请填写必要信息</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>产品类型</label>
+                    <md-select ng-model="data.productTypeId" ng-change="productTypehange()" ng-if="!isDetail">
+                        <md-option ng-repeat="productType in productTypeMap" ng-value="productType.id">
+                            {{productType.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.productTypeName" ng-if="isDetail" disabled>
+                </md-input-container>
             </div>
-            <div class="submit">
-                <center>
-                    <input type="button" class="saveBtn" value="保存">
-                </center>
+            <div layout="row" layout-margin>
+                <md-input-container flex>
+                    <label>价格</label>
+                    <input type="text" name="price" ng-model="data.price" plus ng-disabled="isDetail">
+                    <div ng-messages="form.price.$error" role="alert">
+                        <div ng-message="plus">请填写正确的格式</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>销量</label>
+                    <input type="number" name="sold" ng-model="data.sold" ng-disabled="isDetail">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>总库存</label>
+                    <input type="number" name="stock" ng-model="data.stock" ng-disabled="isDetail">
+                </md-input-container>
             </div>
-        </div>
-    </div>
-</form>
+            <div layout="row" layout-margin>
+                <md-input-container>
+                    <label>规格一名称</label>
+                    <input type="text" name="firstName" ng-model="data.firstName" ng-disabled="isDetail">
+                </md-input-container>
+                <md-chips ng-model="data.first" flex
+                    md-enable-chip-edit="!isDetail" 
+                    md-removable="!isDetail" 
+                    placeholder="规格一"
+                    secondary-placeholder="+规格"
+                    class="lm-chips" readonly="isDetail" 
+                    ng-if="!(isDetail && data.first && !data.first.length)">
+                </md-chips>
+                <md-input-container flex ng-if="isDetail && data.first && !data.first.length">
+                    <label>规格一</label>
+                    <input type="text" name="first" disabled>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-margin>
+                <md-input-container>
+                    <label>规格二名称</label>
+                    <input type="text" name="secondName" ng-model="data.secondName" ng-disabled="isDetail">
+                </md-input-container>
+                <md-chips ng-model="data.second" flex
+                    md-enable-chip-edit="!isDetail" 
+                    md-removable="!isDetail" 
+                    placeholder="规格二"
+                    secondary-placeholder="+规格"
+                    class="lm-chips" readonly="isDetail" 
+                    ng-if="!(isDetail && data.second && !data.second.length)">
+                </md-chips>
+                <md-input-container flex ng-if="isDetail && data.second && !data.second.length">
+                    <label>规格二</label>
+                    <input type="text" name="second" disabled>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-margin>
+                <md-input-container>
+                    <label>规格三名称</label>
+                    <input type="text" name="thirdName" ng-model="data.thirdName" ng-disabled="isDetail">
+                </md-input-container>
+                <md-chips ng-model="data.third" flex my-chip
+                    md-enable-chip-edit="!isDetail" 
+                    md-removable="!isDetail" 
+                    placeholder="规格三"
+                    secondary-placeholder="+规格"
+                    class="lm-chips" readonly="isDetail"
+                    ng-if="!(isDetail && data.third && !data.third.length)">
+                </md-chips>
+                <md-input-container flex ng-if="isDetail && data.third && !data.third.length">
+                    <label>规格三</label>
+                    <input type="text" name="third" disabled>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-margin>
+                 <md-input-container flex>
+                    <label>简介</label>
+                    <textarea ng-model="data.des" rows="3" md-detect-hidden md-select-on-focus ng-disabled="isDetail"></textarea>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-margin ng-if="!isDetail">
+                <upload-section ws-options="options" ws-name="file" ws-text="二维码"></upload-section>
+                <upload-section ws-options="options" ws-name="file" ws-text="大图"></upload-section>
+                <upload-section ws-options="options" ws-name="file" ws-text="小图"></upload-section>
+            </div>
+            <md-grid-list layout-margin class="gallery" 
+                md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
+                md-row-height="1:1" 
+                md-gutter="8px">
+                <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, 'logo', data.barcode)" ng-if="data.barcode">
+                    <img ng-src="{{data.barcode}}" img-responsive>
+                    <md-grid-tile-footer>
+                        <i class="material-icons pointer" ng-click="remove($event, 'barcode')" ng-if="!isDetail">delete_forever</i>
+                        <h3 class="inline-block">二维码</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+                <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '大图', data.image)" ng-if="data.image">
+                    <img ng-src="{{data.image}}" img-responsive>
+                    <md-grid-tile-footer>
+                        <i class="material-icons pointer" ng-click="remove($event, 'image')" ng-if="!isDetail">delete_forever</i>
+                        <h3 class="inline-block">大图</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+                <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '小图', data.icon)" ng-if="data.icon">
+                    <img ng-src="{{data.icon}}" img-responsive>
+                    <md-grid-tile-footer>
+                        <i class="material-icons pointer" ng-click="remove($event, 'icon')" ng-if="!isDetail">delete_forever</i>
+                        <h3 class="inline-block">小图</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+            </md-grid-list>
+            <div layout="row" layout-margin ng-if="!isDetail">
+                <upload-section ws-options="options" ws-name="file" ws-text="多张图"></upload-section>
+                <md-button type="button" ng-click="clear()" class="md-primary">
+                    清除
+                </md-button>
+            </div>
+            <div class="jun-progress display-flex align-items-center flex-hc" ng-show="onLoading">
+                <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>
+            </div>
+            <md-grid-list layout-margin class="gallery" 
+                md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
+                md-row-height="1:1" 
+                md-gutter="8px">
+                <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '多张图', image)" ng-repeat="image in data.images" ng-if="data.images">
+                    <img ng-src="{{image}}" img-responsive>
+                    <md-grid-tile-footer>
+                        <i class="material-icons pointer" ng-click="remove($event, 'images', $index)" ng-if="!isDetail">delete_forever</i>
+                        <h3 class="inline-block">多张图</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+            </md-grid-list>
+            <div layout-margin>
+                <md-subheader>图文信息</md-subheader>
+            </div>
+            <div layout="row" layout-margin class="sticky" ng-if="!isDetail">
+                <md-button class="md-primary md-raised" type="button" style="margin: 14px" ng-click="toHtml()" id="lm-html">
+                    <i class="material-icons">format_size</i>
+                    文本
+                </md-button>
+                <upload-section ws-options="options" ws-name="file" ws-text="图片" ws-icon="photo"></upload-section>
+                <upload-section ws-options="options" ws-name="file" ws-text="视频" ws-icon="ondemand_video"></upload-section>
+                <md-button class="md-primary" type="button" style="margin: 14px" ng-click="nodeClear()">
+                    清除
+                </md-button>
+            </div>
+            <div layout="column" layout-margin ng-if="data.nodeList.length">
+                <md-content>
+                    <md-list class="display-flex flex-colum" style="background: #fff">
+                        <md-list-item ng-repeat="node in data.nodeList" class="display-flex" style="padding-right: 0">
+                            <div flex>
+                                <div ng-bind-html="trustHtml(node.content)" ng-if="'html'==node.type"></div>
+                                <img ng-src="{{node.content}}" ng-if="'image'==node.type">
+                                <video ng-src="{{trustSrc(node.content)}}" controls="controls" ng-if="'video'==node.type">你的播放器不支持该视频播放</video>
+                            </div>
+                            <div class="operate display-flex flex-colum">
+                                <i class="material-icons pointer" ng-click="nodeDel(node,$index)" title="删除">clear</i>
+                                <i class="material-icons pointer" ng-click="nodeEdit(node,$index)" title="编辑">create</i>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </div>
+            <div layout="row" layout-margin ng-if="!isDetail">
+                <span flex></span>
+                <md-button class="md-primary md-raised" type="submit" ng-disabled="form.$invalid">
+                    保&nbsp;&nbsp;存
+                </md-button>
+            </div>
+        </form>
+    </md-card>
 
-<script src="../../js/jquery/jquery-1.8.3.min.js?v=1.0.1"></script>
-<script src="../../plugins/Vue/Vue.js?v=1.0.1"></script>
-<script src="../../plugins/AjaxUploader-0.0.1.js?v=1.0.1"></script>
-<script src="../../js/framework/table.js?v=1.0.1" ></script>
-<script src="../../js/default.js?v=1.0.1"></script>
-<script>
-    var vmParam = $.extend(true, VMDEFAULT, {
-        data: {
-            name: "",
-            des: "",
-            price: "",
-            sold: "",
-            stock: "",
-            barcode: "",
-            icon: "",
-            image: "",
-            images:[],
-            firstName: "",
-            secondName: "",
-            thirdName: "",
-            first: [],
-            second: [],
-            third: []
-        },
-        computed: {
-            ACTION: function(){
-                switch(TYPE){
-                    case "edit":
-                        return "meta/product/update/"+getRequest("id");
-                    case "detail":
-                        return "meta/product/get/"+getRequest("id");
-                    default:
-                        return "meta/product/add";
-                }
-            }
-        },
-        methods: {
-            formdata: function(){
-                var data = {
-                    image: this.image,
-                    icon: this.icon,
-                    images: this.images,
-                    barcode: this.barcode
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-animate.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-aria.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-messages.min.js"></script>
+    <script src="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.js"></script>
+    <script src="../../js/_default.js?v=1.0.1"></script>
+    <script>
+        var htmlNode;
+        angular.module("lmApp1", ["lmApp"])
+        .controller("mainController", ["$scope", "$mdDialog", "trustService", "baseParam", "removeTab", "uploadCheck", "potoView", "lmToastHelper", "httpService", "editCont",
+            function($scope, $mdDialog, trustService, baseParam, removeTab, uploadCheck, potoView, lmToastHelper, httpService, editCont){
+                $scope.data = {
+                    images: [],
+                    first: [],
+                    second: [],
+                    third: [],
+                    nodeList: []
                 };
-                if("[object Array]" === Object.prototype.toString.call(this.first)){
-                    data["first"] = this.first;
-                }else{
-                    data["first"] = this.first.split(",");
-                }
-                if("[object Array]" === Object.prototype.toString.call(this.second)){
-                    data["second"] = this.second;
-                }else{
-                    data["second"] = this.second.split(",");
-                }
-                if("[object Array]" === Object.prototype.toString.call(this.third)){
-                    data["third"] = this.third;
-                }else{
-                    data["third"] = this.third.split(",");
-                }
-                return data;
-            },
-            upload: function(ms, event){
-                var _this = this;
-                new AjaxUploader({
-                    url: _this.uploadBase,
-                    name: "file",
-                    before: function(file){
+                $scope.productTypeMap = []; //产品类型
+
+                $scope.onSubmit = function(){
+                    if($scope.form.$valid){
+                        if("edit" == $scope.pageType){
+                            var action = baseParam.basePathB+"meta/product/update/"+$scope.id;
+                        }else{
+                            var action = baseParam.basePathB+"meta/product/add";
+                        }
+                        var nodeList = $scope["data"]["nodeList"]; 
+                        if(nodeList.length){
+                            angular.forEach(nodeList, function(data, index, array){
+                                data["sort"] = index;
+                            });
+                        }
+                        httpService.post(action, {
+                            name: $scope["data"]["name"],
+                            des: $scope["data"]["des"],
+                            barcode: $scope["data"]["barcode"],
+                            price: $scope["data"]["price"],
+                            sold: $scope["data"]["sold"],
+                            stock: $scope["data"]["stock"],
+                            icon: $scope["data"]["icon"],
+                            image: $scope["data"]["image"],
+                            images: $scope["data"]["images"],
+                            firstName: $scope["data"]["firstName"],
+                            secondName: $scope["data"]["secondName"],
+                            thridName: $scope["data"]["thridName"],
+                            first: $scope["data"]["first"],
+                            second: $scope["data"]["second"],
+                            third: $scope["data"]["third"],
+                            productTypeId: $scope["data"]["productTypeId"],
+                            productTypeName: $scope["data"]["productTypeName"],
+                            nodeList: $scope["data"]["nodeList"]
+                        })
+                        .then(function(response){
+                            removeTab.do(response);
+                        }, function(error){
+                            lmToastHelper.alert(error.message);
+                        });
+                    }
+                };
+
+                //图片删除
+                $scope.remove = function(event, type, index){
+                    event.preventDefault();
+                    if(typeof index != "undefined"){
+                        $scope["data"]["images"].splice(index, 1);
+                    }else{
+                        $scope["data"][type] = "";
+                    }
+                };
+                
+                $scope.trustSrc = function(url){
+                    return trustService.resourceUrl(url);
+                };
+
+                $scope.trustHtml = function(url){
+                    return trustService.html(url);
+                };
+
+                //多张图清除
+                $scope.clear = function() {
+                    $scope["data"]["images"].length = 0;
+                };
+
+                //文本节点清除
+                $scope.nodeClear = function(){
+                    $scope["data"]["nodeList"].length = 0;
+                };
+
+                //文本节点删除
+                $scope.nodeDel = function(node, index){
+                    $scope["data"]["nodeList"].splice(index, 1);
+                };
+
+                //文本节点编辑
+                $scope.nodeEdit = function(node, index){
+                    editCont.index = index;
+                    switch(node.type){
+                        case "html":
+                            $scope.toHtml(node);
+                            break;
+                        case "image":
+                            document.querySelector("[_text='图片']").click();
+                            break;
+                        case "video":
+                            document.querySelector("[_text='视频']").click();
+                            break;
+                    }
+                };
+
+                $scope.showPhotoView = potoView.show;
+                
+                $scope.productTypehange = function(){
+                    for(var i=0,len=$scope.productTypeMap.length; i<len; i++){
+                        if($scope.productTypeMap[i]["id"] === $scope["data"]["productTypeId"]){
+                            $scope["data"]["productTypeName"] = $scope.productTypeMap[i]["name"];
+                            break;
+                        }
+                    }
+                };
+
+                //html文本编辑
+                $scope.toHtml = function(node){
+                    if(node){
+                        htmlNode = node;
+                    }else{
+                        htmlNode = null;
+                        editCont.index = null;
+                    }
+                    $mdDialog.show({
+                        templateUrl: '../../html/_common/kindEditor.tpl.html',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose: false,
+                        escapeToClose: true,
+                        //targetEvent: ev,
+                        controller: "textController"
+                    });
+                };
+
+                $scope.options = {
+                    url: baseParam.uploadBase,
+                    before:function(file){
                         //验证
-                        return _this.pictureCheck(file);
+                        var result = false;
+                        switch(this.getAttribute("_text")){
+                            case "视频":
+                                result = uploadCheck.video(file);
+                                break;
+                            default:
+                                result = uploadCheck.image(file);
+                        }
+                        if(!result){
+                            return false;
+                        }
+                        $scope.onLoading = true;
+                        $scope.determinateValue=0;
+                        $scope.$digest();
+                        return true;
+                    },
+                    uploading: function(progressValue){
+                        $scope.determinateValue = progressValue;
+                        $scope.$digest();
                     },
                     callBack:function(result){
                         //处理结果，显示预览
-                        if(result && result.data){
-                            for(var i=0;i<result.data.length;i++){
-
-                                if("image" == ms){
-                                //大图
-                                    _this.createFilePicture(result.data, ms);
-                                    if("" == _this["icon"]){
-                                        _this.createFilePicture(result.data, "icon", {size:60});
+                        if("200" == result.code){
+                            var code = baseParam.downloadBase+result["data"][0];
+                            switch(this.getAttribute("_text")){
+                                case "二维码":
+                                    $scope["data"]["barcode"] = code;
+                                    break;
+                                case "大图":
+                                    $scope["data"]["image"] = code;
+                                    if("undefined" == typeof $scope["data"]["icon"] || "" == $scope["data"]["icon"]){
+                                        $scope["data"]["icon"] = code;
                                     }
-                                    if(!_this["images"].length){
-                                        _this.createFilePicture(result.data, "images", {multiple:true});
+                                    if(!$scope["data"]["images"].length){
+                                        $scope["data"]["images"].push(code);
                                     }
-                                }else if("icon" == ms){
-                                //小图
-                                    _this.createFilePicture(result.data, ms, {size:60});
-                                }else if("images" == ms){
-                                //多张图
-                                    _this.createFilePicture(result.data, ms, {multiple: true});
-                                }else if("barcode" == ms){
-                                //二维码
-                                    _this.createFilePicture(result.data, ms);
-                                }
-                            }
+                                    break;
+                                case "小图":
+                                    $scope["data"]["icon"] = code;
+                                    break;
+                                case "多张图":
+                                    $scope["data"]["images"].push(code);
+                                    break;
+                                case "图片":
+                                    if(editCont.index != null){
+                                        $scope["data"]["nodeList"][editCont.index] = {
+                                            type: "image",
+                                            content: code,
+                                            sort: 0
+                                        };
+                                    }else{
+                                        $scope["data"]["nodeList"].push({
+                                            type: "image",
+                                            content: code,
+                                            sort: 0
+                                        });
+                                    }
+                                    break;
+                                case "视频":
+                                    if(editCont.index != null){
+                                        $scope["data"]["nodeList"][editCont.index] = {
+                                            type: "video",
+                                            content: code,
+                                            sort: 0
+                                        };
+                                    }else{
+                                        $scope["data"]["nodeList"].push({
+                                            type: "video",
+                                            content: code,
+                                            sort: 0
+                                        });
+                                    }
+                                    break;
+                            }                     
+                        }else{
+                            lmToastHelper.alert(result.message);
                         }
+                        editCont.index = null;
+                        $scope.determinateValue = 0;
+                        $scope.onLoading = false;
+                        $scope.$digest();
+                    }
+                };
+
+                //获取详情
+                if($scope.pageType != null){
+                    (function(){
+                        httpService.post(baseParam.basePathB+"meta/product/get/"+$scope.id)
+                        .then(function(response){
+                            $scope.data = response.data;
+                            $scope["data"]["images"] = typeof $scope["data"]["images"] != "undefined" ? $scope["data"]["images"] : [];
+                            $scope["data"]["first"] = typeof $scope["data"]["first"] != "undefined" ? $scope["data"]["first"] : [];
+                            $scope["data"]["second"] = typeof $scope["data"]["second"] != "undefined" ? $scope["data"]["second"] : [];
+                            $scope["data"]["third"] = typeof $scope["data"]["third"] != "undefined" ? $scope["data"]["third"] : [];
+                            $scope["data"]["nodeList"] = typeof $scope["data"]["nodeList"] != "undefined" ? $scope["data"]["nodeList"] : [];
+                        }, function(error){
+                            lmToastHelper.alert(error.message);
+                        });
+                    })();
+                }
+                
+                //获取产品类型
+                if($scope.pageType != "detail"){
+                    (function(){
+                        httpService.post(baseParam.basePathB+"meta/productType", {
+                            pageSize: 1000
+                        })
+                        .then(function(response){
+                            $scope.productTypeMap = response.data;
+                        }, function(error){
+                            lmToastHelper.alert(error.message);
+                        });
+                    })();
+                }
+
+                $scope.$on("onHtmlChange", function(e, html) {
+                    if(editCont.index != null){
+                        $scope["data"]["nodeList"][editCont.index] = {
+                            type: "html",
+                            content: html,
+                            sort: 0
+                        };
+                        editCont.index = null;
+                    }else{
+                        $scope["data"]["nodeList"].push({
+                            type: "html",
+                            content: html,
+                            sort: 0
+                        });
                     }
                 });
             }
-        }
-    });
-    var vm = new Vue(vmParam);
-    $("form").attr("action", vm.basePathB+vm.ACTION);
-    if(TYPE != null){
-        junAjax({
-            url: vm.basePathB+"meta/product/get/"+getRequest("id"),
-            success: function(result){
-                if(result.code != "200"){
-                    alert(result.data);
-                }else{
-                    for(data in result.data){
-                        vm[data] = result.data[data];
-                    };
-                    vm.first = vm.first.length ? vm.first.join() : "";
-                    vm.second = vm.second.length ? vm.second.join() : "";
-                    vm.third = vm.third.length ? vm.third.join() : "";
+        ])
+        .controller("textController", ["$scope", "$rootScope", "$mdDialog", function($scope, $rootScope, $mdDialog) {
+            $scope.hide = function () {
+                $mdDialog.hide();
+            };
+            
+            $scope.sure = function(){
+                var html = window.frames["content"].getHtml();
+                $rootScope.$broadcast("onHtmlChange", html);
+                $mdDialog.hide();
+            };
+        }])
+        .constant("editCont", {
+            index: null
+        })
 
-                    if(typeof vm.barcode != "undefined" && vm.barcode != ""){
-                    //二维码
-                        vm.createFilePicture([vm.barcode], "barcode", {type: vm.PAGETYPE});
-                    }
-                    if(typeof vm.image != "undefined" && vm.image != ""){
-                    //大图
-                        vm.createFilePicture([vm.image], "image", {type: vm.PAGETYPE});
-                    }
-                    if(typeof vm.icon != "undefined" && vm.icon != ""){
-                    //小图
-                        vm.createFilePicture([vm.icon], "icon", {size:60, type: vm.PAGETYPE});
-                    }
-                    if(typeof vm.images != "undefined" && vm.images.length){
-                    //多张图
-                        vm.createFilePicture(vm.images, "images", {multiple: true, type: vm.PAGETYPE});
-                    }
-                }
-            },
-            error: function(){
-                alert("网络错误 ！");
-            }
-        });
-    }
-    
-</script>
+    ;
+    </script>
 </body>
 </html>
