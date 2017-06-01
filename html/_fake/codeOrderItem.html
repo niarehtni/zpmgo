@@ -45,7 +45,7 @@
                     <label>状态</label>
                     <md-select ng-model="data.status" ng-if="!isDetail">
                         <md-option value="">所有</md-option>
-                        <md-option ng-repeat="status in statusMap" ng-value="status.id">
+                        <md-option ng-repeat="status in statusMap" ng-value="status.name">
                             {{status.name}}
                         </md-option>
                     </md-select>

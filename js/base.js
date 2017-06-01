@@ -42,5 +42,19 @@
 		return this.basePath+url;
 	};
 
+	Base.prototype.getRequest = function(name) {
+		var url = window.location.search;
+		if(url.indexOf("?") != -1){
+			url = url.substr(1);
+			var strs = url.split("&");
+			for(var i=0; i<strs.length; i++) {
+				if(name == strs[i].split("=")[0]){
+					return strs[i].split("=")[1];
+				}
+		    }
+		}
+		return null;
+	};
+
 	BASE = new Base();
 })();

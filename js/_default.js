@@ -384,8 +384,8 @@ angular
 	.constant("baseParam", {
 		basePathB: "https://g.zpmgo.com/",
 		basePathC: "https://c.zpmgo.com/",
-		uploadBase: "https://file.zpmgo.com/api/upload/test",
-		downloadBase: "https://file.zpmgo.com/api/download/test/",
+		uploadBase: "https://file.zpmgo.com/api/upload/temp",
+		downloadBase: "https://file.zpmgo.com/api/download/temp/",
 		uploadBaseC: "https://c.zpmgo.com/api/security/upload/"
 	})
 
@@ -534,6 +534,23 @@ angular
 	                    return viewValue;
 	                } else {
 	                    ngModel.$setValidity("email", false);
+	                    return undefined;
+	                }
+	            });
+	        }
+	    };
+	})
+	.directive("integer", function(){
+	    return {
+	        require: "ngModel",
+	        link: function(scope, element, attrs, ngModel){
+	            if(!ngModel) { return false };
+	            ngModel.$parsers.push(function(viewValue){
+	                if(/^\-?\d+$/.test(viewValue)){
+	                    ngModel.$setValidity('integer', true);
+	                    return viewValue;
+	                }else{
+	                    ngModel.$setValidity('integer', false);
 	                    return undefined;
 	                }
 	            });

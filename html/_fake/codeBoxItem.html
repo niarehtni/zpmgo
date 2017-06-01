@@ -61,9 +61,9 @@
 				$scope.onSubmit = function(){
 					if($scope.form.$valid){
 						if("edit" == $scope.pageType){
-							var action = baseParam.basePathC+"meta/materielBox/update/"+$scope.id;
+							var action = baseParam.basePathC+"meta/codeBox/update/"+$scope.id;
 						}else{
-							var action = baseParam.basePathC+"meta/materielBox/add";
+							var action = baseParam.basePathC+"meta/codeBox/add";
 						}
 						httpService.post(action, {
 							packingCode: $scope["data"]["packingCode"],
@@ -91,7 +91,7 @@
 		        //获取详情
 				if($scope.pageType != null){
 					(function(){
-						httpService.post(baseParam.basePathC+"meta/materielBox/get/"+$scope.id)
+						httpService.post(baseParam.basePathC+"meta/codeBox/get/"+$scope.id)
 						.then(function(response){
 							$scope.data = response.data;
 						}, function(error){

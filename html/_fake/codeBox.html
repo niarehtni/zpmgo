@@ -30,7 +30,7 @@
 	<script src="../../js/base.js?v=1.0.2"></script>
 	<script>
 	$(function(){
-		$("form").attr("action", BASE.setUrl("meta/materielBox", true));
+		$("form").attr("action", BASE.setUrl("meta/codeBox", true));
 		$("table.listTable").flexigrid(GRID);	
 	});	
 	var GRID = {
@@ -53,18 +53,18 @@
 			}
         ],
         add: {
-        	url: "../html/_fake/_materielBoxItem.html",
+        	url: "../html/_fake/codeBoxItem.html",
         },
         edit: {
-        	url: "../html/_fake/_materielBoxItem.html?type=edit",
+        	url: "../html/_fake/codeBoxItem.html?type=edit",
         	primaryKey: "id"
         },
         detail: {
-        	url: "../html/_fake/_materielBoxItem.html?type=detail",
+        	url: "../html/_fake/codeBoxItem.html?type=detail",
         	primaryKey: "id",
         },
         deletes: {
-        	url : BASE.getBasePathC()+"meta/materielBox/delete",
+        	url : BASE.getBasePathC()+"meta/codeBox/delete",
 			primaryKey: "id"
         }
 	};
