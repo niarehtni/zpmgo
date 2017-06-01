@@ -8,33 +8,72 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css">
     <link rel="stylesheet" type="text/css" href="../../css/default.css">
     <base href="./">
-	<title>条码盒信息</title>
+	<title>物料盒信息</title>
 </head>
 <body ng-app="lmApp" ng-cloak ng-controller="mainController">
 	<md-content layout-padding class="lm-pageTitle">
-   		条码盒{{pageTitle}}
+   		物料盒{{pageTitle}}
 	</md-content>
 	<md-card layout-padding>
 		<form name="form" ng-submit="onSubmit()">
 	        <div layout="row" layout-margin>
 	            <md-input-container flex>
-	                <label>编码</label>
-	                <input type="text" name="packingCode" ng-model="data.packingCode" ng-disabled="isDetail">
+                    <label>条码盒类型</label>
+                    <md-select ng-model="data.packingTypeId" ng-change="packingTypeChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="packingType in packingTypeMap" ng-value="packingType.id">
+                            {{packingType.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.packingTypeName" ng-if="isDetail" disabled>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>物料类型</label>
+                    <md-select ng-model="data.materialTypeId" ng-change="materialTypeChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="materialType in materialTypeMap" ng-value="materialType.id">
+                            {{materialTyp.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.materialTypeName" ng-if="isDetail" disabled>
+                </md-input-container>
+	            <md-input-container flex>
+	                <label>标签分类码</label>
+                    <input type="text" name="classifyCode" ng-model="data.classifyCode" ng-disabled="isDetail">
+	            </md-input-container>
+	        </div>
+	        <div layout="row" layout-margin>
+	            <md-input-container flex>
+	                <label>标签编码</label>
+                    <input type="text" name="code" ng-model="data.code" ng-disabled="isDetail">
 	            </md-input-container>
 	            <md-input-container flex>
-				    <label>公司</label>
-				    <md-select ng-model="data.supplierId" ng-change="supplierChange()" ng-if="!isDetail">
-				        <md-option ng-repeat="supplier in supplierMap" ng-value="supplier.id">
-				            {{supplier.name}}
-				        </md-option>
-				    </md-select>
-				    <input type="text" ng-model="data.supplierName" ng-if="isDetail" disabled>
-				</md-input-container>
-				<md-input-container flex>
-	                <label>打包时间</label>
-	                <md-datepicker ng-model="data.packingTime" md-open-on-focus ng-if="!isDetail"></md-datepicker>
-	                <input type="text" ng-model="data.packingTime" disabled ng-if="isDetail">
+	                <label>标签型号</label>
+                    <input type="text" name="labelModel" ng-model="data.labelModel" ng-disabled="isDetail">
 	            </md-input-container>
+	            <md-input-container flex>
+	                <label>标签名称</label>
+                    <input type="text" name="labelName" ng-model="data.labelName" ng-disabled="isDetail">
+	            </md-input-container>
+	        </div>
+	        <div layout="row" layout-margin>
+	            <md-input-container flex>
+	                <label>标签类型</label>
+                    <md-select ng-model="data.labelTypeId" ng-change="labelTypeChange() ng-if="!isDetail">
+                        <md-option ng-repeat="labelType in labelTypeMap" ng-value="labelType.id">
+                            {{labelType.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.labelTypeName" ng-if="isDetail" disabled>
+	            </md-input-container>
+	            <md-input-container flex>
+                    <label>标签状态</label>
+                    <md-select ng-model="data.labelStatus" ng-if="!isDetail">
+                        <md-option ng-repeat="labelStatus in labelStatusMap" ng-value="labelStatus.name">
+                            {{labelStatus.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.labelStatus" ng-if="isDetail" disabled>
+                </md-input-container>
+                <div flex></div>
 	        </div>
 	        <div layout="row" layout-margin ng-if="!isDetail">
 	            <span flex></span>
@@ -56,7 +95,10 @@
 		.controller("mainController", ["$scope", "baseParam", "removeTab", "lmToastHelper", "httpService", 
 			function($scope, baseParam, removeTab, lmToastHelper, httpService){
 				$scope.data = {};
-				$scope.supplierMap = [];  //公司
+				$scope.packingTypeMap = []; //条码盒类型
+				$scope.materialTypeMap = []; //物料类型
+				$scope.labelTypeMap = []; //标签类型
+				$scope.labelStatusMap = []; //标签状态
 
 				$scope.onSubmit = function(){
 					if($scope.form.$valid){
@@ -66,10 +108,17 @@
 							var action = baseParam.basePathC+"meta/materielBox/add";
 						}
 						httpService.post(action, {
-							packingCode: $scope["data"]["packingCode"],
-							packingTime: $scope["data"]["packingTime"],
-							supplierId: $scope["data"]["supplierId"],
-							supplierName: $scope["data"]["supplierName"]
+							packingTypeId: $scope["data"]["packingTypeId"],
+							packingTypeName: $scope["data"]["packingTypeName"],
+							materialTypeId: $scope["data"]["materialTypeId"],
+							materialTypeName: $scope["data"]["materialTypeName"],
+							classifyCode: $scope["data"]["classifyCode"],
+							code: $scope["data"]["code"],
+							labelModel: $scope["data"]["labelModel"],
+							labelName: $scope["data"]["labelName"],
+							labelTypeId: $scope["data"]["labelTypeId"],
+							labelTypeName: $scope["data"]["labelTypeName"],
+							labelStatus: $scope["data"]["labelStatus"]
 						})
 						.then(function(response){
 							removeTab.do(response);
@@ -79,10 +128,28 @@
 					}
 				};
 
-				$scope.supplierChange = function() {
-					for(var i=0,len=$scope.supplierMap.length; i<len; i++){
-						if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
-							$scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
+				$scope.packingTypeChange = function() {
+					for(var i=0,len=$scope.packingTypeMap.length; i<len; i++){
+						if($scope.packingTypeMap[i]["id"] === $scope["data"]["packingTypeId"]){
+							$scope["data"]["packingTypeName"] = $scope.packingTypeMap[i]["name"];
+							break;
+						}
+					}
+				};
+
+				$scope.materialTypeChange = function() {
+					for(var i=0,len=$scope.materialTypeMap.length; i<len; i++){
+						if($scope.materialTypeMap[i]["id"] === $scope["data"]["materialTypeId"]){
+							$scope["data"]["materialTypeName"] = $scope.materialTypeMap[i]["name"];
+							break;
+						}
+					}
+				};
+
+				$scope.labelTypeChange = function() {
+					for(var i=0,len=$scope.labelTypeeMap.length; i<len; i++){
+						if($scope.labelTypeeMap[i]["id"] === $scope["data"]["labelTypeeId"]){
+							$scope["data"]["labelTypeeName"] = $scope.labelTypeeMap[i]["name"];
 							break;
 						}
 					}
@@ -100,19 +167,6 @@
 					})();
 				}
 
-				//获取公司
-				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/supplier", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.supplierMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
-				}
 			}
 		])
 	;

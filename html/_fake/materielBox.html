@@ -39,9 +39,13 @@
         //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "编码", name: "packingCode", width: 200, sortable: true},
-        	{display: "公司", name: "supplierName", width: 120, sortable: true},
-        	{display: "打包时间", name: "packingTime", width: 120, sortable: true},
+        	{display: "条码盒类型", name: "packingTypeName", width: 120, sortable: true},
+        	{display: "物料盒类型", name: "materialTypeName", width: 120, sortable: true},
+        	{display: "标签编码", name: "code", width: 100, sortable: true},
+        	{display: "标签型号", name: "labelModel", width: 100, sortable: true},
+        	{display: "标签名称", name: "labelName", width: 100, sortable: true},
+        	{display: "标签种类", name: "labelTypeName", width: 100, sortable: true},
+        	{display: "标签状态", name: "labelStatus", width: 100, sortable: true},
 			{display: "操作", name: "id", width: 80, sortable: true,
 				dataFormat: function(value, td, row){
 					var oper = '';
@@ -53,14 +57,14 @@
 			}
         ],
         add: {
-        	url: "../html/_fake/_materielBoxItem.html",
+        	url: "../html/_fake/materielBoxItem.html",
         },
         edit: {
-        	url: "../html/_fake/_materielBoxItem.html?type=edit",
+        	url: "../html/_fake/materielBoxItem.html?type=edit",
         	primaryKey: "id"
         },
         detail: {
-        	url: "../html/_fake/_materielBoxItem.html?type=detail",
+        	url: "../html/_fake/materielBoxItem.html?type=detail",
         	primaryKey: "id",
         },
         deletes: {

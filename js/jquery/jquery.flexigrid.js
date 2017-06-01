@@ -1894,10 +1894,6 @@
 
 
 
-
-
-
-/*
 $(document).ready(function(){
 	$("form").filter(function(){
 		if($(this).attr("class")!="notJson"){
@@ -1908,7 +1904,7 @@ $(document).ready(function(){
 	}).submit(function(){
 		return false;
 	});
-});*/
+});
 /**
  * 新增
  * @param jsonObj
