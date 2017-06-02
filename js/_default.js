@@ -144,7 +144,7 @@ angular
                 .position(position)
                 .hideDelay(duration)
             );
-        }
+        };
 
         return new ToastHelper();
     }])
@@ -475,7 +475,7 @@ angular
 ;
 
 /* ========================================================================
- * 照片放大缩小
+ * 校验
  * 
  * ======================================================================== */
 angular
@@ -590,6 +590,26 @@ angular
 	                    ngModel.$setValidity("nochinese", true);
 	                    return viewValue;
 	                }
+	            });
+	        }
+	    };
+	})
+	.directive("theSame", function(){
+	    return {
+	        require: "ngModel",
+	        scope: {
+	        	rValue: "=theSame"
+	        },
+	        link: function(scope, element, attrs, ngModel){
+	            if(!ngModel) { return false; }
+	            ngModel.$parsers.push(function(viewValue){
+	            	if(typeof scope.rValue != "undefined" && scope.rValue === viewValue){
+	            		ngModel.$setValidity("theSame", true);
+	                    return viewValue;
+	            	}else{
+	            		ngModel.$setValidity("theSame", false);
+	                    return undefined;
+	            	}
 	            });
 	        }
 	    };

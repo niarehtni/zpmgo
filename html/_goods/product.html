@@ -35,19 +35,17 @@
     }); 
     var GRID = {
         form: $("form"),
-        //sortname: "",
-        //sortorder: "",
         primaryKey: "id",
         colModel: [
-            {display: "名称", name: "name", width: 200, sortable: true},
-            {display: "价格", name: "price", width: 80, sortable: true},
-            {display: "销量", name: "sold", width: 80, sortable: true},
-            {display: "总库存", name: "stock", width: 80, sortable: true},
-            {display: "规格1", name: "first", width: 100, sortable: true},
-            {display: "规格2", name: "second", width: 100, sortable: true},
-            {display: "规格3", name: "third", width: 100, sortable: true},
-            {display: "简介", name: "des", width: 200, sortable: true},
-            {display: "操作", name: "id", width: 80, sortable: true,
+            {display: "名称", name: "name", width: 300},
+            {display: "价格", name: "price", width: 80},
+            {display: "销量", name: "sold", width: 80},
+            {display: "总库存", name: "stock", width: 80},
+            {display: "规格1", name: "first", width: 100},
+            {display: "规格2", name: "second", width: 100},
+            {display: "规格3", name: "third", width: 100},
+            {display: "简介", name: "des", width: 240},
+            {display: "操作", name: "id", width: 80,
                 dataFormat: function(value, td, row){
                     var oper = '';
                     oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';

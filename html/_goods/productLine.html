@@ -35,14 +35,12 @@
 	});	
 	var GRID = {
 		form: $("form"),
-        //sortname: "",
-        //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 120, sortable: true},
-			{display: "公司", name: "supplierName", width: 120, sortable: true},
-			{display: "描述", name: "des", width: 240, sortable: true},
-			{display: "操作", name: "id", width: 80, sortable: true,
+        	{display: "名称", name: "name", width: 120},
+			{display: "公司", name: "supplierName", width: 120},
+			{display: "描述", name: "des", width: 240},
+			{display: "操作", name: "id", width: 80,
 				dataFormat: function(value, td, row){
 					var oper = '';
             		oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';
