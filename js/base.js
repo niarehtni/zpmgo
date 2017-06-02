@@ -23,9 +23,7 @@
 	};
 
 	Base.prototype.editPwd = function() {
-		alert("预留功能");
-		return;
-		var url="../html/system/changePwd.html";
+		var url="../html/_system/updatePwd.html";
 		top.addTab({href:url,name:"修改密码",closeCallBack:function(result){
 			
 		},closeCheckBefore:function(){return confirm("是否确定关闭？")}});

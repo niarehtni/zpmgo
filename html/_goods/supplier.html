@@ -35,19 +35,17 @@
 	});	
 	var GRID = {
 		form: $("form"),
-        //sortname: "",
-        //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 120, sortable: true},
-			{display: "中文简称", name: "abbr", width: 80, sortable: true},
-			{display: "防伪类型", name: "verifyTypeName", width: 80, sortable: true},
-			{display: "品牌", name: "brandName", width: 120, sortable: true},
-			{display: "注册地址", name: "regAddress", width: 160, sortable: true},
-			{display: "注册时间", name: "regTime", width: 120, sortable: true},
-			{display: "经营范围", name: "busniessScop", width: 100, sortable: true},
-			{display: "联系电话", name: "tel", width: 90, sortable: true},
-			{display: "操作", name: "id", width: 80, sortable: true,
+        	{display: "名称", name: "name", width: 300},
+			{display: "中文简称", name: "abbr", width: 80},
+			{display: "防伪类型", name: "verifyTypeName", width: 80},
+			{display: "品牌", name: "brandName", width: 120},
+			{display: "注册地址", name: "regAddress", width: 160},
+			{display: "注册时间", name: "regTime", width: 120},
+			{display: "经营范围", name: "busniessScop", width: 100},
+			{display: "联系电话", name: "tel", width: 90},
+			{display: "操作", name: "id", width: 80,
 				dataFormat: function(value, td, row){
 					var oper = '';
             		oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';

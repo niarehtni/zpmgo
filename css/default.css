@@ -58,6 +58,10 @@ iframe {
     -o-justify-content: center;
     justify-content: center;
 }
+[flex2] {
+    -webkit-flex: 2;
+    flex: 2;
+}
 .jun-progress {
     position: fixed;
     top: 0;

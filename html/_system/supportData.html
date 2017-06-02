@@ -35,13 +35,11 @@
 	});	
 	var GRID = {
 		form: $("form"),
-        //sortname: "",
-        //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 150, sortable: true},
-			{display: "类型", name: "type", width: 150, sortable: true},
-			{display: "操作", name: "id", width: 80, sortable: true,
+        	{display: "名称", name: "name", width: 150},
+			{display: "类型", name: "type", width: 150},
+			{display: "操作", name: "id", width: 80,
 				dataFormat: function(value, td, row){
 					var oper = '';
             		oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';

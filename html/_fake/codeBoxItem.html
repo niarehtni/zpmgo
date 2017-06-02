@@ -30,7 +30,7 @@
 				    </md-select>
 				    <input type="text" ng-model="data.supplierName" ng-if="isDetail" disabled>
 				</md-input-container>
-				<md-input-container flex>
+				<md-input-container>
 	                <label>打包时间</label>
 	                <md-datepicker ng-model="data.packingTime" md-open-on-focus ng-if="!isDetail"></md-datepicker>
 	                <input type="text" ng-model="data.packingTime" disabled ng-if="isDetail">

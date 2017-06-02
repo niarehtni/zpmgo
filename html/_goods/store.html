@@ -35,17 +35,15 @@
 	});	
 	var GRID = {
 		form: $("form"),
-        //sortname: "",
-        //sortorder: "",
         primaryKey: "id",
         colModel: [
-        	{display: "名称", name: "name", width: 200, sortable: true},
-			{display: "公司", name: "supplierName", width: 100, sortable: true},
-			{display: "门店地址", name: "fullAddress", width: 150, sortable: true},
-			{display: "联系电话", name: "tel", width: 120, sortable: true},
-			{display: "负责人", name: "managerName", width: 80, sortable: true},
-			{display: "负责人电话", name: "managerMobile", width: 120, sortable: true},
-			{display: "操作", name: "id", width: 80, sortable: true,
+        	{display: "名称", name: "name", width: 300},
+			{display: "公司", name: "supplierName", width: 200},
+			{display: "门店地址", name: "fullAddress", width: 150},
+			{display: "联系电话", name: "tel", width: 120},
+			{display: "负责人", name: "managerName", width: 80},
+			{display: "负责人电话", name: "managerMobile", width: 120},
+			{display: "操作", name: "id", width: 80,
 				dataFormat: function(value, td, row){
 					var oper = '';
             		oper += '<span class="editBtn rowBtn" title="编辑" onclick="rowEdit(this)"></span>';
