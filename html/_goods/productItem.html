@@ -22,22 +22,25 @@
         .operate {
             visibility: hidden;
         }
+        .operate i {
+            outline: none;
+        }
     </style>
 </head>
 <body ng-app="lmApp1" ng-cloak ng-controller="mainController">
-    <md-content layout-padding class="lm-pageTitle">
-        产品{{pageTitle}}
-    </md-content>
+    <md-subheader class="md-primary lm-pageTitle">产品{{pageTitle}}</md-subheader>
     <md-card layout-padding>
         <form name="form" ng-submit="onSubmit()">
             <div layout="row" layout-margin>
-                <md-input-container flex flex2>
+                <md-input-container flex>
                     <label>名称</label>
                     <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
                     <div ng-messages="form.name.$error" role="alert">
                         <div ng-message="required">请填写必要信息</div>
                     </div>
                 </md-input-container>
+            </div>
+            <div layout="row" layout-margin>
                 <md-input-container flex>
                     <label>产品类型</label>
                     <md-select ng-model="data.productTypeId" ng-change="productTypehange()" ng-if="!isDetail">
@@ -46,6 +49,24 @@
                         </md-option>
                     </md-select>
                     <input type="text" ng-model="data.productTypeName" ng-if="isDetail" disabled>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>品牌</label>
+                    <md-select ng-model="data.brandId" ng-change="brandChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="brand in brandMap" ng-value="brand.id">
+                            {{brand.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.brandName" ng-if="isDetail" disabled>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>公司</label>
+                    <md-select ng-model="data.supplierId" ng-change="supplierChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="supplier in supplierMap" ng-value="supplier.id">
+                            {{supplier.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.supplierName" ng-if="isDetail" disabled>
                 </md-input-container>
             </div>
             <div layout="row" layout-margin>
@@ -126,9 +147,9 @@
                 </md-input-container>
             </div>
             <div layout="row" layout-margin ng-if="!isDetail">
-                <upload-section ws-options="options" ws-name="file" ws-text="二维码"></upload-section>
-                <upload-section ws-options="options" ws-name="file" ws-text="大图"></upload-section>
-                <upload-section ws-options="options" ws-name="file" ws-text="小图"></upload-section>
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="二维码"></upload-section>
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="大图"></upload-section>
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="小图"></upload-section>
             </div>
             <md-grid-list layout-margin class="gallery" 
                 md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
@@ -157,8 +178,8 @@
                 </md-grid-tile>
             </md-grid-list>
             <div layout="row" layout-margin ng-if="!isDetail">
-                <upload-section ws-options="options" ws-name="file" ws-text="多张图"></upload-section>
-                <md-button type="button" ng-click="clear()" class="md-primary">
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="多张图"></upload-section>
+                <md-button type="button" ng-click="clear()" style="margin: 14px" class="md-primary">
                     清除
                 </md-button>
             </div>
@@ -181,12 +202,12 @@
                 <md-subheader>图文信息</md-subheader>
             </div>
             <div layout="row" layout-margin class="sticky" ng-if="!isDetail">
-                <md-button class="md-primary md-raised" type="button" style="margin: 14px" ng-click="toHtml()" id="lm-html">
+                <md-button class="md-primary md-raised" type="button" style="margin: 14px" id="lm-html" ng-click="toHtml()" ng-disabled="onLoading">
                     <i class="material-icons">format_size</i>
                     文本
                 </md-button>
-                <upload-section ws-options="options" ws-name="file" ws-text="图片" ws-icon="photo"></upload-section>
-                <upload-section ws-options="options" ws-name="file" ws-text="视频" ws-icon="ondemand_video"></upload-section>
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="图片" ws-icon="photo"></upload-section>
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="视频" ws-icon="ondemand_video"></upload-section>
                 <md-button class="md-primary" type="button" style="margin: 14px" ng-click="nodeClear()">
                     清除
                 </md-button>
@@ -236,6 +257,8 @@
                     nodeList: []
                 };
                 $scope.productTypeMap = []; //产品类型
+                $scope.brandMap = [];  //品牌
+                $scope.supplierMap = [];  //公司
 
                 $scope.onSubmit = function(){
                     if($scope.form.$valid){
@@ -268,6 +291,10 @@
                             third: $scope["data"]["third"],
                             productTypeId: $scope["data"]["productTypeId"],
                             productTypeName: $scope["data"]["productTypeName"],
+                            brandId: $scope["data"]["brandId"],
+                            brandName: $scope["data"]["brandName"],
+                            supplierId: $scope["data"]["supplierId"],
+                            supplierName: $scope["data"]["supplierName"],
                             nodeList: $scope["data"]["nodeList"]
                         })
                         .then(function(response){
@@ -337,6 +364,70 @@
                         }
                     }
                 };
+
+                //获取产品类型
+                if($scope.pageType != "detail"){
+                    httpService.post(baseParam.basePathB+"meta/productType", {
+                        pageSize: 1000
+                    })
+                    .then(function(response){
+                        $scope.productTypeMap = response.data;
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
+                }
+
+                $scope.brandChange = function(){
+                    for(var i=0,len=$scope.brandMap.length; i<len; i++){
+                        if($scope.brandMap[i]["id"] === $scope["data"]["brandId"]){
+                            $scope["data"]["brandName"] = $scope.brandMap[i]["name"];
+                            getSupplier();
+                            break;
+                        }
+                    }
+                };
+
+                //获取品牌
+                if($scope.pageType != "detail"){
+                    httpService.post(baseParam.basePathB+"meta/brand", {
+                        pageSize: 1000
+                    })
+                    .then(function(response){
+                        $scope.brandMap = response.data;
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
+                }
+
+                $scope.supplierChange = function() {
+                    for(var i=0,len=$scope.supplierMap.length; i<len; i++){
+                        if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
+                            $scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
+                            break;
+                        }
+                    }
+                };
+
+                //获取公司
+                if($scope.pageType != "detail"){
+                    getSupplier();
+                }
+
+                function getSupplier(){
+                    httpService.post(baseParam.basePathB+"meta/supplier", {
+                        pageSize: 1000,
+                        filters: [{
+                            "key": "brandId",
+                            "cpr": "eqs",
+                            "val": $scope["data"]["brandId"]
+                        }]
+                    })
+                    .then(function(response){
+                        $scope.supplierMap = response.data;
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
+                }
 
                 //html文本编辑
                 $scope.toHtml = function(node){
@@ -455,20 +546,6 @@
                             $scope["data"]["second"] = typeof $scope["data"]["second"] != "undefined" ? $scope["data"]["second"] : [];
                             $scope["data"]["third"] = typeof $scope["data"]["third"] != "undefined" ? $scope["data"]["third"] : [];
                             $scope["data"]["nodeList"] = typeof $scope["data"]["nodeList"] != "undefined" ? $scope["data"]["nodeList"] : [];
-                        }, function(error){
-                            lmToastHelper.alert(error.message);
-                        });
-                    })();
-                }
-                
-                //获取产品类型
-                if($scope.pageType != "detail"){
-                    (function(){
-                        httpService.post(baseParam.basePathB+"meta/productType", {
-                            pageSize: 1000
-                        })
-                        .then(function(response){
-                            $scope.productTypeMap = response.data;
                         }, function(error){
                             lmToastHelper.alert(error.message);
                         });

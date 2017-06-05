@@ -74,8 +74,7 @@ md-chips-wrap {
     outline: none;
 }
 .lm-pageTitle{
-    font-weight: 500;
-    font-size: 14px;
+    /*font-weight: bold;*/
 }
 .iconfont, .material-icons {
     vertical-align: middle;

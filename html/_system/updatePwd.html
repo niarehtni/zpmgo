@@ -11,9 +11,7 @@
 	<title>密码修改</title>
 </head>
 <body ng-app="lmApp" ng-cloak ng-controller="mainController">
-	<md-content layout-padding class="lm-pageTitle">
-   		密码修改
-	</md-content>
+    <md-subheader class="md-primary lm-pageTitle">密码修改{{pageTitle}}</md-subheader>
 	<md-card layout-padding>
 		<form name="form" ng-submit="onSubmit()">
 	        <div layout>
@@ -40,7 +38,7 @@
 	                <input type="password" name="confirm" ng-model="confirm" required the-same="data.new" ng-disabled="isDetail">
 	                <div ng-messages="form.confirm.$error" role="alert">
 	                    <div ng-message="required">请填写必要信息</div>
-	                    <div ng-message="theSame">与新密码不一致</div>
+	                    <div ng-message="theSame">两次输入密码不一致</div>
 	                </div>
 	            </md-input-container>
 	        </div>

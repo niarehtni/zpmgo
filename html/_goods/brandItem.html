@@ -11,9 +11,7 @@
 	<title>品牌信息</title>
 </head>
 <body ng-app="lmApp" ng-cloak ng-controller="mainController">
-	<md-content layout-padding class="lm-pageTitle">
-   		品牌{{pageTitle}}
-	</md-content>
+	<md-subheader class="md-primary lm-pageTitle">品牌{{pageTitle}}</md-subheader>
 	<md-card layout-padding>
 		<form name="form" ng-submit="onSubmit()">
 	        <div layout="row" layout-margin>
@@ -50,8 +48,8 @@
                 </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin id="logo" ng-if="!isDetail">
-	        	<upload-section ws-options="options" ws-name="file" ws-text="logo"></upload-section>
-	        	<upload-section ws-options="options" ws-name="file" ws-text="图片"></upload-section>
+	        	<upload-section ws-options="options" ws-name="file" ws-text="logo" up-dis="onLoading"></upload-section>
+	        	<upload-section ws-options="options" ws-name="file" ws-text="图片" up-dis="onLoading"></upload-section>
 	        </div>
 	        <div class="jun-progress display-flex align-items-center flex-hc" ng-show="onLoading">
                 <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>

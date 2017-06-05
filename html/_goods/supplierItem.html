@@ -11,13 +11,11 @@
 	<title>公司信息</title>
 </head>
 <body ng-app="lmApp" ng-cloak ng-controller="mainController">
-	<md-content layout-padding class="lm-pageTitle">
-   		公司{{pageTitle}}
-	</md-content>
+	<md-subheader class="md-primary lm-pageTitle">公司{{pageTitle}}</md-subheader>
 	<md-card layout-padding>
 		<form name="form" ng-submit="onSubmit()">
 	        <div layout="row" layout-margin>
-	            <md-input-container flex>
+	            <md-input-container flex2>
 	                <label>公司名称</label>
 	                <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
 	                <div ng-messages="form.name.$error" role="alert">
@@ -37,16 +35,6 @@
                     </md-select>
                     <input type="text" ng-model="data.brandName" ng-if="isDetail" disabled>
 	            </md-input-container>
-	            <md-input-container flex>
-                    <label>状态</label>
-                    <md-select ng-model="data.status" ng-if="!isDetail">
-                        <md-option value="">所有</md-option>
-                        <md-option ng-repeat="status in statusMap" ng-value="status.name">
-                            {{status.name}}
-                        </md-option>
-                    </md-select>
-                    <input type="text" ng-model="data.status" ng-if="isDetail" disabled>
-                </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin>
 	            <md-input-container flex>
@@ -68,13 +56,18 @@
                     <input type="text" ng-model="data.verifyTypName" disabled ng-if="isDetail">
 	            </md-input-container>
 	            <md-input-container flex>
+                    <label>状态</label>
+                    <md-select ng-model="data.status" ng-if="!isDetail">
+                        <md-option value="">所有</md-option>
+                        <md-option ng-repeat="status in statusMap" ng-value="status.name">
+                            {{status.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.status" ng-if="isDetail" disabled>
+                </md-input-container>
+	            <md-input-container flex>
 	                <label>注册地址</label>
 	                <input type="text" name="regAddress" ng-model="data.regAddress" ng-disabled="isDetail">
-	            </md-input-container>
-	            <md-input-container>
-	                <label>注册时间</label>
-	                <md-datepicker ng-model="data.regTime" md-open-on-focus ng-if="!isDetail"></md-datepicker>
-	                <input type="text" ng-model="data.regTime" disabled ng-if="isDetail">
 	            </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin>
@@ -95,6 +88,11 @@
 	                <div ng-messages="form.serviceTel.$error" role="alert">
 	                    <div ng-message="telphone">格式不正确</div>
 	                </div>
+	            </md-input-container>
+	            <md-input-container flex>
+	                <label>注册时间</label>
+	                <md-datepicker ng-model="data.regTime" md-open-on-focus ng-if="!isDetail"></md-datepicker>
+	                <input type="text" ng-model="data.regTime" disabled ng-if="isDetail">
 	            </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin>
