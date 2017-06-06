@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/default.css">
+    <base href="./">
+    <title>卖家信息</title>
+    <style>
+        md-list-item {
+            border: 1px solid transparent;
+        }
+        md-list-item:hover{
+            border: 1px solid #ccc;
+        }
+        md-list-item:hover .operate {
+            visibility: visible;
+        }
+        .operate {
+            visibility: hidden;
+        }
+        .operate i {
+            outline: none;
+        }
+    </style>
+</head>
+<body ng-app="lmApp1" ng-cloak ng-controller="mainController">
+    <md-subheader class="md-primary lm-pageTitle">卖家{{pageTitle}}</md-subheader>
+    <md-card layout-padding>
+        <form name="form" ng-submit="onSubmit()">
+            <div layout="row" layout-margin>
+                <md-input-container flex>
+                    <label>名称</label>
+                    <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
+                    <div ng-messages="form.name.$error" role="alert">
+                        <div ng-message="required">请填写必要信息</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>公司</label>
+                    <md-select ng-model="data.supplierId" ng-change="supplierChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="supplier in supplierMap" ng-value="supplier.id">
+                            {{supplier.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.supplierName" ng-if="isDetail" disabled>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>地址</label>
+                    <input type="text" name="address" ng-model="data.address" ng-disabled="isDetail">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-margin>
+               <md-input-container flex>
+                    <label>联系电话</label>
+                    <input type="text" name="phone" ng-model="data.phone" telphone ng-disabled="isDetail">
+                    <div ng-messages="form.phone.$error" role="alert">
+                        <div ng-message="telphone">请填写正确的格式</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex2>
+                    <label>天猫地址</label>
+                    <input type="text" name="tmallUrl" ng-model="data.tmallUrl" ng-disabled="isDetail">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-margin>
+                 <md-input-container flex>
+                    <label>描述</label>
+                    <textarea ng-model="data.des" rows="3" md-detect-hidden md-select-on-focus ng-disabled="isDetail"></textarea>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-margin ng-if="!isDetail">
+                <upload-section ws-options="options" ws-name="file" ws-text="图片" ws-id="picture"></upload-section>
+            </div>
+            <md-grid-list layout-margin class="gallery" 
+                md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
+                md-row-height="1:1" 
+                md-gutter="8px">
+                <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, 'logo', data.image)" ng-if="data.image">
+                    <img ng-src="{{data.image}}" img-responsive>
+                    <md-grid-tile-footer>
+                        <i class="material-icons pointer" ng-click="remove($event, 'image')" ng-if="!isDetail">delete_forever</i>
+                        <h3 class="inline-block">图片</h3>
+                    </md-grid-tile-footer>
+                </md-grid-tile>
+            </md-grid-list>
+            <div class="jun-progress display-flex align-items-center flex-hc" ng-show="onLoading">
+                <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>
+            </div>
+            <div layout-margin>
+                <md-subheader>图文信息</md-subheader>
+            </div>
+            <div layout="row" layout-margin class="sticky" ng-if="!isDetail">
+                <md-button class="md-primary md-raised" type="button" style="margin: 14px" id="lm-html" ng-click="toHtml()" ng-disabled="onLoading">
+                    <i class="material-icons">format_size</i>
+                    文本
+                </md-button>
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="图片" ws-icon="photo" ws-id="nodePic"></upload-section>
+                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="视频" ws-icon="ondemand_video" ws-id="nodeVideo"></upload-section>
+                <md-button class="md-primary" type="button" style="margin: 14px" ng-click="nodeClear()">
+                    清除
+                </md-button>
+            </div>
+            <div layout="column" layout-margin ng-if="data.nodeList.length">
+                <md-content>
+                    <md-list class="display-flex flex-colum" style="background: #fff">
+                        <md-list-item ng-repeat="node in data.nodeList" class="display-flex" style="padding-right: 0">
+                            <div flex>
+                                <div ng-bind-html="trustHtml(node.content)" ng-if="'html'==node.type"></div>
+                                <img ng-src="{{node.content}}" ng-if="'image'==node.type">
+                                <video ng-src="{{trustSrc(node.content)}}" controls="controls" ng-if="'video'==node.type">你的播放器不支持该视频播放</video>
+                            </div>
+                            <div class="operate display-flex flex-colum" ng-if="!isDetail">
+                                <i class="material-icons pointer" ng-click="nodeDel(node,$index)" title="删除">clear</i>
+                                <i class="material-icons pointer" ng-click="nodeEdit(node,$index)" title="编辑">create</i>
+                            </div>
+                        </md-list-item>
+                    </md-list>
+                </md-content>
+            </div>
+            <div layout="row" layout-margin ng-if="!isDetail">
+                <span flex></span>
+                <md-button class="md-primary md-raised" type="submit" ng-disabled="form.$invalid">
+                    保&nbsp;&nbsp;存
+                </md-button>
+            </div>
+        </form>
+    </md-card>
+
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-animate.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-aria.min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-messages.min.js"></script>
+    <script src="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.js"></script>
+    <script src="../../js/_default.js?v=1.0.1"></script>
+    <script>
+        var htmlNode;
+        angular.module("lmApp1", ["lmApp"])
+        .controller("mainController", ["$scope", "$mdDialog", "trustService", "baseParam", "removeTab", "uploadCheck", "potoView", "lmToastHelper", "httpService", "editCont",
+            function($scope, $mdDialog, trustService, baseParam, removeTab, uploadCheck, potoView, lmToastHelper, httpService, editCont){
+                $scope.data = {
+                    images: [],
+                    nodeList: []
+                };
+                $scope.supplierMap = [];  //公司
+
+                $scope.onSubmit = function(){
+                    if($scope.form.$valid){
+                        if("edit" == $scope.pageType){
+                            var action = baseParam.basePathB+"meta/seller/update/"+$scope.id;
+                        }else{
+                            var action = baseParam.basePathB+"meta/seller/add";
+                        }
+                        var nodeList = $scope["data"]["nodeList"]; 
+                        if(nodeList.length){
+                            angular.forEach(nodeList, function(data, index, array){
+                                data["sort"] = index;
+                            });
+                        }
+                        httpService.post(action, {
+                            name: $scope["data"]["name"],
+                            des: $scope["data"]["des"],
+                            tmallUrl: $scope["data"]["tmallUrl"],
+                            phone: $scope["data"]["phone"],
+                            address: $scope["data"]["address"],
+                            image: $scope["data"]["image"],
+                            supplierId: $scope["data"]["supplierId"],
+                            supplierName: $scope["data"]["supplierName"],
+                            nodeList: $scope["data"]["nodeList"]
+                        })
+                        .then(function(response){
+                            removeTab.do(response);
+                        }, function(error){
+                            lmToastHelper.alert(error.message);
+                        });
+                    }
+                };
+
+                //图片删除
+                $scope.remove = function(event, type){
+                    event.preventDefault();
+                    $scope["data"][type] = "";
+                };
+
+                $scope.trustSrc = function(url){
+                    return trustService.resourceUrl(url);
+                };
+
+                $scope.trustHtml = function(url){
+                    return trustService.html(url);
+                };
+
+                //文本节点清除
+                $scope.nodeClear = function(){
+                    $scope["data"]["nodeList"].length = 0;
+                };
+
+                //文本节点删除
+                $scope.nodeDel = function(node, index){
+                    $scope["data"]["nodeList"].splice(index, 1);
+                };
+
+                //文本节点编辑
+                $scope.nodeEdit = function(node, index){
+                    editCont.index = index;
+                    switch(node.type){
+                        case "html":
+                            $scope.toHtml(node);
+                            break;
+                        case "image":
+                            document.getElementById("nodePic").click();
+                            break;
+                        case "video":
+                            document.getElementById("nodeVideo").click();
+                            break;
+                    }
+                };
+
+                $scope.showPhotoView = potoView.show;
+
+                $scope.supplierChange = function() {
+                    for(var i=0,len=$scope.supplierMap.length; i<len; i++){
+                        if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
+                            $scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
+                            break;
+                        }
+                    }
+                };
+
+                //获取公司
+                if($scope.pageType != "detail"){
+                    httpService.post(baseParam.basePathB+"meta/supplier", {
+                        pageSize: 1000
+                    })
+                    .then(function(response){
+                        $scope.supplierMap = response.data;
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
+                }
+
+                //html文本编辑
+                $scope.toHtml = function(node){
+                    if(node){
+                        htmlNode = node;
+                    }else{
+                        htmlNode = null;
+                        editCont.index = null;
+                    }
+                    $mdDialog.show({
+                        templateUrl: '../../html/_common/kindEditor.tpl.html',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose: false,
+                        escapeToClose: true,
+                        controller: "textController"
+                    });
+                };
+
+                $scope.options = {
+                    url: baseParam.uploadBase,
+                    before:function(file){
+                        //验证
+                        var result = false;
+                        switch(this.getAttribute("_text")){
+                            case "视频":
+                                result = uploadCheck.video(file);
+                                break;
+                            default:
+                                result = uploadCheck.image(file);
+                        }
+                        if(!result){
+                            return false;
+                        }
+                        $scope.onLoading = true;
+                        $scope.determinateValue = 0;
+                        $scope.$digest();
+                        return true;
+                    },
+                    uploading: function(progressValue){
+                        $scope.determinateValue = progressValue;
+                        $scope.$digest();
+                    },
+                    callBack:function(result){
+                        //处理结果，显示预览
+                        if("200" == result.code){
+                            var code = baseParam.downloadBase+result["data"][0];
+                            switch(this.id){
+                                case "picture":
+                                    $scope["data"]["image"] = code;
+                                    break;
+                                case "nodePic":
+                                    if(editCont.index != null){
+                                        $scope["data"]["nodeList"][editCont.index] = {
+                                            type: "image",
+                                            content: code,
+                                            sort: 0
+                                        };
+                                    }else{
+                                        $scope["data"]["nodeList"].push({
+                                            type: "image",
+                                            content: code,
+                                            sort: 0
+                                        });
+                                    }
+                                    break;
+                                case "nodeVideo":
+                                    if(editCont.index != null){
+                                        $scope["data"]["nodeList"][editCont.index] = {
+                                            type: "video",
+                                            content: code,
+                                            sort: 0
+                                        };
+                                    }else{
+                                        $scope["data"]["nodeList"].push({
+                                            type: "video",
+                                            content: code,
+                                            sort: 0
+                                        });
+                                    }
+                                    break;
+                            }                     
+                        }else{
+                            lmToastHelper.alert(result.message);
+                        }
+                        editCont.index = null;
+                        $scope.determinateValue = 0;
+                        $scope.onLoading = false;
+                        $scope.$digest();
+                    }
+                };
+
+                //获取详情
+                if($scope.pageType != null){
+                    httpService.post(baseParam.basePathB+"meta/seller/get/"+$scope.id)
+                    .then(function(response){
+                        $scope.data = response.data;
+                        $scope["data"]["image"] = typeof $scope["data"]["image"] != "undefined" ? $scope["data"]["image"] : [];
+                        $scope["data"]["nodeList"] = typeof $scope["data"]["nodeList"] != "undefined" ? $scope["data"]["nodeList"] : [];
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
+                }
+
+                $scope.$on("onHtmlChange", function(e, html) {
+                    if(editCont.index != null){
+                        $scope["data"]["nodeList"][editCont.index] = {
+                            type: "html",
+                            content: html,
+                            sort: 0
+                        };
+                        editCont.index = null;
+                    }else{
+                        $scope["data"]["nodeList"].push({
+                            type: "html",
+                            content: html,
+                            sort: 0
+                        });
+                    }
+                });
+            }
+        ])
+        .controller("textController", ["$scope", "$rootScope", "$mdDialog", function($scope, $rootScope, $mdDialog) {
+            $scope.hide = function () {
+                $mdDialog.hide();
+            };
+            
+            $scope.sure = function(){
+                var html = window.frames["content"].getHtml();
+                $rootScope.$broadcast("onHtmlChange", html);
+                $mdDialog.hide();
+            };
+        }])
+        .constant("editCont", {
+            index: null
+        })
+
+    ;
+    </script>
+</body>
+</html>

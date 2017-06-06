@@ -395,13 +395,14 @@
 	                multiple: "=wsMultiple",
 	                upDis: "=upDis",
 	                options: "=wsOptions",
-	                icon: "@wsIcon"
+	                icon: "@wsIcon",
+	                id: "@wsId"
 	            },
 	            template:
 	                '<md-button type="button" class="md-primary md-raised" ng-disabled="upDis">\
 	                    <i class="material-icons">{{icon}}</i>\
 	                    {{text}}\
-	                    <input type="file" size="{{size}}" _name="{{name}}" _text="{{text}}" ng-disabled="upDis">\
+	                    <input type="file" size="{{size}}" _name="{{name}}" _text="{{text}}" id="{{id}}" ng-disabled="upDis">\
 	                </md-button>',
 	            link: function (scope, element, attrs) {
 	                var fileInput = angular.element(element).find("input");
