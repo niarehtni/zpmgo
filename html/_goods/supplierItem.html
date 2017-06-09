@@ -48,17 +48,16 @@
 	            </md-input-container>
 	            <md-input-container flex>
 	                <label>防伪类型</label>
-	                <md-select ng-model="data.verifyTypId" ng-change="verifyTypChange()" ng-if="!isDetail">
-                        <md-option ng-repeat="verifyTyp in verifyTypMap" ng-value="verifyTyp.id">
-                            {{verifyTyp.name}}
+	                <md-select ng-model="data.verifyTypeId" ng-change="verifyTypeChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="verifyType in verifyTypeMap" ng-value="verifyType.id">
+                            {{verifyType.name}}
                         </md-option>
                     </md-select>
-                    <input type="text" ng-model="data.verifyTypName" disabled ng-if="isDetail">
+                    <input type="text" ng-model="data.verifyTypeName" disabled ng-if="isDetail">
 	            </md-input-container>
 	            <md-input-container flex>
                     <label>状态</label>
                     <md-select ng-model="data.status" ng-if="!isDetail">
-                        <md-option value="">所有</md-option>
                         <md-option ng-repeat="status in statusMap" ng-value="status.name">
                             {{status.name}}
                         </md-option>
@@ -134,6 +133,7 @@
 	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-aria.min.js"></script>
 	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-messages.min.js"></script>
 	<script src="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.js"></script>
+	<script src="//cdn.bootcss.com/moment.js/2.11.1/moment.min.js"></script>
 	<script src="../../js/_default.js?v=1.0.1"></script>
 	<script>
 		angular.module("lmApp")
@@ -142,7 +142,7 @@
 				$scope.data = {};
 				$scope.brandMap = [];  //品牌
 				$scope.typeMap = [];  //类型
-				$scope.verifyTypMap = [];  //防伪类型
+				$scope.verifyTypeMap = [];  //防伪类型
 				$scope.statusMap = [];  //状态
 				$scope.determinateValue = 0;
 
@@ -154,22 +154,22 @@
 							var action = baseParam.basePathB+"meta/supplier/add";
 						}
 						httpService.post(action, {
-							name: 		  $scope["data"]["name"],
-							image: 		  $scope["data"]["image"],
-							des: 		  $scope["data"]["des"],
-							regAddress:   $scope["data"]["regAddress"],
-							regTime: 	  $scope["data"]["regTime"],
-							serviceTel:   $scope["data"]["serviceTel"],
-							abbr: 		  $scope["data"]["abbr"],
-							busniessScop: $scope["data"]["busniessScop"],
-							status: 	  $scope["data"]["status"],
-							tel: 		  $scope["data"]["tel"],
-							typeId: 	  $scope["data"]["typeId"],
-							typeName:     $scope["data"]["typeName"],
-							typeId:       $scope["data"]["verifyTypeId"],
-							typeName:     $scope["data"]["verifyTypeName"],
-							typeId:       $scope["data"]["brandId"],
-							typeName:     $scope["data"]["brandName"]
+							name: 		    $scope["data"]["name"],
+							image: 		    $scope["data"]["image"],
+							des: 		    $scope["data"]["des"],
+							regAddress:     $scope["data"]["regAddress"],
+							regTime: 	    $scope["data"]["regTime"],
+							serviceTel:     $scope["data"]["serviceTel"],
+							abbr: 		    $scope["data"]["abbr"],
+							busniessScop:   $scope["data"]["busniessScop"],
+							status: 	    $scope["data"]["status"],
+							brandId:        $scope["data"]["brandId"],
+							brandName:      $scope["data"]["brandName"],
+							tel: 		    $scope["data"]["tel"],
+							typeId: 	    $scope["data"]["typeId"],
+							typeName:       $scope["data"]["typeName"],
+							verifyTypeId:   $scope["data"]["verifyTypeId"],
+							verifyTypeName: $scope["data"]["verifyTypeName"]
 						})
 						.then(function(response){
 							removeTab.do(response);
@@ -197,7 +197,7 @@
 
 				$scope.typeChange = function(){};
 
-				$scope.verifyTypChange = function(){};
+				$scope.verifyTypeChange = function(){};
 
 				$scope.options = {
 		            url: baseParam.uploadBase,
@@ -231,28 +231,24 @@
 
 		        //获取详情
 				if($scope.pageType != null){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/supplier/get/"+$scope.id)
-						.then(function(response){
-							$scope.data = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/supplier/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取品牌
 				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/brand", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.brandMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/brand", {
+						pageSize: 10000
+					})
+					.then(function(response){
+						$scope.brandMap = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取类型

@@ -23,11 +23,8 @@
 	                </div>
 	            </md-input-container>
 	            <md-input-container flex>
-	                <label>价格</label>
-	                <input type="text" name="price" ng-model="data.price" plus ng-disabled="isDetail">
-	                <div ng-messages="form.price.$error" role="alert">
-	                    <div ng-message="plus">请填写正确信息</div>
-	                </div>
+	                <label>价格(分)</label>
+	                <input type="number" name="price" ng-model="data.price" min="0" number-trust ng-disabled="isDetail">
 	            </md-input-container>
 	            <md-input-container flex>
 	                <label>排序</label>

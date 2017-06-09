@@ -26,13 +26,13 @@
 	                <label>订单</label>
 	                <md-select name="orderId" ng-model="data.orderId" ng-change="orderChange()" required ng-if="!isDetail">
                         <md-option ng-repeat="order in orderMap" ng-value="order.id">
-                            {{order.name}}
+                            {{order.code}}
                         </md-option>
                     </md-select>
                     <div ng-messages="form.orderId.$error" role="alert">
 	                    <div ng-message="required">请填写必要信息</div>
 	                </div>
-                    <input type="text" ng-model="data.orderName" ng-if="isDetail" disabled>
+                    <input type="text" ng-model="data.orderCode" ng-if="isDetail" disabled>
 	            </md-input-container>
 	            <md-input-container flex>
 	                <label>商品</label>
@@ -101,7 +101,7 @@
 						httpService.post(action, {
 							id: 	   $scope["data"]["id"],
 							orderId:   $scope["data"]["orderId"],
-							orderName: $scope["data"]["orderName"],
+							orderCode: $scope["data"]["orderCode"],
 							content:   $scope["data"]["content"],
 							goodsId:   $scope["data"]["goodsId"],
 							goodsName: $scope["data"]["goodsName"],
@@ -125,7 +125,7 @@
 				$scope.orderChange = function() {
 					for(var i=0,len=$scope.orderMap.length; i<len; i++){
 						if($scope.orderMap[i]["id"] === $scope["data"]["orderId"]){
-							$scope["data"]["orderName"] = $scope.orderMap[i]["name"];
+							$scope["data"]["orderCode"] = $scope.orderMap[i]["code"];
 							break;
 						}
 					}
@@ -172,42 +172,36 @@
 
 		        //获取详情
 				if($scope.pageType != null){
-					(function(){
-						httpService.post(baseParam.basePathC+"meta/securityCode/get/"+$scope.id)
-						.then(function(response){
-							$scope.data = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathC+"meta/securityCode/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取订单
 				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathC+"meta/codeOrder", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.orderMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathC+"meta/codeOrder", {
+						pageSize: 10000
+					})
+					.then(function(response){
+						$scope.orderMap = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取商品
 				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/goods", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.goodsMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/goods", {
+						pageSize: 10000
+					})
+					.then(function(response){
+						$scope.goodsMap = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 			}
 		])

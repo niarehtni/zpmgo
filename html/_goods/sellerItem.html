@@ -233,7 +233,7 @@
                 //获取公司
                 if($scope.pageType != "detail"){
                     httpService.post(baseParam.basePathB+"meta/supplier", {
-                        pageSize: 1000
+                        pageSize: 10000
                     })
                     .then(function(response){
                         $scope.supplierMap = response.data;

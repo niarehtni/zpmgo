@@ -42,7 +42,6 @@
 	        	<md-input-container flex>
                     <label>状态</label>
                     <md-select ng-model="data.status" ng-if="!isDetail">
-                        <md-option value="">所有</md-option>
                         <md-option ng-repeat="status in statusMap" ng-value="status.name">
                             {{status.name}}
                         </md-option>
@@ -51,11 +50,17 @@
                 </md-input-container>
 	            <md-input-container flex>
                     <label>数量</label>
-                    <input type="number" min="0" name="num" ng-model="data.num" ng-disabled="isDetail">
+                    <input type="number" min="0" name="num" ng-model="data.num" integer number-trust ng-disabled="isDetail">
+                    <div ng-messages="form.num.$error" role="alert">
+                        <div ng-message="integer">请填写正确的格式</div>
+                    </div>
                 </md-input-container>
                 <md-input-container flex>
                     <label>绑定数量</label>
-                    <input type="number" min="0" name="bindNum" ng-model="data.bindNum" ng-disabled="isDetail">
+                    <input type="number" min="0" name="bindNum" ng-model="data.bindNum" integer number-trust ng-disabled="isDetail">
+                    <div ng-messages="form.bindNum.$error" role="alert">
+                        <div ng-message="integer">请填写正确的格式</div>
+                    </div>
                 </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin ng-if="!isDetail">

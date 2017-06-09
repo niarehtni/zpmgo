@@ -121,14 +121,12 @@
 
 		        //获取详情
 				if($scope.pageType != null){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/industry/get/"+$scope.id)
-						.then(function(response){
-							$scope.data = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/industry/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 			}
 		])

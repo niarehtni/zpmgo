@@ -3,28 +3,28 @@
         <div class="md-toolbar-tools">
             <h2>{{vm.title}}</h2>
             <span flex></span>
-            <md-button class="md-icon-button" ng-click="hide()">
+            <md-button class="md-icon-button" ng-click="vm.hide()">
                 &times;
             </md-button>
         </div>
     </md-toolbar>
     <md-dialog-content class="photo-container">
-        <img ng-src="{{vm.url}}" ng-style="picSty">
+        <img ng-src="{{vm.url}}" ng-style="vm.picSty">
     </md-dialog-content>
     <md-dialog-actions layout="row">
-        <md-button class="md-primary" ng-click="rotateRight()">
+        <md-button class="md-primary" ng-click="vm.rotateRight()">
             <i class="material-icons">rotate_right</i>
         </md-button>
-        <md-button class="md-primary" ng-click="BoostBig()">
+        <md-button class="md-primary" ng-click="vm.BoostBig()">
             <i class="material-icons">zoom_in</i>
         </md-button>
-        <md-button class="md-primary" ng-click="BoostSamll()">
+        <md-button class="md-primary" ng-click="vm.BoostSamll()">
             <i class="material-icons">zoom_out</i>
         </md-button>
-        <md-button class="md-primary" ng-click="mirrorThePicX()">
+        <md-button class="md-primary" ng-click="vm.mirrorThePicX()">
             <i class="material-icons">swap_horiz</i>
         </md-button>
-        <md-button class="md-primary" ng-click="mirrorThePicY()">
+        <md-button class="md-primary" ng-click="vm.mirrorThePicY()">
             <i class="material-icons">swap_vert</i>
         </md-button>
         <span flex></span>
@@ -33,7 +33,7 @@
                 下载图片
             </md-button>
         </a>
-        <md-button class="md-primary" ng-click="hide()">
+        <md-button class="md-primary" ng-click="vm.hide()">
             返回
         </md-button>
     </md-dialog-actions>

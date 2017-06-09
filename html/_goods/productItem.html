@@ -36,54 +36,66 @@
                     <label>名称</label>
                     <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
                     <div ng-messages="form.name.$error" role="alert">
-                        <div ng-message="required">请填写必要信息</div>
+                        <div ng-message="required">请填写名称</div>
                     </div>
                 </md-input-container>
             </div>
             <div layout="row" layout-margin>
                 <md-input-container flex>
-                    <label>产品类型</label>
-                    <md-select ng-model="data.productTypeId" ng-change="productTypehange()" ng-if="!isDetail">
-                        <md-option ng-repeat="productType in productTypeMap" ng-value="productType.id">
-                            {{productType.name}}
-                        </md-option>
-                    </md-select>
-                    <input type="text" ng-model="data.productTypeName" ng-if="isDetail" disabled>
-                </md-input-container>
-                <md-input-container flex>
                     <label>品牌</label>
-                    <md-select ng-model="data.brandId" ng-change="brandChange()" ng-if="!isDetail">
+                    <md-select name="brand" ng-model="data.brandId" ng-change="brandChange()" required ng-if="!isDetail">
                         <md-option ng-repeat="brand in brandMap" ng-value="brand.id">
                             {{brand.name}}
                         </md-option>
                     </md-select>
+                    <div ng-messages="form.brand.$error" role="alert">
+                        <div ng-message="required">请选择品牌</div>
+                    </div>
                     <input type="text" ng-model="data.brandName" ng-if="isDetail" disabled>
                 </md-input-container>
                 <md-input-container flex>
                     <label>公司</label>
-                    <md-select ng-model="data.supplierId" ng-change="supplierChange()" ng-if="!isDetail">
+                    <md-select name="supplier" ng-model="data.supplierId" ng-change="supplierChange()" required ng-if="!isDetail">
                         <md-option ng-repeat="supplier in supplierMap" ng-value="supplier.id">
                             {{supplier.name}}
                         </md-option>
                     </md-select>
+                    <div ng-messages="form.supplier.$error" role="alert">
+                        <div ng-message="required">请选择公司</div>
+                    </div>
                     <input type="text" ng-model="data.supplierName" ng-if="isDetail" disabled>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>产品类型</label>
+                    <md-select name="productType" ng-model="data.productTypeId" ng-change="productTypehange()" required ng-if="!isDetail">
+                        <md-option ng-repeat="productType in productTypeMap" ng-value="productType.id">
+                            {{productType.name}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="form.productType.$error" role="alert">
+                        <div ng-message="required">请选择产品类型</div>
+                    </div>
+                    <input type="text" ng-model="data.productTypeName" ng-if="isDetail" disabled>
                 </md-input-container>
             </div>
             <div layout="row" layout-margin>
                 <md-input-container flex>
-                    <label>价格</label>
-                    <input type="text" name="price" ng-model="data.price" plus ng-disabled="isDetail">
-                    <div ng-messages="form.price.$error" role="alert">
-                        <div ng-message="plus">请填写正确的格式</div>
-                    </div>
+                    <label>价格(分)</label>
+                    <input type="number" name="price" ng-model="data.price" min="0" number-trust ng-disabled="isDetail">
                 </md-input-container>
                 <md-input-container flex>
                     <label>销量</label>
-                    <input type="number" name="sold" ng-model="data.sold" ng-disabled="isDetail">
+                    <input type="number" name="sold" ng-model="data.sold" min="0" integer number-trust ng-disabled="isDetail">
+                    <div ng-messages="form.sold.$error" role="alert">
+                        <div ng-message="integer">请填写正确的格式</div>
+                    </div>
                 </md-input-container>
                 <md-input-container flex>
                     <label>总库存</label>
-                    <input type="number" name="stock" ng-model="data.stock" ng-disabled="isDetail">
+                    <input type="number" name="stock" ng-model="data.stock" min="0" integer number-trust ng-disabled="isDetail">
+                    <div ng-messages="form.stock.$error" role="alert">
+                        <div ng-message="integer">请填写正确的格式</div>
+                    </div>
                 </md-input-container>
             </div>
             <div layout="row" layout-margin>
@@ -141,13 +153,12 @@
                 </md-input-container>
             </div>
             <div layout="row" layout-margin>
-                 <md-input-container flex>
+                <md-input-container flex>
                     <label>简介</label>
                     <textarea ng-model="data.des" rows="3" md-detect-hidden md-select-on-focus ng-disabled="isDetail"></textarea>
                 </md-input-container>
             </div>
             <div layout="row" layout-margin ng-if="!isDetail">
-                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="二维码"></upload-section>
                 <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="大图"></upload-section>
                 <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="小图"></upload-section>
             </div>
@@ -155,13 +166,6 @@
                 md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
                 md-row-height="1:1" 
                 md-gutter="8px">
-                <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, 'logo', data.barcode)" ng-if="data.barcode">
-                    <img ng-src="{{data.barcode}}" img-responsive>
-                    <md-grid-tile-footer>
-                        <i class="material-icons pointer" ng-click="remove($event, 'barcode')" ng-if="!isDetail">delete_forever</i>
-                        <h3 class="inline-block">二维码</h3>
-                    </md-grid-tile-footer>
-                </md-grid-tile>
                 <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '大图', data.image)" ng-if="data.image">
                     <img ng-src="{{data.image}}" img-responsive>
                     <md-grid-tile-footer>
@@ -206,6 +210,10 @@
                     <i class="material-icons">format_size</i>
                     文本
                 </md-button>
+                <md-button class="md-primary md-raised" type="button" style="margin: 14px"  ng-click="webView()" ng-disabled="onLoading">
+                    <i class="material-icons">picture_in_picture_alt</i>
+                    webView
+                </md-button>
                 <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="图片" ws-icon="photo"></upload-section>
                 <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="视频" ws-icon="ondemand_video"></upload-section>
                 <md-button class="md-primary" type="button" style="margin: 14px" ng-click="nodeClear()">
@@ -218,6 +226,9 @@
                         <md-list-item ng-repeat="node in data.nodeList" class="display-flex" style="padding-right: 0">
                             <div flex>
                                 <div ng-bind-html="trustHtml(node.content)" ng-if="'html'==node.type"></div>
+                                <div ng-if="'webView'==node.type">
+                                    <iframe ng-src="{{trustSrc(node.content)}}" frameborder="0" scrolling="auto"></iframe>
+                                </div>
                                 <img ng-src="{{node.content}}" ng-if="'image'==node.type">
                                 <video ng-src="{{trustSrc(node.content)}}" controls="controls" ng-if="'video'==node.type">你的播放器不支持该视频播放</video>
                             </div>
@@ -243,6 +254,7 @@
     <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-aria.min.js"></script>
     <script src="//cdn.bootcss.com/angular.js/1.5.8/angular-messages.min.js"></script>
     <script src="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.js"></script>
+    
     <script src="../../js/_default.js?v=1.0.1"></script>
     <script>
         var htmlNode;
@@ -256,10 +268,10 @@
                     third: [],
                     nodeList: []
                 };
-                $scope.productTypeMap = []; //产品类型
                 $scope.brandMap = [];  //品牌
                 $scope.supplierMap = [];  //公司
-
+                $scope.productTypeMap = []; //产品类型
+                
                 $scope.onSubmit = function(){
                     if($scope.form.$valid){
                         if("edit" == $scope.pageType){
@@ -269,14 +281,17 @@
                         }
                         var nodeList = $scope["data"]["nodeList"]; 
                         if(nodeList.length){
-                            angular.forEach(nodeList, function(data, index, array){
-                                data["sort"] = index;
+                            $scope["data"]["nodeList"] = nodeList.map(function(node, index){
+                                return {
+                                    type: node.type,
+                                    content: node.content,
+                                    sort: index
+                                };
                             });
                         }
                         httpService.post(action, {
                             name: $scope["data"]["name"],
                             des: $scope["data"]["des"],
-                            barcode: $scope["data"]["barcode"],
                             price: $scope["data"]["price"],
                             sold: $scope["data"]["sold"],
                             stock: $scope["data"]["stock"],
@@ -285,7 +300,7 @@
                             images: $scope["data"]["images"],
                             firstName: $scope["data"]["firstName"],
                             secondName: $scope["data"]["secondName"],
-                            thridName: $scope["data"]["thridName"],
+                            thirdName: $scope["data"]["thirdName"],
                             first: $scope["data"]["first"],
                             second: $scope["data"]["second"],
                             third: $scope["data"]["third"],
@@ -351,32 +366,25 @@
                         case "video":
                             document.querySelector("[_text='视频']").click();
                             break;
+                        case "webView":
+                            $scope.webView(node.content);
+                            break;
                     }
                 };
 
                 $scope.showPhotoView = potoView.show;
-                
-                $scope.productTypehange = function(){
-                    for(var i=0,len=$scope.productTypeMap.length; i<len; i++){
-                        if($scope.productTypeMap[i]["id"] === $scope["data"]["productTypeId"]){
-                            $scope["data"]["productTypeName"] = $scope.productTypeMap[i]["name"];
-                            break;
-                        }
-                    }
-                };
 
-                //获取产品类型
+                //获取品牌
                 if($scope.pageType != "detail"){
-                    httpService.post(baseParam.basePathB+"meta/productType", {
-                        pageSize: 1000
+                    httpService.post(baseParam.basePathB+"meta/brand", {
+                        pageSize: 10000
                     })
                     .then(function(response){
-                        $scope.productTypeMap = response.data;
+                        $scope.brandMap = response.data;
                     }, function(error){
                         lmToastHelper.alert(error.message);
                     });
                 }
-
                 $scope.brandChange = function(){
                     for(var i=0,len=$scope.brandMap.length; i<len; i++){
                         if($scope.brandMap[i]["id"] === $scope["data"]["brandId"]){
@@ -387,35 +395,13 @@
                     }
                 };
 
-                //获取品牌
-                if($scope.pageType != "detail"){
-                    httpService.post(baseParam.basePathB+"meta/brand", {
-                        pageSize: 1000
-                    })
-                    .then(function(response){
-                        $scope.brandMap = response.data;
-                    }, function(error){
-                        lmToastHelper.alert(error.message);
-                    });
-                }
-
-                $scope.supplierChange = function() {
-                    for(var i=0,len=$scope.supplierMap.length; i<len; i++){
-                        if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
-                            $scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
-                            break;
-                        }
-                    }
-                };
-
                 //获取公司
                 if($scope.pageType != "detail"){
                     getSupplier();
                 }
-
                 function getSupplier(){
                     httpService.post(baseParam.basePathB+"meta/supplier", {
-                        pageSize: 1000,
+                        pageSize: 10000,
                         filters: [{
                             "key": "brandId",
                             "cpr": "eqs",
@@ -428,6 +414,43 @@
                         lmToastHelper.alert(error.message);
                     });
                 }
+                $scope.supplierChange = function() {
+                    for(var i=0,len=$scope.supplierMap.length; i<len; i++){
+                        if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
+                            $scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
+                            getProductType();
+                            break;
+                        }
+                    }
+                };
+
+                //获取产品类型
+                if($scope.pageType != "detail"){
+                    getProductType();
+                }
+                function getProductType() {
+                    httpService.post(baseParam.basePathB+"meta/productType", {
+                        pageSize: 10000,
+                        filters: [{
+                            "key": "supplierId",
+                            "cpr": "eqs",
+                            "val": $scope["data"]["supplierId"]
+                        }]
+                    })
+                    .then(function(response){
+                        $scope.productTypeMap = response.data;
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
+                }
+                $scope.productTypehange = function(){
+                    for(var i=0,len=$scope.productTypeMap.length; i<len; i++){
+                        if($scope.productTypeMap[i]["id"] === $scope["data"]["productTypeId"]){
+                            $scope["data"]["productTypeName"] = $scope.productTypeMap[i]["name"];
+                            break;
+                        }
+                    }
+                };
 
                 //html文本编辑
                 $scope.toHtml = function(node){
@@ -442,9 +465,36 @@
                         parent: angular.element(document.body),
                         clickOutsideToClose: false,
                         escapeToClose: true,
-                        //targetEvent: ev,
                         controller: "textController"
                     });
+                };
+
+                //webView
+                $scope.webView = function(value){
+                    var confirm = $mdDialog.prompt()
+                        .title("webView")
+                        .textContent("请输入链接地址")
+                        .initialValue(value)
+                        .ariaLabel('webView')
+                        .ok("确定")
+                        .cancel("取消");
+
+                    $mdDialog.show(confirm).then(function(result) {
+                        if(editCont.index != null){
+                            $scope["data"]["nodeList"][editCont.index] = {
+                                type: "webView",
+                                content: result,
+                                sort: 0
+                            };
+                            editCont.index = null;
+                        }else{
+                            $scope["data"]["nodeList"].push({
+                                type: "webView",
+                                content: result,
+                                sort: 0
+                            });
+                        }
+                    }, function() {});
                 };
 
                 $scope.options = {
@@ -476,9 +526,6 @@
                         if("200" == result.code){
                             var code = baseParam.downloadBase+result["data"][0];
                             switch(this.getAttribute("_text")){
-                                case "二维码":
-                                    $scope["data"]["barcode"] = code;
-                                    break;
                                 case "大图":
                                     $scope["data"]["image"] = code;
                                     if("undefined" == typeof $scope["data"]["icon"] || "" == $scope["data"]["icon"]){
@@ -537,19 +584,17 @@
 
                 //获取详情
                 if($scope.pageType != null){
-                    (function(){
-                        httpService.post(baseParam.basePathB+"meta/product/get/"+$scope.id)
-                        .then(function(response){
-                            $scope.data = response.data;
-                            $scope["data"]["images"] = typeof $scope["data"]["images"] != "undefined" ? $scope["data"]["images"] : [];
-                            $scope["data"]["first"] = typeof $scope["data"]["first"] != "undefined" ? $scope["data"]["first"] : [];
-                            $scope["data"]["second"] = typeof $scope["data"]["second"] != "undefined" ? $scope["data"]["second"] : [];
-                            $scope["data"]["third"] = typeof $scope["data"]["third"] != "undefined" ? $scope["data"]["third"] : [];
-                            $scope["data"]["nodeList"] = typeof $scope["data"]["nodeList"] != "undefined" ? $scope["data"]["nodeList"] : [];
-                        }, function(error){
-                            lmToastHelper.alert(error.message);
-                        });
-                    })();
+                    httpService.post(baseParam.basePathB+"meta/product/get/"+$scope.id)
+                    .then(function(response){
+                        $scope.data = response.data;
+                        $scope["data"]["images"] = typeof $scope["data"]["images"] != "undefined" ? $scope["data"]["images"] : [];
+                        $scope["data"]["first"] = typeof $scope["data"]["first"] != "undefined" ? $scope["data"]["first"] : [];
+                        $scope["data"]["second"] = typeof $scope["data"]["second"] != "undefined" ? $scope["data"]["second"] : [];
+                        $scope["data"]["third"] = typeof $scope["data"]["third"] != "undefined" ? $scope["data"]["third"] : [];
+                        $scope["data"]["nodeList"] = typeof $scope["data"]["nodeList"] != "undefined" ? $scope["data"]["nodeList"] : [];
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
                 }
 
                 $scope.$on("onHtmlChange", function(e, html) {

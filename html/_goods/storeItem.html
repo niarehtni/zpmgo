@@ -177,28 +177,24 @@
 
 		        //获取详情
 				if($scope.pageType != null){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/store/get/"+$scope.id)
-						.then(function(response){
-							$scope.data = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/store/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取公司
 				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/supplier", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.supplierMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/supplier", {
+						pageSize: 10000
+					})
+					.then(function(response){
+						$scope.supplierMap = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 			}
 		])

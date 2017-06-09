@@ -12,6 +12,10 @@
 	        $mdDateLocaleProvider.days = ["星期日", "星期一", "星期二", "星期三", "星期三", "星期四", "星期五", "星期六"];
 	        $mdDateLocaleProvider.shortDays = ["日", "一", "二", "三", "四", "五", "六"];
 	        $mdDateLocaleProvider.firstDayOfWeek = 1;
+		    $mdDateLocaleProvider.formatDate = function(date) {
+		    	var m = moment(date);
+		    	return m.isValid() ? m.format('L') : '';
+		    };
 	    }])
 
 	    .run(["$rootScope", "getRequest", "pageService", function ($rootScope, getRequest, pageService) {
@@ -425,6 +429,19 @@
 	        };
 		}])
 
+		.directive("numberTrust", ["baseUpload", function(baseUpload){
+			return {
+	            restrict: "A",
+	            require: "ngModel",
+		        link: function(scope, element, attrs, ngModel){
+		            if(!ngModel) { return false };
+		            ngModel.$formatters.push(function(value) {
+		            	return Number(value);
+			     	});
+		        }
+	        };
+		}])
+
 		.directive("imgResponsive", ["computedStyle", function(computedStyle){
 			return {
 				restrict: "A",
@@ -466,8 +483,8 @@
 		.constant("baseParam", {
 			basePathB: "https://g.zpmgo.com/",
 			basePathC: "https://c.zpmgo.com/",
-			uploadBase: "https://file.zpmgo.com/api/upload/temp",
-			downloadBase: "https://file.zpmgo.com/api/download/temp/",
+			uploadBase: "https://file.zpmgo.com/api/upload/lm",
+			downloadBase: "https://file.zpmgo.com/api/download/lm/",
 			uploadBaseC: "https://c.zpmgo.com/api/security/upload/"
 		})
 	;
@@ -622,68 +639,72 @@
 	 * ======================================================================== */
 	angular
 		.module("photoModule", ["ngMaterial"])
-		.controller("photoViewController", ["$scope", "$mdDialog", function($scope, $mdDialog) {
-	        'use strict';
-	        // 关闭窗口
-	        $scope.hide = function () {
-	            $mdDialog.hide();
-	        };
+		.controller("photoViewController", ["$mdDialog", function($mdDialog) {
+	        "use strict";
+	        var _this = this;
+	        
 	        // 初始化照片原始大小以及位置
 	        var rotateDeg = 0;
 	        var scaleX = 1;
 	        var matrixDegX = 1;
 	        var matrixDegY = 1;
-	        $scope.picSty = {
+
+	        // 关闭窗口
+	        this.hide = function () {
+	            $mdDialog.hide();
+	        };
+
+	        this.picSty = {
 	            "transform": "rotate(" + rotateDeg + "deg) scale(" + scaleX + ") matrix(" + matrixDegX + "," + 0 + "," + 0 + "," + matrixDegY + "," + 0 + "," + 0 + ")",
 	            "transition": "all 0.2s ease"
 	        }
 	        // 图片旋转
-	        $scope.rotateRight = function () {
+	        this.rotateRight = function () {
 	            rotateDeg = rotateDeg + 90;
-	            $scope.picSty = {
+	            _this.picSty = {
 	                "transform": "rotate(" + rotateDeg + "deg) scale(" + scaleX + ") matrix(" + matrixDegX + "," + 0 + "," + 0 + "," + matrixDegY + "," + 0 + "," + 0 + ")",
 	                "transition": "all 0.2s ease"
 	            }
 	        };
 	        // 放大
-	        $scope.BoostBig = function () {
+	        this.BoostBig = function () {
 	            scaleX = scaleX + 0.2;
-	            $scope.picSty = {
+	            _this.picSty = {
 	                "transform": "rotate(" + rotateDeg + "deg) scale(" + scaleX + ") matrix(" + matrixDegX + "," + 0 + "," + 0 + "," + matrixDegY + "," + 0 + "," + 0 + ")",
 	                "transition": "all 0.2s ease"
 	            }
 	        }
 	        // 缩小
-	        $scope.BoostSamll = function () {
+	        this.BoostSamll = function () {
 	            if (scaleX < 0.6) {
 	                return;
 	            }
 	            scaleX = scaleX - 0.2;
-	            $scope.picSty = {
+	            _this.picSty = {
 	                "transform": "rotate(" + rotateDeg + "deg) scale(" + scaleX + ") matrix(" + matrixDegX + "," + 0 + "," + 0 + "," + matrixDegY + "," + 0 + "," + 0 + ")",
 	                "transition": "all 0.2s ease"
 	            }
 	        }
 	        // 左右镜像
-	        $scope.mirrorThePicX = function () {
+	        this.mirrorThePicX = function () {
 	            if (matrixDegX == 1) {
 	                matrixDegX = -1;
 	            } else {
 	                matrixDegX = 1;
 	            }
-	            $scope.picSty = {
+	            _this.picSty = {
 	                "transform": "rotate(" + rotateDeg + "deg) scale(" + scaleX + ") matrix(" + matrixDegX + "," + 0 + "," + 0 + "," + matrixDegY + "," + 0 + "," + 0 + ")",
 	                "transition": "all 0.2s ease"
 	            }
 	        }
 	        // 上下镜像
-	        $scope.mirrorThePicY = function () {
+	        this.mirrorThePicY = function () {
 	            if (matrixDegY == 1) {
 	                matrixDegY = -1;
 	            } else {
 	                matrixDegY = 1;
 	            }
-	            $scope.picSty = {
+	            _this.picSty = {
 	                "transform": "rotate(" + rotateDeg + "deg) scale(" + scaleX + ") matrix(" + matrixDegX + "," + 0 + "," + 0 + "," + matrixDegY + "," + 0 + "," + 0 + ")",
 	                "transition": "all 0.2s ease"
 	            }

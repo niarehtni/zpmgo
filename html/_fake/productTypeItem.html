@@ -42,7 +42,7 @@
 	            </md-input-container>
 	            <md-input-container flex>
 	                <label>排序</label>
-	                <input type="number" name="sort" ng-model="data.sort" ng-disabled="isDetail">
+	                <input type="number" name="sort" ng-model="data.sort" number-trust ng-disabled="isDetail">
 	            </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin>
@@ -174,42 +174,36 @@
 
 		        //获取详情
 				if($scope.pageType != null){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/productType/get/"+$scope.id)
-						.then(function(response){
-							$scope.data = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/productType/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取公司
 				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/supplier", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.supplierMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/supplier", {
+						pageSize: 10000
+					})
+					.then(function(response){
+						$scope.supplierMap = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取产品类型
 				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/productType", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.productTypeMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/productType", {
+						pageSize: 10000
+					})
+					.then(function(response){
+						$scope.productTypeMap = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 			}
 		])

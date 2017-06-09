@@ -174,28 +174,24 @@
 
 				//获取详情
 				if($scope.pageType != null){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/brand/get/"+$scope.id)
-						.then(function(response){
-							$scope.data = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/brand/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 				//获取行业列表
 				if($scope.pageType != "detail"){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/industry", {
-							pageSize: 1000
-						})
-						.then(function(response){
-							$scope.industryMap = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/industry", {
+						pageSize: 10000
+					})
+					.then(function(response){
+						$scope.industryMap = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 
 			}
