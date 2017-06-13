@@ -246,80 +246,6 @@
 			return new GetRequest();
 		})
 
-		.factory("baseUpload", function(){
-	        function BaseUpload(){}
-
-	        BaseUpload.prototype.init = function(param){
-	        	var _param = {
-	        		url: "",  //上传接口
-	        		dataType: "json",  //数据类型【返回的数据】
-	        		fileInput: null,  //file input
-	        		before: function(fileList){ return true; },  //文件上传前，一般用用来处理验证
-	        		uploading: function(progress){},
-	        		callBack: function(result){}
-	        	};
-	        	var _this = this;
-	            for(var p in param){
-	                if(param.hasOwnProperty(p) && typeof param[p] != "undefined"){
-	                    _param[p] = param[p];
-	                }
-	            }
-	            angular.element(_param.fileInput).bind("change", function(){
-	                if(_param.before && _param.before.call(_param.fileInput, _param.fileInput.files)){
-	                    _this.xhr(_param);
-	                }
-	            });
-	        };
-
-	        BaseUpload.prototype.xhr = function(param){
-	           	angular.element(param.fileInput).attr("disabled", "disabled");
-	            angular.element(param.fileInput).parent().attr("disabled", "disabled");
-
-	            if(typeof XDomainRequest != "undefined"){
-	                var xhr = new XDomainRequest();
-	            }else{
-	                var xhr = new XMLHttpRequest();
-	            }
-
-	            xhr.onreadystatechange = function(){
-	                if (4 == xhr.readyState) {
-	                //成功处理
-	                    param.fileInput.value = null; // 清除文件框的值，使重复上传
-	                    var result = xhr.responseText;
-	                    if(200 == xhr.status){
-	                        if(param.dataType && "json" == param.dataType){
-	                            result = JSON.parse(result);
-	                        }
-	                    }
-
-	                    angular.element(param.fileInput).removeAttr("disabled");
-	                    angular.element(param.fileInput).parent().removeAttr("disabled");
-
-	                    if(param.callBack){
-	                        param.callBack.call(param.fileInput, result);
-	                    }
-	                }
-	            };
-
-	            xhr.upload.onprogress = function(event){
-	                var progressValue = Math.floor(100 * event.loaded / event.total); 
-	                if(param.uploading){
-	                    param.uploading.call(param.fileInput, progressValue);
-	                }
-	            };
-
-	            var formData = new FormData();
-	            angular.forEach(param.fileInput.files, function(value){
-	                formData.append(param.fileInput.getAttribute("_name"), value);
-	            });
-
-	            xhr.open("POST", param.url, true);
-	            xhr.send(formData);
-	        };
-
-	        return new BaseUpload();
-	    })
-
 	    .factory("uploadCheck", ["lmToastHelper", function(lmToastHelper){
 	    	function UploadCheck(){}
 
@@ -389,7 +315,7 @@
 		    }
 		}])
 
-		.directive("uploadSection", ["baseUpload", function(baseUpload){
+		.directive("uploadSection", function(){
 			return {
 	            restrict: "AE",
 	            scope: {
@@ -397,16 +323,16 @@
 	                size: "@wsSize",
 	                text: "@wsText",
 	                multiple: "=wsMultiple",
-	                upDis: "=upDis",
+	                disabled: "=upDisabled",
 	                options: "=wsOptions",
 	                icon: "@wsIcon",
 	                id: "@wsId"
 	            },
 	            template:
-	                '<md-button type="button" class="md-primary md-raised" ng-disabled="upDis">\
+	                '<md-button type="button" class="md-primary md-raised" ng-disabled="disabled">\
 	                    <i class="material-icons">{{icon}}</i>\
 	                    {{text}}\
-	                    <input type="file" size="{{size}}" _name="{{name}}" _text="{{text}}" id="{{id}}" ng-disabled="upDis">\
+	                    <input type="file" size="{{size}}" _name="{{name}}" _text="{{text}}" id="{{id}}" ng-disabled="disabled">\
 	                </md-button>',
 	            link: function (scope, element, attrs) {
 	                var fileInput = angular.element(element).find("input");
@@ -416,20 +342,88 @@
 	                    fileInput.attr("multiple", "multiple");
 	                }
 	                scope.options.fileInput = fileInput[0];
-	                baseUpload.init(scope.options);
+
+	                init();
+
+	                function init(){
+	                	var _param = {
+			        		url: "",  //上传接口
+			        		dataType: "json",  //数据类型【返回的数据】
+			        		fileInput: null,  //file input
+			        		before: function(fileList){ return true; },  //文件上传前，一般用用来处理验证
+			        		uploading: function(progress){},
+			        		callBack: function(result){}
+			        	};
+			        	angular.forEach(_param, function(value, key){
+			        		if("undefined" == typeof scope.options[key]){
+			        			scope.options[key] = value;
+			        		}
+			        	});
+			            angular.element(scope.options.fileInput).bind("change", function(){
+			                if(scope.options.before && scope.options.before.call(scope.options.fileInput, scope.options.fileInput.files)){
+			                    xhr();
+			                }
+			            });
+	                }
+
+	                function xhr(){
+			           	angular.element(scope.options.fileInput).attr("disabled", "disabled");
+			            angular.element(scope.options.fileInput).parent().attr("disabled", "disabled");
+
+			            if(typeof XDomainRequest != "undefined"){
+			                var xhr = new XDomainRequest();
+			            }else{
+			                var xhr = new XMLHttpRequest();
+			            }
+
+			            xhr.onreadystatechange = function(){
+			                if (4 == xhr.readyState) {
+			                //成功处理
+			                    scope.options.fileInput.value = null; // 清除文件框的值，使重复上传
+			                    var result = xhr.responseText;
+			                    if(200 == xhr.status){
+			                        if(scope.options.dataType && "json" == scope.options.dataType){
+			                            result = JSON.parse(result);
+			                        }
+			                    }
+
+			                    angular.element(scope.options.fileInput).removeAttr("disabled");
+			                    angular.element(scope.options.fileInput).parent().removeAttr("disabled");
+
+			                    if(scope.options.callBack){
+			                        scope.options.callBack.call(scope.options.fileInput, result);
+			                    }
+			                }
+			            };
+
+			            xhr.upload.onprogress = function(event){
+			                var progressValue = Math.floor(100 * event.loaded / event.total); 
+			                if(scope.options.uploading){
+			                    scope.options.uploading.call(scope.options.fileInput, progressValue);
+			                }
+			            };
+
+			            var formData = new FormData();
+			            angular.forEach(scope.options.fileInput.files, function(value){
+			                formData.append(scope.options.fileInput.getAttribute("_name"), value);
+			            });
+
+			            xhr.open("POST", scope.options.url, true);
+			            xhr.send(formData);
+			        }
 
 	                scope.$on("$destroy", function(){
 	                    delete scope.name;
 	                    delete scope.size;
 	                    delete scope.multiple;
 	                    delete scope.options;
-	                    delete scope.upDis;
+	                    delete scope.upDisabled;
 	                });
 	            }
 	        };
-		}])
+		})
 
-		.directive("numberTrust", ["baseUpload", function(baseUpload){
+		.directive("numberTrust", function(){
 			return {
 	            restrict: "A",
 	            require: "ngModel",
@@ -440,7 +434,7 @@
 			     	});
 		        }
 	        };
-		}])
+		})
 
 		.directive("imgResponsive", ["computedStyle", function(computedStyle){
 			return {

@@ -17,7 +17,7 @@
             <div layout="row" layout-margin>
                 <md-input-container flex>
                     <label>商品</label>
-                    <md-select name="goodsId" ng-model="data.goodsId" required>
+                    <md-select name="goodsId" ng-model="data.goodsId" ng-change="goosChange()" required>
                         <md-option ng-repeat="goods in goodsMap" ng-value="goods.id">
                             {{goods.name}}
                         </md-option>
@@ -35,7 +35,7 @@
                 <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>
             </div>
             <div layout="row" layout-margin ng-if="!isDetail">
-                <upload-section ws-options="options" ws-name="file" up-dis="form.$invalid"></upload-section>
+                <upload-section ws-options="options" ws-name="file" up-disabled="form.$invalid"></upload-section>
             </div>
         </form>
     </md-card>
@@ -53,7 +53,7 @@
                 $scope.data = {};
                 $scope.goodsMap = []; //商品
                 $scope.options = {
-                    url: baseParam.uploadBaseC+$scope["data"]["goodsId"],
+                    url: baseParam.uploadBaseC,
                     before:function(file){
                         //验证
                         $scope.onLoading = true;
@@ -77,18 +77,20 @@
                     }
                 };
 
+                $scope.goosChange = function(){
+                    $scope.options.url = baseParam.uploadBaseC + $scope["data"]["goodsId"];
+                }
+
                 //获取商品
                 if($scope.pageType != "detail"){
-                    (function(){
-                        httpService.post(baseParam.basePathB+"meta/goods", {
-                            pageSize: 1000
-                        })
-                        .then(function(response){
-                            $scope.goodsMap = response.data;
-                        }, function(error){
-                            lmToastHelper.alert(error.message);
-                        });
-                    })();
+                    httpService.post(baseParam.basePathB+"meta/goods", {
+                        pageSize: 10000
+                    })
+                    .then(function(response){
+                        $scope.goodsMap = response.data;
+                    }, function(error){
+                        lmToastHelper.alert(error.message);
+                    });
                 }
             }
         ])

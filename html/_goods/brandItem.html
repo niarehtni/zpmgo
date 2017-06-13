@@ -48,8 +48,8 @@
                 </md-input-container>
 	        </div>
 	        <div layout="row" layout-margin id="logo" ng-if="!isDetail">
-	        	<upload-section ws-options="options" ws-name="file" ws-text="logo" up-dis="onLoading"></upload-section>
-	        	<upload-section ws-options="options" ws-name="file" ws-text="图片" up-dis="onLoading"></upload-section>
+	        	<upload-section ws-options="options" ws-name="file" ws-text="logo" up-disabled="onLoading"></upload-section>
+	        	<upload-section ws-options="optionsImage" ws-name="file" ws-text="图片" up-disabled="onLoading"></upload-section>
 	        </div>
 	        <div class="jun-progress display-flex align-items-center flex-hc" ng-show="onLoading">
                 <md-progress-linear md-mode='determinate' value="{{determinateValue}}" md-diameter="100" style="width: 200px;"></md-progress-linear>
@@ -171,6 +171,8 @@
 		                $scope.$digest();
 		            }
 		        };
+
+		        $scope.optionsImage = angular.copy($scope.options);
 
 				//获取详情
 				if($scope.pageType != null){

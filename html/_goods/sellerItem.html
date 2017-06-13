@@ -73,7 +73,7 @@
                 </md-input-container>
             </div>
             <div layout="row" layout-margin ng-if="!isDetail">
-                <upload-section ws-options="options" ws-name="file" ws-text="图片" ws-id="picture"></upload-section>
+                <upload-section ws-options="options" ws-name="file" ws-text="图片" ws-id="picture" up-disabled="onLoading"></upload-section>
             </div>
             <md-grid-list layout-margin class="gallery" 
                 md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
@@ -98,8 +98,8 @@
                     <i class="material-icons">format_size</i>
                     文本
                 </md-button>
-                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="图片" ws-icon="photo" ws-id="nodePic"></upload-section>
-                <upload-section ws-options="options" ws-name="file" up-dis="onLoading" ws-text="视频" ws-icon="ondemand_video" ws-id="nodeVideo"></upload-section>
+                <upload-section ws-options="optionsPicture" ws-name="file" up-dis="onLoading" ws-text="图片" ws-icon="photo" ws-id="nodePic" up-disabled="onLoading"></upload-section>
+                <upload-section ws-options="optionsVideo" ws-name="file" up-dis="onLoading" ws-text="视频" ws-icon="ondemand_video" ws-id="nodeVideo" up-disabled="onLoading"></upload-section>
                 <md-button class="md-primary" type="button" style="margin: 14px" ng-click="nodeClear()">
                     清除
                 </md-button>
@@ -331,6 +331,8 @@
                         $scope.$digest();
                     }
                 };
+                $scope.optionsPicture = angular.copy($scope.options);
+                $scope.optionsVideo = angular.copy($scope.options);
 
                 //获取详情
                 if($scope.pageType != null){
