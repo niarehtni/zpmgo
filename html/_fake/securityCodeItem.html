@@ -25,7 +25,7 @@
 	            <md-input-container flex>
 	                <label>订单</label>
 	                <md-select name="orderId" ng-model="data.orderId" ng-change="orderChange()" required ng-if="!isDetail">
-                        <md-option ng-repeat="order in orderMap" ng-value="order.id">
+                        <md-option ng-repeat="order in orderMap" ng-value="order.code">
                             {{order.code}}
                         </md-option>
                     </md-select>

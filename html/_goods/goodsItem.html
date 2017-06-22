@@ -53,8 +53,8 @@
                 </md-input-container>
                 <md-input-container flex>
                     <label>卖家</label>
-                    <md-select name="seller" ng-model="data.sellerId" ng-change="sellerChange()" required ng-if="!isDetail">
-                        <md-option ng-repeat="seller in sellerMap" ng-value="seller.id">
+                    <md-select name="seller" ng-model="data.sellerName" required ng-if="!isDetail">
+                        <md-option ng-repeat="seller in sellerMap" ng-value="seller.name">
                             {{seller.name}}
                         </md-option>
                     </md-select>
@@ -67,8 +67,8 @@
             <div layout="row" layout-margin>
                 <md-input-container flex>
                     <label>品牌</label>
-                    <md-select name="brand" ng-model="data.brandId" ng-change="brandChange()" required ng-if="!isDetail">
-                        <md-option ng-repeat="brand in brandMap" ng-value="brand.id">
+                    <md-select name="brand" ng-model="data.brandName" ng-change="brandChange()" required ng-if="!isDetail">
+                        <md-option ng-repeat="brand in brandMap" ng-value="brand.name">
                             {{brand.name}}
                         </md-option>
                     </md-select>
@@ -79,8 +79,8 @@
                 </md-input-container>
                 <md-input-container flex>
                     <label>公司</label>
-                    <md-select name="supplier" ng-model="data.supplierId" ng-change="supplierChange()" required ng-if="!isDetail">
-                        <md-option ng-repeat="supplier in supplierMap" ng-value="supplier.id">
+                    <md-select name="supplier" ng-model="data.supplierName" ng-change="supplierChange()" required ng-if="!isDetail">
+                        <md-option ng-repeat="supplier in supplierMap" ng-value="supplier.name">
                             {{supplier.name}}
                         </md-option>
                     </md-select>
@@ -330,11 +330,8 @@
                             productName: $scope["data"]["productName"],
                             productTypeId: $scope["data"]["productTypeId"],
                             productTypeName: $scope["data"]["productTypeName"],
-                            brandId: $scope["data"]["brandId"],
                             brandName: $scope["data"]["brandName"],
-                            supplierId: $scope["data"]["supplierId"],
                             supplierName: $scope["data"]["supplierName"],
-                            sellerId: $scope["data"]["sellerId"],
                             sellerName: $scope["data"]["sellerName"],
                             nodeList: $scope["data"]["nodeList"]
                         })
@@ -415,17 +412,23 @@
                     for(var i=0,len=$scope.productMap.length; i<len; i++){
                         if($scope.productMap[i]["id"] === $scope["data"]["productId"]){
                             $scope["data"]["productName"] = $scope.productMap[i]["name"];
-                            getProduct();
                             break;
                         }
                     }
+                    getProduct();
                 };
                 function getProduct(){
                     httpService.post(baseParam.basePathB+"meta/product/get/"+$scope["data"]["productId"])
                     .then(function(response){
                         angular.extend($scope.data, response.data);  
-                        getSupplier(getProductType);
+                        $scope.brandChange();
                     }, function(error){
+                        delete $scope["data"]["brandName"];
+                        $scope.supplierMap = [];
+                        delete $scope["data"]["supplierName"];
+                        $scope.productTypeMap = [];
+                        delete $scope["data"]["productTypeId"];
+                        delete $scope["data"]["productTypeName"];
                         lmToastHelper.alert(error.message);
                     });
                 }
@@ -441,14 +444,6 @@
                         lmToastHelper.alert(error.message);
                     });
                 }
-                $scope.sellerChange = function() {
-                    for(var i=0,len=$scope.sellerMap.length; i<len; i++){
-                        if($scope.sellerMap[i]["id"] === $scope["data"]["sellerId"]){
-                            $scope["data"]["sellerName"] = $scope.sellerMap[i]["name"];
-                            break;
-                        }
-                    }
-                };
 
                 //获取品牌
                 if($scope.pageType != "detail"){
@@ -462,45 +457,67 @@
                     });
                 }
                 $scope.brandChange = function(){
-                    for(var i=0,len=$scope.brandMap.length; i<len; i++){
-                        if($scope.brandMap[i]["id"] === $scope["data"]["brandId"]){
-                            $scope["data"]["brandName"] = $scope.brandMap[i]["name"];
-                            getSupplier();
-                            break;
+                    getSupplier()
+                    .then(function(data){
+                        if(data.length){
+                            $scope["data"]["supplierName"] = data[0]["name"];
+                            getProductType()
+                            .then(function(data){
+                                if(data.length){
+                                    $scope["data"]["productTypeId"] = data[0]["id"];
+                                    $scope["data"]["productTypeName"] = data[0]["name"];
+                                }else{
+                                    deleteProductType();
+                                }
+                            }, function(){
+                                deleteProductType();
+                            });
+                        }else{
+                            delete $scope["data"]["supplierName"];
+                            $scope.productTypeMap = [];
+                            deleteProductType();
                         }
-                    }
+                    }, function(){
+                        delete $scope["data"]["supplierName"];
+                        $scope.productTypeMap = [];
+                        deleteProductType();
+                    });
                 };
 
                 //获取公司
                 if($scope.pageType != "detail"){
                     getSupplier();
                 }
-                function getSupplier(callBack){
-                    httpService.post(baseParam.basePathB+"meta/supplier", {
+                function getSupplier(){ 
+                    return httpService.post(baseParam.basePathB+"meta/supplier", {
                         pageSize: 10000,
                         filters: [{
-                            "key": "brandId",
+                            "key": "brandName",
                             "cpr": "eqs",
-                            "val": $scope["data"]["brandId"]
+                            "val": $scope["data"]["brandName"]
                         }]
                     })
                     .then(function(response){
                         $scope.supplierMap = response.data;
-                        if(callBack){
-                            callBack();
-                        }
+                        return response.data;
                     }, function(error){
+                        $scope.supplierMap = [];
                         lmToastHelper.alert(error.message);
+                        return error;
                     });
                 }
                 $scope.supplierChange = function() {
-                    for(var i=0,len=$scope.supplierMap.length; i<len; i++){
-                        if($scope.supplierMap[i]["id"] === $scope["data"]["supplierId"]){
-                            $scope["data"]["supplierName"] = $scope.supplierMap[i]["name"];
-                            getProductType();
-                            break;
+                    getProductType()
+                    .then(function(data){
+                        if(data.length){
+                            $scope["data"]["productTypeId"] = data[0]["id"];
+                            $scope["data"]["productTypeName"] = data[0]["name"];
+                        }else{
+                            deleteProductType();
                         }
-                    }
+                    }, function(){
+                        deleteProductType();
+                    });
                 };
 
                 //获取产品类型
@@ -508,18 +525,21 @@
                     getProductType();
                 }
                 function getProductType() {
-                    httpService.post(baseParam.basePathB+"meta/productType", {
+                    return httpService.post(baseParam.basePathB+"meta/productType", {
                         pageSize: 10000,
                         filters: [{
-                            "key": "supplierId",
+                            "key": "supplierName",
                             "cpr": "eqs",
-                            "val": $scope["data"]["supplierId"]
+                            "val": $scope["data"]["supplierName"]
                         }]
                     })
                     .then(function(response){
                         $scope.productTypeMap = response.data;
+                        return response.data;
                     }, function(error){
+                        $scope.productTypeMap = [];
                         lmToastHelper.alert(error.message);
+                        return error;
                     });
                 }
                 $scope.productTypehange = function(){
@@ -676,6 +696,10 @@
                             $scope["data"]["second"] = typeof $scope["data"]["second"] != "undefined" ? $scope["data"]["second"] : [];
                             $scope["data"]["third"] = typeof $scope["data"]["third"] != "undefined" ? $scope["data"]["third"] : [];
                             $scope["data"]["nodeList"] = typeof $scope["data"]["nodeList"] != "undefined" ? $scope["data"]["nodeList"] : [];
+                            
+                            if("edit" === $scope.pageType){
+                                $scope.brandChange();
+                            }
                         }, function(error){
                             lmToastHelper.alert(error.message);
                         });
@@ -698,6 +722,11 @@
                         });
                     }
                 });
+
+                function deleteProductType(){
+                    delete $scope["data"]["productTypeId"];
+                    delete $scope["data"]["productTypeName"];
+                }
             }
         ])
         .controller("textController", ["$scope", "$rootScope", "$mdDialog", function($scope, $rootScope, $mdDialog) {

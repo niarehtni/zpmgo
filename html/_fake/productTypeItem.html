@@ -61,10 +61,10 @@
 		    	md-cols="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="6"  
 		    	md-row-height="1:1" 
 		    	md-gutter="8px">
-		        <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '图片', data.code)" ng-if="data.code">
-		            <img ng-src="{{data.code}}" img-responsive>
+		        <md-grid-tile md-colspan="1" md-rowspan="1" md-colspan-sm="1" ng-click="showPhotoView($event, '图片', data.image)" ng-if="data.image">
+		            <img ng-src="{{data.image}}" img-responsive>
 		            <md-grid-tile-footer>
-		            	<i class="material-icons pointer" ng-click="remove($event, 'code')" ng-if="!isDetail">delete_forever</i>
+		            	<i class="material-icons pointer" ng-click="remove($event, 'image')" ng-if="!isDetail">delete_forever</i>
 		            	<h3 class="inline-block">图片</h3>
 		            </md-grid-tile-footer>
 		        </md-grid-tile>
@@ -101,7 +101,7 @@
 						}
 						httpService.post(action, {
 							name: 		     $scope["data"]["name"],
-							code: 		     $scope["data"]["code"],
+							image: 		     $scope["data"]["image"],
 							des: 		     $scope["data"]["des"],
 							productTypeId:   $scope["data"]["productTypeId"],
 							productTypeName: $scope["data"]["productTypeName"],
@@ -162,7 +162,7 @@
 		            callBack:function(result){
 		                //处理结果，显示预览
 		                if("200" == result.code){
-		                	$scope["data"]["code"] = baseParam.downloadBase+result["data"][0];
+		                	$scope["data"]["image"] = baseParam.downloadBase+result["data"][0];
 		                }else{
 		                	lmToastHelper.alert(result.message);
 		                }
