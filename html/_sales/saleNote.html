@@ -7,18 +7,17 @@
     <link rel="stylesheet" href="../../css/jquery/jquery.flexigrid.css?v=1.0.1">
     <link rel="stylesheet" href="../../css/jquery/jquery.alerts.css?v=1.0.1">
     <base href="./">
-	<title>轮播图列表</title>
+	<title>销售登记</title>
 </head>
 <body>
 	<form action="" method="POST">
 		<table class="searchTable">
 			<tbody>
 				<tr>
-					<td>标题</td>
+					<td>标签序列号</td>
   					<td style="padding-left:10px">
-  						<input type="text" name="title" value="" cpr="like">
-  						<input type="hidden" name="type" value="" cpr="eqs">
-  					</td>		
+  						<input type="text" name="serialNo" value="" cpr="like">
+  					</td>				
   				</tr>
 			</tbody>
 		</table>
@@ -31,23 +30,20 @@
 	<script src="../../js/base.js?v=1.0.2"></script>
 	<script>
 	$(function(){
-		$("form").attr("action", BASE.setUrl("meta/homeElement"));
-		$("input[type='hidden']").val(BASE.getRequest("type"));
-		if("seller" == BASE.getRequest("type")){
-			GRID.colModel[1].display = "商家";
-		}
+		$("form").attr("action", BASE.setUrl("meta/saleNote"));
 		$("table.listTable").flexigrid(GRID);	
 	});	
-	var model = BASE.getRequest("type");
 	var GRID = {
 		form: $("form"),
         primaryKey: "id",
         colModel: [
-        	{display: "标题", name: "title", width: 200},
-        	{display: "商品", name: "targetId", width: 200},
-        	{display: "图片地址", name: "imgUrl", width: 200},
-        	{display: "跳转地址", name: "url", width: 200},
-        	{display: "价格(分)", name: "price", width: 80},
+        	{display: "产品", name: "productName", width: 140},
+			{display: "标签序列号", name: "serialNo", width: 140},
+			{display: "特殊码", name: "bindCode", width: 140},
+			{display: "销售人员", name: "salerName", width: 100},
+			{display: "购买者", name: "customerName", width: 100},
+			{display: "购买日期", name: "saleDate", width: 100},
+			{display: "手机", name: "customerTel", width: 100},
 			{display: "操作", name: "id", width: 80,
 				dataFormat: function(value, td, row){
 					var oper = '';
@@ -59,18 +55,18 @@
 			}
         ],
         add: {
-        	url: "../html/_business/carouselItem.html?model="+model,
+        	url: "../html/_sales/saleNoteItem.html",
         },
         edit: {
-        	url: "../html/_business/carouselItem.html?type=edit&model="+model,
+        	url: "../html/_sales/saleNoteItem.html?type=edit",
         	primaryKey: "id"
         },
         detail: {
-        	url: "../html/_business/carouselItem.html?type=detail&model="+model,
+        	url: "../html/_sales/saleNoteItem.html?type=detail",
         	primaryKey: "id",
         },
         deletes: {
-        	url : BASE.getBasePath()+"meta/homeElement/delete",
+        	url : BASE.getBasePath()+"meta/saleNote/delete",
 			primaryKey: "id"
         }
 	};

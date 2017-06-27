@@ -91,7 +91,7 @@
                 </md-input-container>
                 <md-input-container flex>
                     <label>产品类型</label>
-                    <md-select name="productType" ng-model="data.productTypeId" ng-change="productTypehange()" required ng-if="!isDetail">
+                    <md-select name="productType" ng-model="data.productTypeId" ng-change="productTypeChange()" required ng-if="!isDetail">
                         <md-option ng-repeat="productType in productTypeMap" ng-value="productType.id">
                             {{productType.name}}
                         </md-option>
@@ -542,7 +542,7 @@
                         return error;
                     });
                 }
-                $scope.productTypehange = function(){
+                $scope.productTypeChange = function(){
                     for(var i=0,len=$scope.productTypeMap.length; i<len; i++){
                         if($scope.productTypeMap[i]["id"] === $scope["data"]["productTypeId"]){
                             $scope["data"]["productTypeName"] = $scope.productTypeMap[i]["name"];

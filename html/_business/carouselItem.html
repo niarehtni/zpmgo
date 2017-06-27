@@ -15,22 +15,33 @@
 	<md-card layout-padding>
 		<form name="form" ng-submit="onSubmit()">
 	        <div layout="row" layout-margin>
-	            <md-input-container flex flex2>
+	        	<md-input-container flex>
+	                <label>{{label}}</label>
+	                <md-select name="seller" ng-model="data.targetId" ng-change="targetChange()" ng-if="!isDetail">
+                        <md-option ng-repeat="target in targetMap" ng-value="target.id">
+                            {{target.name}}
+                        </md-option>
+                    </md-select>
+                    <input type="text" ng-model="data.targetId" ng-if="isDetail" disabled>
+	            </md-input-container>
+	            <md-input-container flex>
 	                <label>标题</label>
 	                <input type="text" name="title" ng-model="data.title" required ng-disabled="isDetail">
 	                <div ng-messages="form.title.$error" role="alert">
 	                    <div ng-message="required">请填写必要信息</div>
 	                </div>
 	            </md-input-container>
-	            <md-input-container flex>
+	        </div>
+	        <div layout="row" layout-margin>
+	        	<md-input-container flex>
 	                <label>价格(分)</label>
 	                <input type="number" name="price" ng-model="data.price" min="0" number-trust ng-disabled="isDetail">
 	            </md-input-container>
 	            <md-input-container flex>
 	                <label>排序</label>
-	                <input type="text" name="sort" ng-model="data.sort" plus integer ng-disabled="isDetail">
+	                <input type="number" name="sort" min="0" ng-model="data.sort" number-trust integer ng-disabled="isDetail">
 	                <div ng-messages="form.sort.$error" role="alert">
-	                    <div ng-message-exp="['plus', 'integer']">请填写正确的信息</div>
+	                    <div ng-message="integer">请填写正确的信息</div>
 	                </div>
 	            </md-input-container>
 	        </div>
@@ -78,10 +89,37 @@
 	<script src="../../js/_default.js?v=1.0.1"></script>
 	<script>
 		angular.module("lmApp")
-		.controller("mainController", ["$scope", "baseParam", "removeTab", "uploadCheck", "potoView", "lmToastHelper", "httpService", "getRequest",
-			function($scope, baseParam, removeTab, uploadCheck, potoView, lmToastHelper, httpService, getRequest){
+		.controller("mainController", ["$scope", "$rootScope", "baseParam", "removeTab", "uploadCheck", "potoView", "lmToastHelper", "httpService", "getRequest",
+			function($scope, $rootScope, baseParam, removeTab, uploadCheck, potoView, lmToastHelper, httpService, getRequest){
 				$scope.data = {};
 				$scope.determinateValue = 0;
+				$scope.targetMap = [];
+
+				if("seller" == getRequest.param("model")){
+					$scope.label = "商家";
+					if($scope.pageType != "detail"){
+						httpService.post(baseParam.basePathB+"meta/seller", {
+	                        pageSize: 10000
+	                    })
+	                    .then(function(response){
+	                        $scope.targetMap = response.data;
+	                    }, function(error){
+	                        lmToastHelper.alert(error.message);
+	                    });
+					}
+				}else{
+					$scope.label = "商品";
+					if($scope.pageType != "detail"){
+						httpService.post(baseParam.basePathB+"meta/goods", {
+	                        pageSize: 10000
+	                    })
+	                    .then(function(response){
+	                        $scope.targetMap = response.data;
+	                    }, function(error){
+	                        lmToastHelper.alert(error.message);
+	                    });
+					}
+				}
 
 				$scope.onSubmit = function(){
 					if($scope.form.$valid){
@@ -96,6 +134,7 @@
 							url: $scope["data"]["url"],
 							price: $scope["data"]["price"],
 							sort: $scope["data"]["sort"],
+							targetId: $scope["data"]["targetId"],
 							type: getRequest.param("model")
 						})
 						.then(function(response){
@@ -105,6 +144,15 @@
 						});
 					}
 				};
+
+				$scope.targetChange = function(){
+					for(var i=0,len=$scope.targetMap.length; i<len; i++){
+                        if($scope.targetMap[i]["id"] === $scope["data"]["targetId"]){
+                            $scope["data"]["title"] = $scope.targetMap[i]["name"];
+                            break;
+                        }
+                    }
+				}
 
 				$scope.remove = function(event, type){
                     event.preventDefault();
@@ -145,14 +193,12 @@
 
 		        //获取详情
 				if($scope.pageType != null){
-					(function(){
-						httpService.post(baseParam.basePathB+"meta/homeElement/get/"+$scope.id)
-						.then(function(response){
-							$scope.data = response.data;
-						}, function(error){
-							lmToastHelper.alert(error.message);
-						});
-					})();
+					httpService.post(baseParam.basePathB+"meta/homeElement/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
 				}
 			}
 		])

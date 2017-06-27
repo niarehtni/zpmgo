@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/default.css">
+    <base href="./">
+	<title>APP用户信息</title>
+</head>
+<body ng-app="lmApp" ng-cloak ng-controller="mainController">
+	<md-subheader class="md-primary lm-pageTitle">APP用户{{pageTitle}}</md-subheader>
+	<md-card layout-padding>
+		<form name="form" ng-submit="onSubmit()">
+	        <div layout="row" layout-margin>
+	            <md-input-container flex>
+	                <label>昵称</label>
+	                <input type="text" name="name" ng-model="data.name" required ng-disabled="isDetail">
+	                <div ng-messages="form.name.$error" role="alert">
+	                    <div ng-message="required">请填写必要信息</div>
+	                </div>
+	            </md-input-container>
+	            <md-input-container flex>
+                    <label>支付宝用户ID</label>
+	                <input type="text" ng-model="data.alipayUserId" required ng-disabled="isDetail">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>出生日期</label>
+                    <md-datepicker ng-model="data.birthday" md-open-on-focus ng-if="!isDetail"></md-datepicker>
+                    <input value="{{data.birthday | date: 'yyyy-MM-dd'}}" ng-if="isDetail">
+                </md-input-container>
+	        </div>
+	        <div layout="row" layout-margin>
+	            <md-input-container flex>
+                    <label>手机</label>
+	                <input type="text" name="phone" ng-model="data.phone" cellphone ng-disabled="isDetail">
+                    <div ng-messages="form.phone.$error" role="alert">
+                        <div ng-message="cellphone">请填写正确的格式</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>邮箱</label>
+                    <input type="text" name="email" ng-model="data.email" email ng-disabled="isDetail">
+                    <div ng-messages="form.email.$error" role="alert">
+                        <div ng-message="email">请填写正确的格式</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-input-has-value" flex>
+                	<label>性别</label>
+	                <md-radio-group ng-model="data.sex" layout="row">
+		                <md-radio-button value="true" class="md-primary"> 男 </md-radio-button>
+		                <md-radio-button value="false" class="md-primary"> 女 </md-radio-button>
+		            </md-radio-group>
+	            </md-input-container>
+	        </div>
+	        <div layout="row" layout-margin ng-if="!isDetail">
+	            <span flex></span>
+	            <md-button class="md-primary md-raised" type="submit" ng-disabled="form.$invalid">
+	           		保&nbsp;&nbsp;存
+	           	</md-button>
+	        </div>
+	    </form>
+	</md-card>
+
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular.min.js"></script>
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-animate.min.js"></script>
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-aria.min.js"></script>
+	<script src="//cdn.bootcss.com/angular.js/1.5.8/angular-messages.min.js"></script>
+	<script src="//cdn.bootcss.com/angular-material/1.1.4/angular-material.min.js"></script>
+	<script src="../../js/_default.js?v=1.0.1"></script>
+	<script>
+		angular.module("lmApp")
+		.controller("mainController", ["$scope", "baseParam", "removeTab", "lmToastHelper", "httpService", 
+			function($scope, baseParam, removeTab, lmToastHelper, httpService){
+				$scope.data = {
+					sex: "true"
+				};
+				
+				$scope.onSubmit = function(){
+					if($scope.form.$valid){
+						if("edit" == $scope.pageType){
+							var action = baseParam.basePathB+"meta/user/update/"+$scope.id;
+						}else{
+							var action = baseParam.basePathB+"meta/user/add";
+						}
+						httpService.post(action, {
+							name: $scope["data"]["name"],
+							phone: $scope["data"]["phone"],
+							birthday: new Date($scope["data"]["birthday"]).toLocaleDateString(),
+							sex: $scope["data"]["sex"],
+							email: $scope["data"]["email"],
+							alipayUserId: $scope["data"]["alipayUserId"]
+						})
+						.then(function(response){
+							removeTab.do(response);
+						}, function(error){
+							lmToastHelper.alert(error.message);
+						});
+					}
+				};
+
+				//获取详情
+				if($scope.pageType != null){
+					httpService.post(baseParam.basePathB+"meta/user/get/"+$scope.id)
+					.then(function(response){
+						$scope.data = response.data;
+					}, function(error){
+						lmToastHelper.alert(error.message);
+					});
+				}
+			}
+		])
+	;
+	</script>
+</body>
+</html>

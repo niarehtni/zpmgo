@@ -12,10 +12,6 @@
 	        $mdDateLocaleProvider.days = ["星期日", "星期一", "星期二", "星期三", "星期三", "星期四", "星期五", "星期六"];
 	        $mdDateLocaleProvider.shortDays = ["日", "一", "二", "三", "四", "五", "六"];
 	        $mdDateLocaleProvider.firstDayOfWeek = 1;
-		    $mdDateLocaleProvider.formatDate = function(date) {
-		    	var m = moment(date);
-		    	return m.isValid() ? m.format('L') : '';
-		    };
 	    }])
 
 	    .run(["$rootScope", "getRequest", "pageService", function ($rootScope, getRequest, pageService) {
